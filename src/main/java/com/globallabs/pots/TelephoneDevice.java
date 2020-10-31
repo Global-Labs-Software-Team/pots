@@ -34,7 +34,7 @@ public class TelephoneDevice implements TelephoneFunctions {
 			long end = start + 10*1000;
 			while (System.currentTimeMillis() < end) {
 				if (telephone.getStatus().equals(Status.BUSY)) return;
-				System.out.println("Ringing");
+				//System.out.println("Ringing");
 			}
 			telephone.setStatus(Status.OFF_CALL);
 		} else {

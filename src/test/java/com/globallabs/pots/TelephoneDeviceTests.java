@@ -10,6 +10,7 @@ import com.globallabs.operator.Exchange;
 import com.globallabs.phoneexceptions.*;
 
 import java.lang.Thread;
+import java.util.concurrent.TimeUnit;
 
 public class TelephoneDeviceTests {
 	private Exchange exchange;
@@ -73,7 +74,13 @@ public class TelephoneDeviceTests {
 	@Test
 	public void test_ring_phone() throws DialingMySelfException, BusyPhoneException {
 		phone1.dial(2);
-		phone1.ring();
+		Runnable runnable =
+		        () -> { try {phone1.ring(); } catch(Exception e) {}};
+		Thread t = new Thread(runnable);
+		t.start();
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch(Exception e) {};
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		assertEquals(Status.RINGING, statusPhone1);
 	}
@@ -81,11 +88,8 @@ public class TelephoneDeviceTests {
 	@Test
 	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException {
 		phone1.dial(2);
-		phone1.ring();
 		phone2.answer();
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
-		assertEquals(Status.RINGING, statusPhone1);
 		assertEquals(Status.BUSY, statusPhone2);
 	}
 
