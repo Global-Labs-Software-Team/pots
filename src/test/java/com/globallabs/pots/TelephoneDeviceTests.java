@@ -7,8 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.globallabs.operator.Exchange;
-import com.globallabs.phoneexceptions.DialingMySelfException;
-import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
+import com.globallabs.phoneexceptions.*;
+
+import java.lang.Thread;
 
 public class TelephoneDeviceTests {
 	private Exchange exchange;
@@ -64,4 +65,42 @@ public class TelephoneDeviceTests {
 	public void test_dial_myself() {
 		assertThrows(DialingMySelfException.class, () -> {phone1.dial(1);});
 	}
+
+	/**
+	 * Test that a dial failed if the other phone
+	 * is busy
+	 */
+	@Test
+	public void test_ring_phone() throws DialingMySelfException, BusyPhoneException {
+		phone1.dial(2);
+		phone1.ring();
+		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
+		assertEquals(Status.RINGING, statusPhone1);
+	}
+
+	@Test
+	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException {
+		phone1.dial(2);
+		phone1.ring();
+		phone2.answer();
+		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
+		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		assertEquals(Status.RINGING, statusPhone1);
+		assertEquals(Status.BUSY, statusPhone2);
+	}
+
+	/**
+	 * Test that a dial failed if the other phone
+	 * is busy
+	 */
+	@Test
+	public void test_ring_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException {
+		phone1.dial(2);
+		phone1.ring();
+		Thread.sleep(11000);
+		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
+		assertEquals(Status.OFF_CALL, statusPhone1);
+	}
+
+	
 }
