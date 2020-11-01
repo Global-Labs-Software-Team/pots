@@ -21,7 +21,7 @@ public class TelephoneDevice implements TelephoneFunctions {
 		}
 		telephone.setStatus(Status.DIALING);
 		try {
-			exchange.enrouteCall(phoneNumber);
+			exchange.enrouteCall(telephone.getId(), phoneNumber);
 		} catch(Exception e) {
 			telephone.setStatus(Status.OFF_CALL);
 		}
