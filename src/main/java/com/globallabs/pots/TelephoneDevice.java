@@ -27,9 +27,8 @@ public class TelephoneDevice implements TelephoneFunctions {
 		}
 	}
 
-	public void ring() throws BusyPhoneException {
+	public void dialing() throws BusyPhoneException {
 		if (telephone.getStatus().equals(Status.DIALING)){
-			telephone.setStatus(Status.RINGING);
 			long start = System.currentTimeMillis();
 			long end = start + 10*1000;
 			while (System.currentTimeMillis() < end) {
@@ -43,13 +42,14 @@ public class TelephoneDevice implements TelephoneFunctions {
 		
 	}
 
-	public void answer() throws BusyPhoneException, NoIncomingCallsException {
+	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
 		if (telephone.getStatus().equals(Status.RINGING)){
 			telephone.setStatus(Status.BUSY);
+			exchange.openCallBetween(telephone.getId(), telephone.getIncomingCall().getId());
 		} else if (telephone.getStatus().equals(Status.BUSY)) {
 			throw new BusyPhoneException("You can't answer while you are in another call");
 		} else {
-			throw new NoIncomingCallsException("No one is calling you :(");
+			throw new NoIncomingCallsException("No one is calling you");
 		}
 	}
 	

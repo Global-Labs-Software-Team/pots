@@ -27,6 +27,7 @@ public class Exchange implements ExchangeSpecification {
 		if (phoneToCall.getStatus() == Status.BUSY) {
 			throw new BusyPhoneException("The phone with id " + phoneNumber + " is busy");
 		}
+		originPhone.setLastCall(phoneToCall);
 		phoneToCall.setStatus(Status.RINGING);
 		phoneToCall.setIncomingCall(originPhone);
 	}
