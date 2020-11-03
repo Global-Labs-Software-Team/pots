@@ -68,40 +68,65 @@ public class TelephoneDeviceTests {
 	}
 
 	/**
-	 * Test that a dial failed if the other phone
-	 * is busy
+	 * Test that the status of the target phone is ringing when available
+	 * and the origin phone is dialing
 	 */
 	@Test
-	public void test_ring_phone() throws DialingMySelfException, BusyPhoneException, PhoneNotFoundException, BusyPhoneException {
-		phone1.dial(2);
+	public void test_dialing_phone() throws DialingMySelfException, BusyPhoneException {
+		phone1.getPhoneInfo().setStatus(Status.DIALING);
+		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
+		phone2.getPhoneInfo().setStatus(Status.RINGING);
+		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
 		Runnable runnable =
-		        () -> { try {phone1.ring(); } catch(Exception e) {}};
+		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
 		Thread t = new Thread(runnable);
 		t.start();
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch(Exception e) {};
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
-		assertEquals(Status.RINGING, statusPhone1);
+		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		assertEquals(Status.DIALING, statusPhone1);
+		assertEquals(Status.RINGING, statusPhone2);
 	}
 
+	/**
+	 * Test that after the target phone answers, both phones are busy
+	 */
 	@Test
-	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, PhoneNotFoundException {
-		phone1.dial(2);
+	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
+		phone1.getPhoneInfo().setStatus(Status.DIALING);
+		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
+		phone2.getPhoneInfo().setStatus(Status.RINGING);
+		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
+		Runnable runnable =
+		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
+		Thread t = new Thread(runnable);
+		t.start();
 		phone2.answer();
+		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		assertEquals(Status.BUSY, statusPhone1);
 		assertEquals(Status.BUSY, statusPhone2);
 	}
 
 	/**
-	 * Test that a dial failed if the other phone
+	 * Test that after dialing a busy phone
 	 * is busy
 	 */
 	@Test
-	public void test_ring_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException, PhoneNotFoundException {
-		phone1.dial(2);
-		phone1.ring();
-		Thread.sleep(11000);
+	public void test_dialing_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException {
+		phone1.getPhoneInfo().setStatus(Status.DIALING);
+		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
+		phone2.getPhoneInfo().setStatus(Status.RINGING);
+		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
+		Runnable runnable =
+		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
+		Thread t = new Thread(runnable);
+		t.start();
+		try {
+			TimeUnit.SECONDS.sleep(11);
+		} catch(Exception e) {};
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		assertEquals(Status.OFF_CALL, statusPhone1);
 	}

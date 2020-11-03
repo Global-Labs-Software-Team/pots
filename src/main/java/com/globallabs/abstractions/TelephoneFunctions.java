@@ -16,14 +16,14 @@ public interface TelephoneFunctions {
 	 * Sets the current device in a ringing state
 	 * @throws BusyPhoneException if we are already in a call
 	 */
-	public void ring() throws BusyPhoneException;
+	public void dialing() throws BusyPhoneException;
 	
 	/**
 	 * Current device answers an incoming call
 	 * @throws BusyPhoneException if we are already in a call
 	 * @throws NoIncomingCallsException if there are no incoming calls
 	 */
-	public void answer() throws BusyPhoneException, NoIncomingCallsException;
+	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
 //	
 //	public void hangUp();
 	
