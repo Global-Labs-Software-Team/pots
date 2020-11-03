@@ -40,7 +40,7 @@ public class TelephoneDeviceTests {
 	 * Test that the phone dialed successfully to another phone
 	 */
 	@Test
-	public void test_dial_success() throws DialingMySelfException {
+	public void test_dial_success() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		phone1.dial(2);
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
@@ -53,9 +53,9 @@ public class TelephoneDeviceTests {
 	 * is busy
 	 */
 	@Test
-	public void test_dial_busy_phone() throws DialingMySelfException {
+	public void test_dial_busy_phone() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		phone2.getPhoneInfo().setStatus(Status.BUSY);
-		phone1.dial(2);
+		assertThrows(BusyPhoneException.class, () -> {phone1.dial(2);});
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
 		assertEquals(Status.BUSY, statusPhone2);
