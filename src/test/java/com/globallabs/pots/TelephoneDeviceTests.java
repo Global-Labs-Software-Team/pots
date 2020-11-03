@@ -40,7 +40,7 @@ public class TelephoneDeviceTests {
 	 * Test that the phone dialed successfully to another phone
 	 */
 	@Test
-	public void test_dial_success() throws DialingMySelfException {
+	public void test_dial_success() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		phone1.dial(2);
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
@@ -53,9 +53,9 @@ public class TelephoneDeviceTests {
 	 * is busy
 	 */
 	@Test
-	public void test_dial_busy_phone() throws DialingMySelfException {
+	public void test_dial_busy_phone() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		phone2.getPhoneInfo().setStatus(Status.BUSY);
-		phone1.dial(2);
+		assertThrows(BusyPhoneException.class, () -> {phone1.dial(2);});
 		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
 		assertEquals(Status.BUSY, statusPhone2);
@@ -72,7 +72,7 @@ public class TelephoneDeviceTests {
 	 * is busy
 	 */
 	@Test
-	public void test_ring_phone() throws DialingMySelfException, BusyPhoneException {
+	public void test_ring_phone() throws DialingMySelfException, BusyPhoneException, PhoneNotFoundException, BusyPhoneException {
 		phone1.dial(2);
 		Runnable runnable =
 		        () -> { try {phone1.ring(); } catch(Exception e) {}};
@@ -86,7 +86,7 @@ public class TelephoneDeviceTests {
 	}
 
 	@Test
-	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException {
+	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, PhoneNotFoundException {
 		phone1.dial(2);
 		phone2.answer();
 		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
@@ -98,7 +98,7 @@ public class TelephoneDeviceTests {
 	 * is busy
 	 */
 	@Test
-	public void test_ring_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException {
+	public void test_ring_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException, PhoneNotFoundException {
 		phone1.dial(2);
 		phone1.ring();
 		Thread.sleep(11000);

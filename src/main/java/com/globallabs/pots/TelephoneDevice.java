@@ -15,7 +15,7 @@ public class TelephoneDevice implements TelephoneFunctions {
 		this.exchange.addPhoneToExchange(this.telephone);
 	}
 	
-	public void dial(final int phoneNumber) throws DialingMySelfException {
+	public void dial(final int phoneNumber) throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		if (phoneNumber == telephone.getId()) {
 			throw new DialingMySelfException("You are calling yourself");
 		}
@@ -24,6 +24,7 @@ public class TelephoneDevice implements TelephoneFunctions {
 			exchange.enrouteCall(telephone.getId(), phoneNumber);
 		} catch(Exception e) {
 			telephone.setStatus(Status.OFF_CALL);
+			throw e;
 		}
 	}
 
@@ -55,5 +56,9 @@ public class TelephoneDevice implements TelephoneFunctions {
 	
 	public Telephone getPhoneInfo() {
 		return this.telephone;
+	}
+	
+	public String toString() {
+		return this.telephone.toString();
 	}
 }

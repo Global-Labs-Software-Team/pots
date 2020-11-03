@@ -10,7 +10,7 @@ public interface TelephoneFunctions {
 	 * @param phoneToCall
 	 * @throws DialingMySelfException if the phone you are dialing is you
 	 */
-	public void dial(final int number) throws DialingMySelfException;
+	public void dial(final int number) throws DialingMySelfException, BusyPhoneException, PhoneNotFoundException;
 	
 	/**
 	 * Sets the current device in a ringing state

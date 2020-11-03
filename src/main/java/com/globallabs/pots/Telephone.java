@@ -101,6 +101,6 @@ public class Telephone {
      */
     @Override
     public String toString() {
-        return "Telephone{" + "id=" + this.id + "}";
+        return "Telephone {" + "number=" + this.id + " with status " + this.status + "}" ;
     }
 }
