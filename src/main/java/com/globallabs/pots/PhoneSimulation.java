@@ -6,6 +6,7 @@ import java.util.List;
 import com.globallabs.operator.Exchange;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
+import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
@@ -13,7 +14,7 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
 public class PhoneSimulation {
 	
 	public static void main(String[] args) throws PhoneExistInNetworkException, DialingMySelfException, 
-			NoIncomingCallsException, BusyPhoneException, PhoneNotFoundException {
+			NoIncomingCallsException, BusyPhoneException, PhoneNotFoundException, NoCommunicationPathException {
 		// TODO Auto-generated method stub
 		Exchange exchange = new Exchange();
 		List<TelephoneDevice> telephones = new ArrayList<TelephoneDevice>();
