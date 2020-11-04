@@ -2,31 +2,40 @@ package com.globallabs.pots;
 
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.globallabs.abstractions.TelephoneFunctions;
+import com.globallabs.models.TelephoneModel;
+import com.globallabs.operator.Exchange;
+import com.globallabs.phoneexceptions.BusyPhoneException;
+import com.globallabs.phoneexceptions.DialingMySelfException;
+import com.globallabs.phoneexceptions.NoCommunicationPathException;
+import com.globallabs.phoneexceptions.NoIncomingCallsException;
+import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
+import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
-@Entity
-public class Telephone {
-    
-    private @Id int id;
+public class Telephone implements TelephoneFunctions {
     
     private Status status;
+    
+    private TelephoneModel phoneInfo;
+    private Exchange exchange;
     
     private Telephone lastCall;
     
     private Telephone incomingCall;
     
-    public Telephone(final int id){
-    	this.id = id;
+    public Telephone(TelephoneModel phoneInfo, Exchange exchange) throws PhoneExistInNetworkException{
+    	this.phoneInfo = phoneInfo;
+    	this.exchange = exchange;
+    	this.exchange.addPhoneToExchange(this);
     	this.status = Status.OFF_CALL;
     }
-
+    
     /**
-     * Getter for the Id field
-     * @return the identifier of the phone
+     * Get the number of the phone
+     * @return
      */
     public int getId() {
-        return id;
+    	return phoneInfo.getId();
     }
     
     /**
@@ -78,6 +87,45 @@ public class Telephone {
     	incomingCall = phone;
     }
     
+    public void dial(final int phoneNumber) throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
+		if (phoneNumber == phoneInfo.getId()) {
+			throw new DialingMySelfException("You are calling yourself");
+		}
+		setStatus(Status.DIALING);
+		try {
+			exchange.enrouteCall(phoneInfo.getId(), phoneNumber);
+		} catch(Exception e) {
+			setStatus(Status.OFF_CALL);
+			throw e;
+		}
+	}
+
+	public void dialing() throws BusyPhoneException {
+		if (getStatus().equals(Status.DIALING)){
+			long start = System.currentTimeMillis();
+			long end = start + 10*1000;
+			while (System.currentTimeMillis() < end) {
+				if (getStatus().equals(Status.BUSY)) return;
+				//System.out.println("Ringing");
+			}
+			setStatus(Status.OFF_CALL);
+		} else {
+			throw new BusyPhoneException("");
+		}
+		
+	}
+
+	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
+		if (getStatus().equals(Status.RINGING)){
+			setStatus(Status.BUSY);
+			exchange.openCallBetween(getId(), getIncomingCall().getId());
+		} else if (getStatus().equals(Status.BUSY)) {
+			throw new BusyPhoneException("You can't answer while you are in another call");
+		} else {
+			throw new NoIncomingCallsException("No one is calling you");
+		}
+	}
+    
     /**
      * Compare to telephone to see if they are the same
      * 
@@ -93,7 +141,7 @@ public class Telephone {
             return false;
         }
         Telephone telephone = (Telephone)o;
-        return Objects.equals(this.id, telephone.id);
+        return this.phoneInfo.equals(telephone.phoneInfo);
     }
 
     /**
@@ -101,6 +149,6 @@ public class Telephone {
      */
     @Override
     public String toString() {
-        return "Telephone {" + "number=" + this.id + " with status " + this.status + "}" ;
+        return phoneInfo.toString();
     }
 }

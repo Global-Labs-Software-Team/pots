@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import com.globallabs.models.TelephoneModel;
+
 @SpringBootTest
 class TelephoneControllerTests {
     @Autowired
@@ -21,7 +23,7 @@ class TelephoneControllerTests {
     @Test
     public void testDeletingExistingTelephone() {
         int id = 1;
-        controller.newTelephone(new Telephone(id)); // Telephone with ID one
+        controller.newTelephone(new TelephoneModel(id)); // Telephone with ID one
         ResponseEntity<?> response = controller.delete(id);
         assertEquals(204, response.getStatusCodeValue());
     }

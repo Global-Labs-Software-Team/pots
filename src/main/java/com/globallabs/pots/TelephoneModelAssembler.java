@@ -6,12 +6,14 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+import com.globallabs.models.TelephoneModel;
+
 @Component
 class TelephoneModelAssembler implements 
-    RepresentationModelAssembler<Telephone, EntityModel<Telephone>> {
+    RepresentationModelAssembler<TelephoneModel, EntityModel<TelephoneModel>> {
     
     @Override
-    public EntityModel<Telephone> toModel(Telephone telephone) {
+    public EntityModel<TelephoneModel> toModel(TelephoneModel telephone) {
         return EntityModel.of(telephone, 
             linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
             linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")

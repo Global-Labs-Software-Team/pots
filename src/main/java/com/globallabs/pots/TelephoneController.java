@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.globallabs.models.TelephoneModel;
+
 @RestController
 class TelephoneController {
 
@@ -33,7 +35,7 @@ class TelephoneController {
      * @return a list with the telephones
      */
     @GetMapping("/telephones")
-    List<Telephone> all() {
+    List<TelephoneModel> all() {
         return repository.findAll();
     }
 
@@ -57,8 +59,8 @@ class TelephoneController {
      * @return the information of the new telephone in the network
      */
     @PostMapping("/telephones")
-    ResponseEntity<?> newTelephone(@RequestBody Telephone newTelephone) {
-        EntityModel<Telephone> entityModel = assembler.toModel(repository.save(newTelephone)); 
+    ResponseEntity<?> newTelephone(@RequestBody TelephoneModel newTelephone) {
+        EntityModel<TelephoneModel> entityModel = assembler.toModel(repository.save(newTelephone)); 
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
@@ -67,7 +69,7 @@ class TelephoneController {
     /**
      * Delete an existing phone from the network
      * @param id the identifier of the phone
-     * @return a responseentity
+     * @return a response entity
      */
     @DeleteMapping("/telephones/{id}")
     ResponseEntity<?> delete(@PathVariable int id) {

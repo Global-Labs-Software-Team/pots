@@ -26,10 +26,4 @@ public interface TelephoneFunctions {
 	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
 //	
 //	public void hangUp();
-	
-	/**
-	 * Gets the info basic information
-	 * @return Telephone object
-	 */
-	public Telephone getPhoneInfo();
 }
