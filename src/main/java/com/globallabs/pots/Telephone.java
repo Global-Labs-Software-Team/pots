@@ -12,6 +12,10 @@ public class Telephone {
     
     private Status status;
     
+    private Telephone lastCall;
+    
+    private Telephone incomingCall;
+    
     public Telephone(final int id){
     	this.id = id;
     	this.status = Status.OFF_CALL;
@@ -42,6 +46,39 @@ public class Telephone {
     }
     
     /**
+     * Get the phone that you were in a call, also
+     * if you are in a call, the phone you are connected with
+     * @return the last phone you called
+     */
+    public Telephone getLastCall() {
+    	return lastCall;
+    }
+    
+    /**
+     * Set the phone of your last call or you current call
+     * @param phone the last phone you called or you are in a call with
+     */
+    public void setLastCall(final Telephone phone) {
+    	this.lastCall = phone;
+    }
+    
+    /**
+     * Get the phone that is calling you.
+     * @return the phone calling you, null if there is nobody calling you
+     */
+    public Telephone getIncomingCall() {
+    	return incomingCall;
+    }
+    
+    /**
+     * Set the phone that is calling you
+     * @param phone
+     */
+    public void setIncomingCall(final Telephone phone) {
+    	incomingCall = phone;
+    }
+    
+    /**
      * Compare to telephone to see if they are the same
      * 
      * @param o The object to compare
@@ -64,6 +101,6 @@ public class Telephone {
      */
     @Override
     public String toString() {
-        return "Telephone{" + "id=" + this.id + "}";
+        return "Telephone {" + "number=" + this.id + " with status " + this.status + "}" ;
     }
 }
