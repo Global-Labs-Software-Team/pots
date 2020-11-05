@@ -1,10 +1,8 @@
-package com.globallabs.pots;
-
-import java.util.Objects;
+package com.globallabs.telephone;
 
 import com.globallabs.abstractions.TelephoneFunctions;
-import com.globallabs.models.TelephoneModel;
 import com.globallabs.operator.Exchange;
+import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;

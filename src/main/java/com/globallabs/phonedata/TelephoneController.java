@@ -1,4 +1,4 @@
-package com.globallabs.pots;
+package com.globallabs.phonedata;
 
 import java.util.List;
 
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.globallabs.models.TelephoneModel;
-
 @RestController
-class TelephoneController {
+public class TelephoneController {
 
     private final TelephoneRepository repository;
     private final TelephoneModelAssembler assembler;
@@ -25,7 +23,7 @@ class TelephoneController {
      * Constructor of the class
      * @param repository the interface to connect to the database
      */
-    TelephoneController(TelephoneRepository repository, TelephoneModelAssembler assembler) {
+    public TelephoneController(TelephoneRepository repository, TelephoneModelAssembler assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
@@ -35,7 +33,7 @@ class TelephoneController {
      * @return a list with the telephones
      */
     @GetMapping("/telephones")
-    List<TelephoneModel> all() {
+    public List<TelephoneModel> all() {
         return repository.findAll();
     }
 
@@ -47,7 +45,7 @@ class TelephoneController {
      * @apiNote it is not implemented yet
      */
     @GetMapping("/telephones/{id}")
-    ResponseEntity<?> one(@PathVariable int id) {
+    public ResponseEntity<?> one(@PathVariable int id) {
         return ResponseEntity
                 .ok()
                 .body("ok");

@@ -1,7 +1,7 @@
 package com.globallabs.abstractions;
 
 import com.globallabs.phoneexceptions.*;
-import com.globallabs.pots.Telephone;
+import com.globallabs.telephone.Telephone;
 
 public interface TelephoneFunctions {
 	

@@ -1,4 +1,4 @@
-package com.globallabs.pots;
+package com.globallabs.phonedata;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -6,10 +6,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.globallabs.models.TelephoneModel;
-
 @Component
-class TelephoneModelAssembler implements 
+public class TelephoneModelAssembler implements 
     RepresentationModelAssembler<TelephoneModel, EntityModel<TelephoneModel>> {
     
     @Override

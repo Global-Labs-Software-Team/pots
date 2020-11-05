@@ -1,4 +1,4 @@
-package com.globallabs.models;
+package com.globallabs.phonedata;
 
 import java.util.Objects;
 

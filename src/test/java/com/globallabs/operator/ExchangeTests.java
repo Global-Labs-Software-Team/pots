@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.globallabs.models.TelephoneModel;
+import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-import com.globallabs.pots.Status;
-import com.globallabs.pots.Telephone;
+import com.globallabs.telephone.Status;
+import com.globallabs.telephone.Telephone;
 
 public class ExchangeTests {
 	

@@ -4,7 +4,7 @@ import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-import com.globallabs.pots.Telephone;
+import com.globallabs.telephone.Telephone;
 
 public interface ExchangeSpecification {
 	
