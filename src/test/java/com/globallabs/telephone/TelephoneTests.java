@@ -1,28 +1,37 @@
-package com.globallabs.pots;
+package com.globallabs.telephone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.globallabs.operator.Exchange;
-import com.globallabs.phoneexceptions.*;
+import com.globallabs.phonedata.TelephoneModel;
+import com.globallabs.phoneexceptions.BusyPhoneException;
+import com.globallabs.phoneexceptions.DialingMySelfException;
+import com.globallabs.phoneexceptions.NoCommunicationPathException;
+import com.globallabs.phoneexceptions.NoIncomingCallsException;
+import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
+import com.globallabs.phoneexceptions.PhoneNotFoundException;
+import com.globallabs.telephone.Status;
+import com.globallabs.telephone.Telephone;
 
-import java.lang.Thread;
-import java.util.concurrent.TimeUnit;
-
-public class TelephoneDeviceTests {
-	private Exchange exchange;
+class TelephoneTests {
+    
+private Exchange exchange;
 	
-	private TelephoneDevice phone1;
-	private TelephoneDevice phone2;
+	private Telephone phone1;
+	private Telephone phone2;
 	
 	@BeforeEach
 	public void setUp() throws PhoneExistInNetworkException {
 		exchange = new Exchange();
-		phone1 = new TelephoneDevice(new Telephone(1), exchange);
-		phone2 = new TelephoneDevice(new Telephone(2), exchange);
+		phone1 = new Telephone(new TelephoneModel(1), exchange);
+		phone2 = new Telephone(new TelephoneModel(2), exchange);
 	}
 	
 	/**
@@ -31,9 +40,8 @@ public class TelephoneDeviceTests {
 	 */
 	@Test
 	public void test_constructor() throws PhoneExistInNetworkException {
-		Telephone phone1 = new Telephone(4);
-		TelephoneDevice phone1Device = new TelephoneDevice(phone1, exchange);
-		assertEquals(phone1, phone1Device.getPhoneInfo());
+		Telephone phone1 = new Telephone(new TelephoneModel(4), exchange);
+		assertEquals(4, phone1.getId());
 	}
 	
 	/**
@@ -42,8 +50,8 @@ public class TelephoneDeviceTests {
 	@Test
 	public void test_dial_success() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
 		phone1.dial(2);
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
-		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		Status statusPhone1 = phone1.getStatus();
+		Status statusPhone2 = phone2.getStatus();
 		assertEquals(Status.RINGING, statusPhone2);
 		assertEquals(Status.DIALING, statusPhone1);
 	}
@@ -54,10 +62,10 @@ public class TelephoneDeviceTests {
 	 */
 	@Test
 	public void test_dial_busy_phone() throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
-		phone2.getPhoneInfo().setStatus(Status.BUSY);
+		phone2.setStatus(Status.BUSY);
 		assertThrows(BusyPhoneException.class, () -> {phone1.dial(2);});
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
-		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		Status statusPhone1 = phone1.getStatus();
+		Status statusPhone2 = phone2.getStatus();
 		assertEquals(Status.BUSY, statusPhone2);
 		assertEquals(Status.OFF_CALL, statusPhone1);
 	}
@@ -73,10 +81,10 @@ public class TelephoneDeviceTests {
 	 */
 	@Test
 	public void test_dialing_phone() throws DialingMySelfException, BusyPhoneException {
-		phone1.getPhoneInfo().setStatus(Status.DIALING);
-		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
-		phone2.getPhoneInfo().setStatus(Status.RINGING);
-		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
+		phone1.setStatus(Status.DIALING);
+		phone1.setLastCall(phone2);
+		phone2.setStatus(Status.RINGING);
+		phone2.setIncomingCall(phone1);
 		Runnable runnable =
 		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
 		Thread t = new Thread(runnable);
@@ -84,8 +92,8 @@ public class TelephoneDeviceTests {
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch(Exception e) {};
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
-		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		Status statusPhone1 = phone1.getStatus();
+		Status statusPhone2 = phone2.getStatus();
 		assertEquals(Status.DIALING, statusPhone1);
 		assertEquals(Status.RINGING, statusPhone2);
 	}
@@ -95,17 +103,17 @@ public class TelephoneDeviceTests {
 	 */
 	@Test
 	public void test_answer() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
-		phone1.getPhoneInfo().setStatus(Status.DIALING);
-		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
-		phone2.getPhoneInfo().setStatus(Status.RINGING);
-		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
+		phone1.setStatus(Status.DIALING);
+		phone1.setLastCall(phone2);
+		phone2.setStatus(Status.RINGING);
+		phone2.setIncomingCall(phone1);
 		Runnable runnable =
 		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
 		Thread t = new Thread(runnable);
 		t.start();
 		phone2.answer();
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
-		Status statusPhone2 = phone2.getPhoneInfo().getStatus();
+		Status statusPhone1 = phone1.getStatus();
+		Status statusPhone2 = phone2.getStatus();
 		assertEquals(Status.BUSY, statusPhone1);
 		assertEquals(Status.BUSY, statusPhone2);
 	}
@@ -116,10 +124,10 @@ public class TelephoneDeviceTests {
 	 */
 	@Test
 	public void test_dialing_unavailable_phone() throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException, InterruptedException {
-		phone1.getPhoneInfo().setStatus(Status.DIALING);
-		phone1.getPhoneInfo().setLastCall(phone2.getPhoneInfo());
-		phone2.getPhoneInfo().setStatus(Status.RINGING);
-		phone2.getPhoneInfo().setIncomingCall(phone1.getPhoneInfo());
+		phone1.setStatus(Status.DIALING);
+		phone1.setLastCall(phone2);
+		phone2.setStatus(Status.RINGING);
+		phone2.setIncomingCall(phone1);
 		Runnable runnable =
 		        () -> { try { phone1.dialing(); } catch(Exception e) {}};
 		Thread t = new Thread(runnable);
@@ -127,9 +135,8 @@ public class TelephoneDeviceTests {
 		try {
 			TimeUnit.SECONDS.sleep(11);
 		} catch(Exception e) {};
-		Status statusPhone1 = phone1.getPhoneInfo().getStatus();
+		Status statusPhone1 = phone1.getStatus();
 		assertEquals(Status.OFF_CALL, statusPhone1);
 	}
 
-	
 }

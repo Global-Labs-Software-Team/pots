@@ -1,4 +1,4 @@
-package com.globallabs.pots;
+package com.globallabs.phonedata;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -7,11 +7,11 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 @Component
-class TelephoneModelAssembler implements 
-    RepresentationModelAssembler<Telephone, EntityModel<Telephone>> {
+public class TelephoneModelAssembler implements 
+    RepresentationModelAssembler<TelephoneModel, EntityModel<TelephoneModel>> {
     
     @Override
-    public EntityModel<Telephone> toModel(Telephone telephone) {
+    public EntityModel<TelephoneModel> toModel(TelephoneModel telephone) {
         return EntityModel.of(telephone, 
             linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
             linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")

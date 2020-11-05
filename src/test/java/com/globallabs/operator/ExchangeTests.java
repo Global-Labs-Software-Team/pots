@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-import com.globallabs.pots.Status;
-import com.globallabs.pots.Telephone;
+import com.globallabs.telephone.Status;
+import com.globallabs.telephone.Telephone;
 
 public class ExchangeTests {
 	
@@ -22,10 +23,8 @@ public class ExchangeTests {
 	@BeforeEach
 	public void setUp() throws PhoneExistInNetworkException {
 		exchange = new Exchange();
-		telephone = new Telephone(1);
-		telephoneTwo = new Telephone(2);
-		exchange.addPhoneToExchange(telephone);
-		exchange.addPhoneToExchange(telephoneTwo);
+		telephone = new Telephone(new TelephoneModel(1), exchange);
+		telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
 	}
 	
 	@Test
@@ -41,7 +40,7 @@ public class ExchangeTests {
 	@Test
 	void test_addPhoneToExchange_success() throws PhoneExistInNetworkException {
 		Exchange exchange = new Exchange();
-		exchange.addPhoneToExchange(new Telephone(1));
+		new Telephone(new TelephoneModel(1), exchange);
 		assertEquals(1, exchange.getNumberOfPhones());
 	}
 	
@@ -52,8 +51,7 @@ public class ExchangeTests {
 	@Test
 	void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException {
 		Exchange exchange = new Exchange();
-		Telephone telephone = new Telephone(1);
-		exchange.addPhoneToExchange(telephone);
+		Telephone telephone = new Telephone(new TelephoneModel(1), exchange);
 		
 		assertThrows(PhoneExistInNetworkException.class, () -> {exchange.addPhoneToExchange(telephone);});
 	}
@@ -179,8 +177,8 @@ public class ExchangeTests {
 	 */
 	@Test
 	void test_closeCall_when_a_communication_path_does_not_exist() throws PhoneExistInNetworkException {
-		Telephone telephoneThree = new Telephone(3);
-		exchange.addPhoneToExchange(telephoneThree);
+		Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
+
 		// Set up of the scenario: One is in a call with three
 		telephone.setLastCall(telephoneThree);
 		telephone.setStatus(Status.BUSY);

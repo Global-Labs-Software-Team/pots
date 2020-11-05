@@ -1,4 +1,4 @@
-package com.globallabs.pots;
+package com.globallabs.phonedata;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Interface that have the necessary functions to make
  * database operations
  */
-interface TelephoneRepository extends JpaRepository<Telephone, Long>{
+public interface TelephoneRepository extends JpaRepository<TelephoneModel, Integer>{
     
 }

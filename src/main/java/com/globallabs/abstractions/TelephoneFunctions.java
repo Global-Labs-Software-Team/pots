@@ -1,7 +1,7 @@
 package com.globallabs.abstractions;
 
 import com.globallabs.phoneexceptions.*;
-import com.globallabs.pots.Telephone;
+import com.globallabs.telephone.Telephone;
 
 public interface TelephoneFunctions {
 	
@@ -26,10 +26,4 @@ public interface TelephoneFunctions {
 	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
 //	
 //	public void hangUp();
-	
-	/**
-	 * Gets the info basic information
-	 * @return Telephone object
-	 */
-	public Telephone getPhoneInfo();
 }

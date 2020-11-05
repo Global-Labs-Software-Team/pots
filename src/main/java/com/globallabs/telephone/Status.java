@@ -1,4 +1,4 @@
-package com.globallabs.pots;
+package com.globallabs.telephone;
 
 /**
  * The different status that a phone can
