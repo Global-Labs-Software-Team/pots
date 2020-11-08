@@ -123,6 +123,10 @@ public class Telephone implements TelephoneFunctions {
 			throw new NoIncomingCallsException("No one is calling you");
 		}
 	}
+	
+	public void hangUp() {
+		
+	}
     
     /**
      * Compare to telephone to see if they are the same
