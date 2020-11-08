@@ -138,5 +138,21 @@ private Exchange exchange;
 		Status statusPhone1 = phone1.getStatus();
 		assertEquals(Status.OFF_CALL, statusPhone1);
 	}
-
+	
+	/**
+	 * Test that in at on going call between phone1 and phone2
+	 * if phone1 hang up the call, phone1 and phone2 status
+	 * are OFF_CALL
+	 */
+	@Test
+	public void test_hangUp_ongoingCall() {
+		phone1.setStatus(Status.BUSY);
+		phone1.setLastCall(phone2);
+		phone2.setStatus(Status.BUSY);
+		phone2.setLastCall(phone1);
+		
+		phone1.hangUp();
+		assertEquals(Status.OFF_CALL, phone1.getStatus());
+		assertEquals(Status.OFF_CALL, phone2.getStatus());
+	}
 }
