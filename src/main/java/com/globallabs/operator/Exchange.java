@@ -50,7 +50,7 @@ public class Exchange implements ExchangeSpecification {
 		Telephone phoneWhoCloseCall = getPhone(numberWhoCloseCall);
 		Telephone phoneTheOtherEnd = getPhone(theOtherNumberInCall);
 		
-		if (!(phoneWhoCloseCall.getLastCall() == phoneTheOtherEnd)) {
+		if (!(phoneWhoCloseCall.getLastCall() == phoneTheOtherEnd || phoneWhoCloseCall.getIncomingCall() == phoneTheOtherEnd)) {
 			throw new NoCommunicationPathException("There is no path between " + phoneWhoCloseCall + " and " + phoneTheOtherEnd);
 		}
 		
