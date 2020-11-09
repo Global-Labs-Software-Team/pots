@@ -115,8 +115,8 @@ public class Telephone implements TelephoneFunctions {
 
 	public void answer() throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
 		if (getStatus().equals(Status.RINGING)){
-			setStatus(Status.BUSY);
 			exchange.openCallBetween(getId(), getIncomingCall().getId());
+			setStatus(Status.BUSY);
 		} else if (getStatus().equals(Status.BUSY)) {
 			throw new BusyPhoneException("You can't answer while you are in another call");
 		} else {
@@ -124,8 +124,19 @@ public class Telephone implements TelephoneFunctions {
 		}
 	}
 	
-	public void hangUp() {
+	public void hangUp() throws NoCommunicationPathException {
+		Telephone otherPhone;
+		if (getStatus() == Status.RINGING) {
+			otherPhone = getIncomingCall();
+		} else if (getStatus() == Status.DIALING || getStatus() == Status.BUSY) {
+			otherPhone = getLastCall();
+		} else {
+			throw new NoCommunicationPathException("You don't have any active call");
+		}
 		
+		exchange.closeCallBetween(this.getId(), otherPhone.getId());
+		setStatus(Status.OFF_CALL);
+		setIncomingCall(null);
 	}
     
     /**

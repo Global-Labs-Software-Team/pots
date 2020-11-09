@@ -145,7 +145,7 @@ private Exchange exchange;
 	 * are OFF_CALL
 	 */
 	@Test
-	public void test_hangUp_ongoingCall() {
+	public void test_hangUp_ongoingCall() throws NoCommunicationPathException{
 		phone1.setStatus(Status.BUSY);
 		phone1.setLastCall(phone2);
 		phone2.setStatus(Status.BUSY);
@@ -154,5 +154,29 @@ private Exchange exchange;
 		phone1.hangUp();
 		assertEquals(Status.OFF_CALL, phone1.getStatus());
 		assertEquals(Status.OFF_CALL, phone2.getStatus());
+	}
+	
+	/**
+	 * Test that at incoming call from phone1 if phone2
+	 * cancel the incoming the call the status of phone1
+	 * and phone2 become OFF_CALL and the variable
+	 * incomingCall is null
+	 */
+	@Test
+	public void test_hangUp_incomingCall() throws NoCommunicationPathException {
+		phone1.setStatus(Status.DIALING);
+		phone1.setLastCall(phone2);
+		phone2.setStatus(Status.RINGING);
+		phone2.setIncomingCall(phone1);
+		
+		phone2.hangUp();
+		assertEquals(Status.OFF_CALL, phone1.getStatus());
+		assertEquals(Status.OFF_CALL, phone2.getStatus());
+		assertEquals(null, phone2.getIncomingCall());
+	}
+	
+	@Test
+	public void test_hangUp_whenThereIsNoCall() {
+		assertThrows(NoCommunicationPathException.class, () -> {phone1.hangUp();});
 	}
 }

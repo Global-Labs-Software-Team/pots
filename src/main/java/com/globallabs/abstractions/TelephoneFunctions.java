@@ -27,6 +27,7 @@ public interface TelephoneFunctions {
 //	
 	/**
 	 * Hang up the current call or a incoming call
+	 * @throws NoCommunicationPathException if there is no active call
 	 */
-	public void hangUp();
+	public void hangUp()throws NoCommunicationPathException;
 }
