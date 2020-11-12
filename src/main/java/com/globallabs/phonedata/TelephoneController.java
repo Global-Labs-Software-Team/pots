@@ -2,7 +2,6 @@ package com.globallabs.phonedata;
 
 import java.util.List;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +70,10 @@ public class TelephoneController {
      */
     @DeleteMapping("/telephones/{id}")
     ResponseEntity<?> delete(@PathVariable int id) {
-        throw new NotYetImplementedException();
+        TelephoneModel telephoneModelToDelete = new TelephoneModel(id);
+        repository.delete(telephoneModelToDelete);;
+        return ResponseEntity
+            .status(204)
+            .body("Successfully deleted");
     }
 }
