@@ -10,6 +10,7 @@ import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
+import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
@@ -21,7 +22,7 @@ public class PotsApplication {
 
 	public static void main(String[] args) throws PhoneExistInNetworkException, 
 					BusyPhoneException, PhoneExistInNetworkException, PhoneNotFoundException, 
-					DialingMySelfException, NoCommunicationPathException, NoIncomingCallsException {
+					DialingMySelfException, NoCommunicationPathException, NoIncomingCallsException, InvalidNumberException {
 		// TODO Auto-generated method stub
 		Exchange exchange = new Exchange();
 		List<Telephone> telephones = new ArrayList<Telephone>();

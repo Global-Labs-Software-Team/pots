@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
+import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
@@ -21,7 +22,7 @@ public class ExchangeTests {
 	private Telephone telephoneTwo;
 	
 	@BeforeEach
-	public void setUp() throws PhoneExistInNetworkException {
+	public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
 		exchange = new Exchange();
 		telephone = new Telephone(new TelephoneModel(1), exchange);
 		telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
@@ -38,7 +39,7 @@ public class ExchangeTests {
 	 * @throws PhoneExistInNetworkException
 	 */
 	@Test
-	void test_addPhoneToExchange_success() throws PhoneExistInNetworkException {
+	void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, InvalidNumberException {
 		Exchange exchange = new Exchange();
 		new Telephone(new TelephoneModel(1), exchange);
 		assertEquals(1, exchange.getNumberOfPhones());
@@ -49,7 +50,7 @@ public class ExchangeTests {
 	 * in the exchange
 	 */
 	@Test
-	void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException {
+	void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException, InvalidNumberException {
 		Exchange exchange = new Exchange();
 		Telephone telephone = new Telephone(new TelephoneModel(1), exchange);
 		
@@ -176,7 +177,7 @@ public class ExchangeTests {
 	 * but there is no path there. So NoCommunicationPathException is thrown
 	 */
 	@Test
-	void test_closeCall_when_a_communication_path_does_not_exist() throws PhoneExistInNetworkException {
+	void test_closeCall_when_a_communication_path_does_not_exist() throws PhoneExistInNetworkException, InvalidNumberException {
 		Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
 
 		// Set up of the scenario: One is in a call with three

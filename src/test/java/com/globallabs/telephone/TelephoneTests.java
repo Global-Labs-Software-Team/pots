@@ -13,6 +13,7 @@ import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
+import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
@@ -28,7 +29,7 @@ private Exchange exchange;
 	private Telephone phone2;
 	
 	@BeforeEach
-	public void setUp() throws PhoneExistInNetworkException {
+	public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
 		exchange = new Exchange();
 		phone1 = new Telephone(new TelephoneModel(1), exchange);
 		phone2 = new Telephone(new TelephoneModel(2), exchange);
@@ -39,7 +40,7 @@ private Exchange exchange;
 	 * @throws PhoneExistInNetworkException
 	 */
 	@Test
-	public void test_constructor() throws PhoneExistInNetworkException {
+	public void test_constructor() throws PhoneExistInNetworkException, InvalidNumberException {
 		Telephone phone1 = new Telephone(new TelephoneModel(4), exchange);
 		assertEquals(4, phone1.getId());
 	}
