@@ -5,10 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.ResponseEntity;
 
-@SpringBootTest
+@SpringBootTest(classes = TelephoneController.class)
+@ComponentScan(basePackages = {"com.globallabs.phonedata"})
+@EnableAutoConfiguration
 class TelephoneControllerTests {
     @Autowired 
     private TelephoneController controller;

@@ -16,12 +16,14 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Telephone;
 
-//@SpringBootApplication
+@SpringBootApplication
 public class PotsApplication {
 
 	public static void main(String[] args) throws PhoneExistInNetworkException, 
 					BusyPhoneException, PhoneExistInNetworkException, PhoneNotFoundException, 
 					DialingMySelfException, NoCommunicationPathException, NoIncomingCallsException {
+		SpringApplication.run(PotsApplication.class, args);
+
 		// TODO Auto-generated method stub
 		Exchange exchange = new Exchange();
 		List<Telephone> telephones = new ArrayList<Telephone>();
