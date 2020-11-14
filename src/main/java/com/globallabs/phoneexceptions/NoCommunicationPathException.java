@@ -1,7 +1,10 @@
 package com.globallabs.phoneexceptions;
 
 public class NoCommunicationPathException extends Exception {
-	public NoCommunicationPathException(String message) {
-		super(message);
-	}
+
+  private static final long serialVersionUID = 1L;
+  
+  public NoCommunicationPathException(String message) {
+    super(message);
+  }
 }

@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Interface that have the necessary functions to make
- * database operations
+ * database operations.
  */
-public interface TelephoneRepository extends JpaRepository<TelephoneModel, Integer>{
+public interface TelephoneRepository extends JpaRepository<TelephoneModel, Integer> {
     
 }
