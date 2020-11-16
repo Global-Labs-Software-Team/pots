@@ -42,6 +42,14 @@ public class Telephone implements TelephoneFunctions {
   public int getId() {
     return phoneInfo.getId();
   }
+
+  /**
+   * Returns the phone model to get all the info.
+   * @return a phone model object
+   */
+  public TelephoneModel getPhoneInfo() {
+    return phoneInfo;
+  }
     
   /**
    * Returns the status of the telephone.
@@ -146,15 +154,17 @@ public class Telephone implements TelephoneFunctions {
   public void answer() 
       throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
     if (getStatus().equals(Status.RINGING)) {
-      setStatus(Status.BUSY);
       exchange.openCallBetween(getId(), getIncomingCall().getId());
+      setStatus(Status.BUSY);
+      setLastCall(getIncomingCall());
+      setIncomingCall(null);
     } else if (getStatus().equals(Status.BUSY)) {
       throw new BusyPhoneException("You can't answer while you are in another call");
     } else {
       throw new NoIncomingCallsException("No one is calling you");
     }
   }
-    
+  
   /**
    * Compare to telephone to see if they are the same.
    * 
@@ -178,6 +188,11 @@ public class Telephone implements TelephoneFunctions {
    */
   @Override
   public String toString() {
-    return phoneInfo.toString();
+    String lastCall = this.lastCall == null ? null :
+        this.lastCall.getPhoneInfo().toString();
+    String incomingCall = this.incomingCall == null ? null :
+        this.incomingCall.getPhoneInfo().toString(); 
+    return phoneInfo.toString() + " {" + "last call: " + lastCall
+      + ", incoming call: " + incomingCall + ", status: " + status + "}";
   }
 }

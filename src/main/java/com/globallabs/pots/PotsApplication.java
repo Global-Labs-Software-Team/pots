@@ -9,13 +9,41 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Telephone;
-import java.util.ArrayList;
-import java.util.List;
 //import org.springframework.boot.SpringApplication;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //@SpringBootApplication
 public class PotsApplication {
+
+  /**
+   * The first scenario is the simplest one. It consists
+   * of two phones t1 and t2 that call each other. t1 dial the
+   * t2 number, t2 answer the call, they talk for a moment and then
+   * t2 hang up the call.
+   * @throws PhoneExistInNetworkException If the phone already exist in the network
+   * @throws BusyPhoneException If the phone is busy
+   * @throws PhoneNotFoundException If the phone is not in the network
+   * @throws DialingMySelfException If you are calling yourself
+   * @throws NoCommunicationPathException There is no path between the phones
+   * @throws NoIncomingCallsException If you do not have a call to answer
+   */
+  public static void firstScenario() throws PhoneExistInNetworkException, 
+      BusyPhoneException, PhoneNotFoundException, DialingMySelfException,
+      NoCommunicationPathException, NoIncomingCallsException {
+    Exchange exchange = new Exchange();
+    Telephone t1 = new Telephone(new TelephoneModel(1), exchange);
+    Telephone t2 = new Telephone(new TelephoneModel(2), exchange);
+
+    t1.dial(2); // t1 dial t2
+    System.out.println(t1 + "\nis dialing\n" + t2);
+    System.out.println("------------------------");
+    t2.answer(); // t2 pick up the phone
+    System.out.println(t2 + "\nanswered\n" + t1);
+    System.out.println("------------------------");
+    // They talk for a while and then t2 hang up the call
+    // t2.hangUp();
+    System.out.println(t2 + "\nhang up\n" + t1);
+  }
 
   /**
    * Simulation of the pots applications.
@@ -32,32 +60,6 @@ public class PotsApplication {
   public static void main(String[] args) throws PhoneExistInNetworkException, 
           BusyPhoneException, PhoneNotFoundException, DialingMySelfException,
           NoCommunicationPathException, NoIncomingCallsException {
-    // TODO Auto-generated method stub
-    Exchange exchange = new Exchange();
-    List<Telephone> telephones = new ArrayList<Telephone>();
-        
-    // Create phones with the numbers: 0, 1, 2, 3
-    System.out.println("Telephones in the network:");
-    for (int number = 0; number < 4; number++) {
-      Telephone telephone = new Telephone(new TelephoneModel(number), exchange);
-      telephones.add(telephone);
-      System.out.println(telephone);
-    }
-    System.out.println();
-    // Simulating a call from 0 to 1 and 2 to 3
-    telephones.get(0).dial(1);
-    System.out.println(telephones.get(0) + " is calling " + telephones.get(1));
-        
-    // Telephone 1 accept the call of telephone 0
-    telephones.get(1).answer();
-    System.out.println(telephones.get(0) + " is talking " + telephones.get(1));
-        
-    // Telephone 3 try to call one when it is busy
-    try {
-      System.out.println(telephones.get(3) + " will try to call " + telephones.get(1));
-      telephones.get(3).dial(1);
-    } catch (Exception e) {
-      System.out.println(telephones.get(3) + " phone call failed: " + e.getMessage());
-    }
+    firstScenario();
   }
 }
