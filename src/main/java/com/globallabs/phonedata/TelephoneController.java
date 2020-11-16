@@ -33,7 +33,7 @@ public class TelephoneController {
      * @return a list with the telephones
      */
     @GetMapping("/telephones")
-    public List<TelephoneModel> all() {
+    List<TelephoneModel> all() {
         return repository.findAll();
     }
 
@@ -41,14 +41,10 @@ public class TelephoneController {
      * API to get one telephone in the database
      * @param id the id of the phone
      * @return the response
-     * 
-     * @apiNote it is not implemented yet
      */
     @GetMapping("/telephones/{id}")
-    public ResponseEntity<?> one(@PathVariable int id) {
-        return ResponseEntity
-                .ok()
-                .body("ok");
+    Optional<TelephoneModel> one(@PathVariable int id) {
+        return repository.findById(id);
     }
 
     /**
