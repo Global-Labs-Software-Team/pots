@@ -1,7 +1,10 @@
 package com.globallabs.phoneexceptions;
 
 public class PhoneExistInNetworkException extends Exception {
-	public PhoneExistInNetworkException(String message) {
-		super(message);
-	}
+
+  private static final long serialVersionUID = 1L;
+  
+  public PhoneExistInNetworkException(String message) {
+    super(message);
+  }
 }
