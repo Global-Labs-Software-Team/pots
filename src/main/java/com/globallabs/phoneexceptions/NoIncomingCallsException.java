@@ -1,7 +1,10 @@
 package com.globallabs.phoneexceptions;
 
 public class NoIncomingCallsException extends Exception {
-	public NoIncomingCallsException(String message) {
-		super(message);
-	}
+
+  private static final long serialVersionUID = 1L;
+  
+  public NoIncomingCallsException(String message) {
+    super(message);
+  }
 }

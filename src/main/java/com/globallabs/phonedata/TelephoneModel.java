@@ -10,6 +10,10 @@ public class TelephoneModel {
     
     private @Id int id;
     
+    TelephoneModel() {
+
+    }
+
     public TelephoneModel(final int id){
     	this.id = id;
     }
