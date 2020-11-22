@@ -23,12 +23,14 @@ class TelephoneTests {
 
   private Telephone phone1;
   private Telephone phone2;
+  private Telephone phone3;
 
   @BeforeEach
   public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = new Exchange();
     phone1 = new Telephone(new TelephoneModel(1), exchange);
     phone2 = new Telephone(new TelephoneModel(2), exchange);
+    phone3 = new Telephone(new TelephoneModel(3), exchange);
   }
 
   /**
@@ -137,6 +139,42 @@ class TelephoneTests {
     assertEquals(Status.BUSY, statusPhone2);
   }
 
+  /**
+   * Test the case when the phone does not
+   * have incoming calls and try to answer a call.
+   */
+  @Test
+  public void test_answer_without_incomingCall() {
+    phone1.setStatus(Status.OFF_CALL);
+    phone1.setIncomingCall(null);
+    
+    assertThrows(NoIncomingCallsException.class, () -> {
+      phone1.answer();
+    });
+  }
+  
+  /**
+   * Test the scenario when there is an ongoing call
+   * between two telephones t1, t2 and t1 has an incoming
+   * call of t3 and tries to answer it.
+   */
+  @Test
+  public void test_answer_whenBusy() {
+    phone1.setStatus(Status.BUSY);
+    phone1.setLastCall(phone2);
+    phone1.setIncomingCall(phone3);
+    
+    phone2.setStatus(Status.BUSY);
+    phone2.setLastCall(phone1);
+    
+    phone3.setStatus(Status.DIALING);
+    phone3.setLastCall(phone1);
+    
+    assertThrows(BusyPhoneException.class, () -> {
+      phone1.answer();
+    });
+  }
+  
   /**
    * Test that in at on going call between phone1 and phone2
    * if phone1 hang up the call, phone1 and phone2 status
