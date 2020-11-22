@@ -5,16 +5,17 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.globallabs.phoneexceptions.InvalidNumberException;
+
 @Entity
 public class TelephoneModel {
     
     private @Id int id;
     
-    TelephoneModel() {
-
-    }
-
-    public TelephoneModel(final int id){
+    public TelephoneModel(final int id) throws InvalidNumberException {
+    	if (id <= 0) {
+    		throw new InvalidNumberException("Negative number");
+    	}
     	this.id = id;
     }
 

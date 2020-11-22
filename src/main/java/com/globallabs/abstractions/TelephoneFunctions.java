@@ -32,6 +32,11 @@ public interface TelephoneFunctions {
      */
   public void answer() 
       throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
-  //
-  // public void hangUp();
+  
+  /**
+   * Hang up the ongoing call or the incoming call.
+   * @throws NoCommunicationPathException when you are hanging up to
+   a phone you are not connected
+   */
+  public void hangUp() throws NoCommunicationPathException;
 }

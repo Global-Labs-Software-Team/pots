@@ -164,6 +164,22 @@ public class Telephone implements TelephoneFunctions {
       throw new NoIncomingCallsException("No one is calling you");
     }
   }
+
+  @Override
+  public void hangUp() throws NoCommunicationPathException {
+    Telephone otherPhone;
+    if (getStatus() == Status.RINGING) {
+      otherPhone = getIncomingCall();
+    } else if (getStatus() == Status.DIALING || getStatus() == Status.BUSY) {
+      otherPhone = getLastCall();
+    } else {
+      throw new NoCommunicationPathException("You don't have any active call");
+    }
+    
+    exchange.closeCallBetween(this.getId(), otherPhone.getId());
+    setStatus(Status.OFF_CALL);
+    setIncomingCall(null);
+  }
   
   /**
    * Compare to telephone to see if they are the same.

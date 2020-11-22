@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
+import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
@@ -24,7 +25,7 @@ public class ExchangeTests {
    * Set up all the necessary functions for the tests.
    */
   @BeforeEach
-  public void setUp() throws PhoneExistInNetworkException {
+  public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = new Exchange();
     telephone = new Telephone(new TelephoneModel(1), exchange);
     telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
@@ -40,7 +41,8 @@ public class ExchangeTests {
    * Test that a phone is added successfully.
    */
   @Test
-  void test_addPhoneToExchange_success() throws PhoneExistInNetworkException {
+  void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
+      InvalidNumberException {
     Exchange exchange = new Exchange();
     new Telephone(new TelephoneModel(1), exchange);
     assertEquals(1, exchange.getNumberOfPhones());
@@ -51,7 +53,8 @@ public class ExchangeTests {
    * in the exchange.
    */
   @Test
-  void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException {
+  void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException,
+      InvalidNumberException {
     Exchange exchange = new Exchange();
     Telephone telephone = new Telephone(new TelephoneModel(1), exchange);
     
@@ -188,7 +191,7 @@ public class ExchangeTests {
    */
   @Test
   void test_closeCall_when_a_communication_path_does_not_exist() 
-      throws PhoneExistInNetworkException {
+      throws PhoneExistInNetworkException, InvalidNumberException {
     Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
 
     // Set up of the scenario: One is in a call with three
