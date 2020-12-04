@@ -1,8 +1,8 @@
 package com.globallabs.phonedata;
 
+import com.globallabs.phoneexceptions.InvalidNumberException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +66,7 @@ public class TelephoneController {
    * @return a response entity
    */
   @DeleteMapping("/telephones/{id}")
-  ResponseEntity<?> delete(@PathVariable int id) {
+  ResponseEntity<?> delete(@PathVariable int id) throws InvalidNumberException {
     TelephoneModel telephoneModelToDelete = new TelephoneModel(id);
     if (!repository.existsById(id)) {
       return ResponseEntity
