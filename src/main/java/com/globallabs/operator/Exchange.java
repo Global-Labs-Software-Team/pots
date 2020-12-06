@@ -51,7 +51,7 @@ public class Exchange implements ExchangeSpecification {
   private LinkedList<Telephone> telephones;
   
   public Exchange() {
-    this.telephones = new LinkedList<Telephone>();
+    telephones = new LinkedList<Telephone>();
   }
   
   @Override
@@ -115,11 +115,11 @@ public class Exchange implements ExchangeSpecification {
       throw new PhoneExistInNetworkException("The phone " 
         + phone + "is already in the network");
     }
-    this.telephones.add(phone);
+    telephones.add(phone);
   }
   
   public int getNumberOfPhones() {
-    return this.telephones.size();
+    return telephones.size();
   }
   
   @Override
