@@ -36,7 +36,7 @@ import java.util.LinkedList;
  * of the parameters is important. These parameters follow this logic:
  * the first parameter represents the Telephone who called the function,
  * the second parameter represents the Telephone that is going to be
- * synchronized by the consequences of the function. For example:
+ * synchronized by the consequences of this function. For example:
  * 
  * <p>You have two telephones t1 and t2, t1 dial t2, this means that t1
  * called the function enrouteCall. Then, enrouteCall will synchronize t2
