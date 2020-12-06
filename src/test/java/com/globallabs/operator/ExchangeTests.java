@@ -11,30 +11,32 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.BeforeAll;
+// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 public class ExchangeTests {
   
-  private Exchange exchange;
-  private Telephone telephone;
-  private Telephone telephoneTwo;
+  private static Exchange exchange;
+  private static Telephone telephone;
+  private static Telephone telephoneTwo;
   
   /**
    * Set up all the necessary functions for the tests.
    */
-  @BeforeEach
-  public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
-    exchange = new Exchange();
+  @BeforeAll
+  public static void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
+    exchange = Exchange.getInstance();
     telephone = new Telephone(new TelephoneModel(1), exchange);
     telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
   }
   
   @Test
-  void test_constructor() {
-    Exchange exchange = new Exchange();
-    assertEquals(0, exchange.getNumberOfPhones());
+  void test_getInstance_first_time() {
+    Exchange exchange = Exchange.getInstance();
+    assertEquals(3, exchange.getNumberOfPhones());
   }
   
   /**
@@ -43,9 +45,9 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
       InvalidNumberException {
-    Exchange exchange = new Exchange();
-    new Telephone(new TelephoneModel(1), exchange);
-    assertEquals(1, exchange.getNumberOfPhones());
+    Exchange exchange = Exchange.getInstance();
+    new Telephone(new TelephoneModel(9), exchange);
+    assertEquals(3, exchange.getNumberOfPhones());
   }
   
   /**
@@ -55,11 +57,10 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException,
       InvalidNumberException {
-    Exchange exchange = new Exchange();
-    Telephone telephone = new Telephone(new TelephoneModel(1), exchange);
-    
+    Exchange exchange = Exchange.getInstance();
+
     assertThrows(PhoneExistInNetworkException.class, () -> {
-      exchange.addPhoneToExchange(telephone);
+      new Telephone(new TelephoneModel(1), exchange);
     });
   }
   
@@ -71,7 +72,9 @@ public class ExchangeTests {
   @Test 
   void test_enrouteCall_success() throws BusyPhoneException, 
       PhoneNotFoundException, PhoneExistInNetworkException {
-    // Telephone two decides to call telephone one
+    // Telephone two decides to call telephone one and
+    // telephone one is free
+    telephone.setStatus(Status.OFF_CALL);
     exchange.enrouteCall(2, 1);
     // The telephone one receive the notification
     assertEquals(Status.RINGING, telephone.getStatus());
@@ -99,9 +102,9 @@ public class ExchangeTests {
    */
   @Test
   void test_enrouteCall_when_phone_no_exist() {
-    Exchange exchange = new Exchange();
+    Exchange exchange = Exchange.getInstance();
     assertThrows(PhoneNotFoundException.class, () -> {
-      exchange.enrouteCall(2, 1);
+      exchange.enrouteCall(4, 1);
     });
   }
   
@@ -136,6 +139,10 @@ public class ExchangeTests {
    */
   @Test
   void test_openCall_without_incomingCall() {
+    telephone.setStatus(Status.OFF_CALL);
+    telephone.setIncomingCall(null);
+    telephoneTwo.setStatus(Status.OFF_CALL);
+    telephoneTwo.setLastCall(null);
     assertThrows(NoCommunicationPathException.class, () -> {
       exchange.openCallBetween(1, 2);
     });
@@ -200,6 +207,9 @@ public class ExchangeTests {
     
     telephoneThree.setLastCall(telephone);
     telephoneThree.setStatus(Status.BUSY);
+
+    telephoneTwo.setLastCall(null);
+    telephoneTwo.setStatus(Status.OFF_CALL);
     
     // Exchange try to cancel a call between 1 and 2 but there is no connection
     assertThrows(NoCommunicationPathException.class, () -> {

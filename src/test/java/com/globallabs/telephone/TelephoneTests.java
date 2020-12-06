@@ -13,21 +13,22 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
 class TelephoneTests {
 
-  private Exchange exchange;
+  private static Exchange exchange;
 
-  private Telephone phone1;
-  private Telephone phone2;
-  private Telephone phone3;
+  private static Telephone phone1;
+  private static Telephone phone2;
+  private static Telephone phone3;
 
-  @BeforeEach
-  public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
-    exchange = new Exchange();
+  @BeforeAll
+  public static void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
+    exchange = Exchange.getInstance();
     phone1 = new Telephone(new TelephoneModel(1), exchange);
     phone2 = new Telephone(new TelephoneModel(2), exchange);
     phone3 = new Telephone(new TelephoneModel(3), exchange);
@@ -213,6 +214,8 @@ class TelephoneTests {
 
   @Test
   public void test_hangUp_whenThereIsNoCall() {
+    phone1.setStatus(Status.OFF_CALL);
+    phone1.setLastCall(null);
     assertThrows(NoCommunicationPathException.class, () -> {
       phone1.hangUp();
     });
