@@ -55,57 +55,56 @@ public class Exchange implements ExchangeSpecification {
   }
   
   @Override
-  public void enrouteCall(final int phoneNumberFrom, final int phoneNumber) 
+  public void enrouteCall(final int origin, final int destination) 
       throws BusyPhoneException, PhoneNotFoundException {
-    Telephone phoneToCall = getPhone(phoneNumber);
-    Telephone originPhone = getPhone(phoneNumberFrom);
-    if (phoneToCall == null || originPhone == null) {
+    Telephone originPhone = getPhone(origin);
+    Telephone destinationPhone = getPhone(destination);
+    if (destinationPhone == null || originPhone == null) {
       throw new PhoneNotFoundException("Either, the phone with id " 
-        + phoneNumber + "or" + phoneNumberFrom + " does not belongs to the network");
+        + destination + "or" + origin + " does not belongs to the network");
     }
-    if (phoneToCall.getStatus() == Status.BUSY) {
-      throw new BusyPhoneException("The phone with id " + phoneNumber + " is busy");
+    if (destinationPhone.getStatus() == Status.BUSY) {
+      throw new BusyPhoneException("The phone with id " + destination + " is busy");
     }
-    originPhone.setLastCall(phoneToCall);
-    phoneToCall.setStatus(Status.RINGING);
-    phoneToCall.setIncomingCall(originPhone);
+    originPhone.setLastCall(destinationPhone);
+    destinationPhone.setStatus(Status.RINGING);
+    destinationPhone.setIncomingCall(originPhone);
   }
   
   @Override
-  public void openCallBetween(final int receiverNumber, final int callingNumber) 
+  public void openCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException {
-    Telephone phone = getPhone(receiverNumber); // Phone receiving the call
-    Telephone origin = getPhone(callingNumber); // Phone that is calling
+    Telephone originPhone = getPhone(origin); // Phone receiving the call
+    Telephone destinationPhone = getPhone(destination); // Phone that is calling
       
     // If the origin phone is not the one calling the other phone
     // or
     // the origin last call is not the same as the other phone
-    if (!origin.equals(phone.getIncomingCall()) || !phone.equals(origin.getLastCall())) {
+    if (!destinationPhone.equals(originPhone.getIncomingCall()) 
+        || !originPhone.equals(destinationPhone.getLastCall())) {
       throw new NoCommunicationPathException("There is no path between " 
-      + origin + " and " + phone);
+      + destinationPhone + " and " + originPhone);
     }
       
-    origin.setStatus(Status.BUSY);
+    destinationPhone.setStatus(Status.BUSY);
   }
   
   @Override
-  public void closeCallBetween(final int numberWhoCloseCall, final int theOtherNumberInCall) 
+  public void closeCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException {
-    Telephone phoneWhoCloseCall = getPhone(numberWhoCloseCall);
-    Telephone phoneTheOtherEnd = getPhone(theOtherNumberInCall);
-    if (!((phoneWhoCloseCall.getLastCall() != null 
-        && phoneWhoCloseCall.getLastCall().equals(phoneTheOtherEnd)) 
-          || (phoneWhoCloseCall.getIncomingCall() != null 
-          && phoneWhoCloseCall.getIncomingCall().equals(phoneTheOtherEnd)))) {
+    Telephone originPhone = getPhone(origin);
+    Telephone destinationPhone = getPhone(destination);
+    if (!((originPhone.getLastCall() != null 
+        && originPhone.getLastCall().equals(destinationPhone)) 
+          || (originPhone.getIncomingCall() != null 
+          && originPhone.getIncomingCall().equals(destinationPhone)))) {
       throw new NoCommunicationPathException(
-                "There is no path between " + phoneWhoCloseCall + " and " + phoneTheOtherEnd);
+                "There is no path between " + originPhone + " and " + destinationPhone);
     }
-    
-    if (phoneTheOtherEnd.getStatus() == Status.RINGING) {
-      phoneTheOtherEnd.setIncomingCall(null);
+    if (destinationPhone.getStatus() == Status.RINGING) {
+      destinationPhone.setIncomingCall(null);
     }
-    
-    phoneTheOtherEnd.setStatus(Status.OFF_CALL);
+    destinationPhone.setStatus(Status.OFF_CALL);
   }
   
   @Override

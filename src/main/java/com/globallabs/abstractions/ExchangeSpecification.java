@@ -10,33 +10,35 @@ public interface ExchangeSpecification {
     
   /**
   * Route the call that a phone is requesting.
-  * @param phoneNumberFrom The telephone were the call is coming
-  * @param phoneNumber The destination telephone
+  * @param origin The telephone were the call is coming
+  * @param destination The destination telephone
   * @throws BusyPhoneException if the other phone is in a call
   * @throws PhoneNotFoundException if the other phone does not belong to the network
   */
-  public void enrouteCall(final int phoneNumberFrom, final int phoneNumber) 
+  public void enrouteCall(final int origin, final int destination) 
       throws BusyPhoneException, PhoneNotFoundException;
   
   /**
   * Close the communication channel with the given phone
   * number. This update the status of the other phone
   * to OFF_CALL
-  * @param theOtherNumberInCall the phoneNumber that you want to close the communication with
-  * @param numberWhoCloseCall the phone where the closeCall signal comes from
+  * @param origin the phone where the closeCall signal comes from
+  * @param destination the phoneNumber that you want to close the communication with
+  * @throws NoCommunicationPathException when there is no communication between origin
+  and destination
   */
-  public void closeCallBetween(final int numberWhoCloseCall, final int theOtherNumberInCall) 
+  public void closeCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException;
   
   /**
   * Open the communication channel with the given phone.
   * This update the status of the other phone to BUSY.
-  * @param callingNumber the phone number you one accept its call
-  * @param receiverNumber the phone where the openCall signal comes from
+  * @param origin the phone where the openCall signal comes from
+  * @param destination the phone number you one accept its call
   * @throws NoCommunicationPathException when a path from phoneNumberFrom and phoneNumber 
   does not exist
   */
-  public void openCallBetween(final int receiverNumber, final int callingNumber) 
+  public void openCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException;
   
   /**
