@@ -43,6 +43,10 @@ import java.util.LinkedList;
  * to give it the information that t1 is calling him. All the other functions
  * work in the same way.
  * 
+ * <p>Third remark, it only exists one Exchange instance across the application.
+ * All the phones to be able to connect between each other must use this single
+ * instance. Application of the Singleton design pattern.
+ * 
  * @author Daniel RODRIGUEZ
  * @since 1.0
  */
