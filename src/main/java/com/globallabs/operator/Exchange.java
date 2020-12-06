@@ -47,11 +47,29 @@ import java.util.LinkedList;
  * @since 1.0
  */
 public class Exchange implements ExchangeSpecification {
-    
+  
   private LinkedList<Telephone> telephones;
   
   public Exchange() {
     telephones = new LinkedList<Telephone>();
+  }
+
+  /**
+   * This private class will create an only exchange
+   * when a Telephone try to get it (Singleton Pattern).
+   * If the exchange does not exists then it will create it,
+   * else it will retrieve it. 
+   */
+  private static class ExchangeHolder {
+    private static final Exchange INSTANCE = new Exchange();
+  }
+
+  /**
+   * Access to the singleton of Exchange.
+   * @return the exchange
+   */
+  public static Exchange getInstance() {
+    return ExchangeHolder.INSTANCE;
   }
   
   @Override
