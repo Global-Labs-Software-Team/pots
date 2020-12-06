@@ -31,7 +31,7 @@ public class PotsApplication {
   public static void firstScenario() throws PhoneExistInNetworkException, 
       BusyPhoneException, PhoneNotFoundException, DialingMySelfException,
       NoCommunicationPathException, NoIncomingCallsException, InvalidNumberException {
-    Exchange exchange = new Exchange();
+    Exchange exchange = Exchange.getInstance();
     Telephone t1 = new Telephone(new TelephoneModel(1), exchange);
     Telephone t2 = new Telephone(new TelephoneModel(2), exchange);
 
