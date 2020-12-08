@@ -66,7 +66,7 @@ public class Telephone implements TelephoneFunctions {
    * @param newStatus the status to be set
    */
   public void setStatus(final Status newStatus) {
-    this.status = newStatus;
+    status = newStatus;
   }
     
   /**
@@ -85,7 +85,7 @@ public class Telephone implements TelephoneFunctions {
    * @param phone a Telephone object of the last phone you were in a call with
    */
   public void setLastCall(final Telephone phone) {
-    this.lastCall = phone;
+    lastCall = phone;
   }
     
   /**
