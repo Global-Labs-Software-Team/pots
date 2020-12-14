@@ -13,6 +13,7 @@ public class TelephoneModel {
   
   /**
    * Constructor for the TelephoneModel.
+   *
    * @param id identifier of the phone
    * @throws InvalidNumberException when the the identifier is 
    less than zero
@@ -27,6 +28,7 @@ public class TelephoneModel {
 
   /**
    * Getter for the Id field.
+   *
    * @return the identifier of the phone
    */
   public int getId() {
@@ -35,7 +37,7 @@ public class TelephoneModel {
   
   /**
    * Compare to telephone to see if they are the same.
-   * 
+   *
    * @param o The object to compare
    * @return true if they are equal, false otherwise
    */
@@ -47,7 +49,7 @@ public class TelephoneModel {
     if (!(o instanceof TelephoneModel)) {
       return false;
     }
-    TelephoneModel telephone = (TelephoneModel)o;
+    TelephoneModel telephone = (TelephoneModel) o;
     return Objects.equals(this.id, telephone.id);
   }
 

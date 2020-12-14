@@ -13,7 +13,6 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

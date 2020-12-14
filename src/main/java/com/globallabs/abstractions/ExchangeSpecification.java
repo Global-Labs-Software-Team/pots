@@ -17,6 +17,7 @@ public interface ExchangeSpecification {
   * <p>Example of its use: There is a Telephone 1 (t1) who is dialing a
   Telephone 2 (t2). To connect them t1 make use of enrouteCall(t1 number, t2 number)
   to create a communication link with t2.
+  *
   * @param origin The Telephone number of the device dialing (initiating the call).
   * @param destination The Telephone number of the device receiving the call.
   * @throws BusyPhoneException If the destination has an Status equal to Busy.
@@ -38,6 +39,7 @@ public interface ExchangeSpecification {
   * 
   * <p>Important: This method cannot be called before, creating a communication link (enrouteCall)
   and the peer receiving the call accept it (openCallBetween).
+  *
   * @param origin the number of the Telephone that wants to close the communication link.
   * @param destination the number of the Telephone in the other side of the communication
   link.
@@ -58,6 +60,7 @@ public interface ExchangeSpecification {
   *
   * <p>Important: This method cannot be called before creating a communication link
   (enrouteCall).
+  *
   * @param origin The Telephone who accept the call.
   * @param destination The Telephone who is dialing.
   * @throws NoCommunicationPathException when there is no communication link between
@@ -68,6 +71,7 @@ public interface ExchangeSpecification {
   
   /**
   * Add a phone to the exchange.
+  *
   * @param phone the Telephone device to be added.
   * @throws PhoneExistInNetworkException if the Telephone is already inside the network.
   */
@@ -75,12 +79,14 @@ public interface ExchangeSpecification {
   
   /**
   * Get the number of phone currently in the exchange.
+  *
   * @return the number of phones in the exchange
   */
   public int getNumberOfPhones();
   
   /**
   * Get a phone number from the exchange given a number.
+  *
   * @param number the phone number
   * @return a phone entity with that number
   */

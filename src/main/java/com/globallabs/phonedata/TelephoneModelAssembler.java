@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 public class TelephoneModelAssembler implements 
     RepresentationModelAssembler<TelephoneModel, EntityModel<TelephoneModel>> {
     
-    @Override
-    public EntityModel<TelephoneModel> toModel(TelephoneModel telephone) {
-        return EntityModel.of(telephone, 
-            linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
-            linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")
-        );
-    }
+  @Override
+  public EntityModel<TelephoneModel> toModel(TelephoneModel telephone) {
+    return EntityModel.of(telephone, 
+      linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
+      linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")
+    );
+  }
 }

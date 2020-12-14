@@ -21,6 +21,7 @@ public class PotsApplication {
    * of two phones t1 and t2 that call each other. t1 dial the
    * t2 number, t2 answer the call, they talk for a moment and then
    * t2 hang up the call.
+   *
    * @throws PhoneExistInNetworkException If the phone already exist in the network
    * @throws BusyPhoneException If the phone is busy
    * @throws PhoneNotFoundException If the phone is not in the network
