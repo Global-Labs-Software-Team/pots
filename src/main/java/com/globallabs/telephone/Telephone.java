@@ -58,10 +58,7 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Returns the number of the telephone.
-<<<<<<< HEAD
-=======
    *
->>>>>>> c1df60aa23ddddb593c28378b5b0ee6e122f9208
    * @return the number of the telephone
    */
   public int getId() {

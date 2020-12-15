@@ -13,14 +13,8 @@ public class TelephoneModelAssembler implements
   @Override
   public EntityModel<TelephoneModel> toModel(TelephoneModel telephone) {
     return EntityModel.of(telephone, 
-<<<<<<< HEAD
-            linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
-            linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")
-        );
-=======
       linkTo(methodOn(TelephoneController.class).one(telephone.getId())).withSelfRel(),
       linkTo(methodOn(TelephoneController.class).all()).withRel("telephones")
     );
->>>>>>> c1df60aa23ddddb593c28378b5b0ee6e122f9208
   }
 }
