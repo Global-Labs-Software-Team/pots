@@ -46,7 +46,7 @@ import java.util.LinkedList;
  * <p>Third remark, it only exists one Exchange instance across the application.
  * All the phones to be able to connect between each other must use this single
  * instance. Application of the Singleton design pattern.
- * 
+ *
  * @author Daniel RODRIGUEZ
  * @since 1.0
  */
@@ -70,6 +70,7 @@ public class Exchange implements ExchangeSpecification {
 
   /**
    * Access to the singleton of Exchange.
+   *
    * @return the exchange
    */
   public static Exchange getInstance() {
@@ -145,7 +146,7 @@ public class Exchange implements ExchangeSpecification {
   
   @Override
   public Telephone getPhone(final int phoneNumber) {
-    for (Telephone phone: telephones) {
+    for (Telephone phone : telephones) {
       if (phone.getId() == phoneNumber) {
         return phone;
       }

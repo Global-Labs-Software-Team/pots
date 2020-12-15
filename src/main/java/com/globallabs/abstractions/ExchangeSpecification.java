@@ -9,53 +9,84 @@ import com.globallabs.telephone.Telephone;
 public interface ExchangeSpecification {
     
   /**
-  * Route the call that a phone is requesting.
-  * @param origin The telephone were the call is coming
-  * @param destination The destination telephone
-  * @throws BusyPhoneException if the other phone is in a call
-  * @throws PhoneNotFoundException if the other phone does not belong to the network
+  * Create a communication link between two Telephone devices. This method is
+  for the use of the device initiating the call (dialing). The remark to this
+  method is that it will change the status of Telephone receiving the call, to
+  notify him that is receiving a call.
+  *
+  * <p>Example of its use: There is a Telephone 1 (t1) who is dialing a
+  Telephone 2 (t2). To connect them t1 make use of enrouteCall(t1 number, t2 number)
+  to create a communication link with t2.
+  *
+  * @param origin The Telephone number of the device dialing (initiating the call).
+  * @param destination The Telephone number of the device receiving the call.
+  * @throws BusyPhoneException If the destination has an Status equal to Busy.
+  * @throws PhoneNotFoundException if the Telephone the origin is trying to reach (destination)
+  does not belong to the exchange.
   */
   public void enrouteCall(final int origin, final int destination) 
       throws BusyPhoneException, PhoneNotFoundException;
   
   /**
-  * Close the communication channel with the given phone
-  * number. This update the status of the other phone
-  * to OFF_CALL
-  * @param origin the phone where the closeCall signal comes from
-  * @param destination the phoneNumber that you want to close the communication with
-  * @throws NoCommunicationPathException when there is no communication between origin
-  and destination
+  * Close the communication link between two Telephones that are
+  currently in a call. This method can be called from either of
+  the devices that belongs to the communication. It will update
+  the status of the Telephone that did not close the call, to notify
+  him that the call has ended.
+  *
+  * <p>Example of its use: Two Telephones are in a call: t1, t2. Then, t2
+  decides to close the call, it uses closeCallBetween(t2 number, t1 number).
+  * 
+  * <p>Important: This method cannot be called before, creating a communication link (enrouteCall)
+  and the peer receiving the call accept it (openCallBetween).
+  *
+  * @param origin the number of the Telephone that wants to close the communication link.
+  * @param destination the number of the Telephone in the other side of the communication
+  link.
+  * @throws NoCommunicationPathException when there is no communication link between origin
+  and destination.
   */
   public void closeCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException;
   
   /**
-  * Open the communication channel with the given phone.
-  * This update the status of the other phone to BUSY.
-  * @param origin the phone where the openCall signal comes from
-  * @param destination the phone number you one accept its call
-  * @throws NoCommunicationPathException when a path from phoneNumberFrom and phoneNumber 
-  does not exist
+  * Open the communication link with the destination phone. This method is for
+  the use of the Telephone that is receiving a call (it has an incoming call). It will
+  update the status of the Telephone who is calling properly.
+  *
+  * <p>Example of its use: The Telephone 1 (t1) dialed Telephone 2 (t2) using enrouteCall().
+  Telephone (t2) accept the call using openCallBetween(number t2, number t1). Now the
+  communication is fully established.
+  *
+  * <p>Important: This method cannot be called before creating a communication link
+  (enrouteCall).
+  *
+  * @param origin The Telephone who accept the call.
+  * @param destination The Telephone who is dialing.
+  * @throws NoCommunicationPathException when there is no communication link between
+  origin and destination.
   */
   public void openCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException;
   
   /**
-  * Add a phone to the network.
-  * @param phone the Telephone object to add to the exchange
-  * @throws PhoneExistInNetworkException if the phone is already inside the network
+  * Add a phone to the exchange.
+  *
+  * @param phone the Telephone device to be added.
+  * @throws PhoneExistInNetworkException if the Telephone is already inside the network.
   */
   public void addPhoneToExchange(final Telephone phone) throws PhoneExistInNetworkException;
   
   /**
-  * Getter for the telephones list.
-  * @return the number of phones in the network
+  * Get the number of phone currently in the exchange.
+  *
+  * @return the number of phones in the exchange
   */
   public int getNumberOfPhones();
   
   /**
-  * Get a phone number from the network given a number.
+  * Get a phone number from the exchange given a number.
+  *
   * @param number the phone number
   * @return a phone entity with that number
   */

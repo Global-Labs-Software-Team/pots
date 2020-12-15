@@ -44,7 +44,7 @@ public class Telephone implements TelephoneFunctions {
    * Telephone constructor. 
    * Takes the information from the model. Adds the phone to the exchange 
    * and sets it's status to OFF_CALL
-   * 
+   *
    * @param phoneInfo a telephone model containing the phone's information
    * @param exchange the exchange where the phone belongs
    */
@@ -58,6 +58,10 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Returns the number of the telephone.
+<<<<<<< HEAD
+=======
+   *
+>>>>>>> c1df60aa23ddddb593c28378b5b0ee6e122f9208
    * @return the number of the telephone
    */
   public int getId() {
@@ -66,6 +70,7 @@ public class Telephone implements TelephoneFunctions {
 
   /**
    * Returns the phone model to get all the info.
+   *
    * @return a phone model object
    */
   public TelephoneModel getPhoneInfo() {
@@ -74,7 +79,7 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Returns the status of the telephone.
-   * 
+   *
    * @return the status of the telephone
    */
   public Status getStatus() {
@@ -83,7 +88,7 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Sets a new status of the telephone.
-   * 
+   *
    * @param newStatus the status to be set
    */
   public void setStatus(final Status newStatus) {
@@ -93,7 +98,7 @@ public class Telephone implements TelephoneFunctions {
   /**
    * Returns the last phone you were in a call with.
    * If you are in a call, returns the phone you are connected with
-   * 
+   *
    * @return a Telephone object of the last phone you were in a call with
    */
   public Telephone getLastCall() {
@@ -102,7 +107,7 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Sets the last phone you were in a call with.
-   * 
+   *
    * @param phone a Telephone object of the last phone you were in a call with
    */
   public void setLastCall(final Telephone phone) {
@@ -112,7 +117,7 @@ public class Telephone implements TelephoneFunctions {
   /**
    * Returns the phone that is calling you.
    * Returns null if nobody is calling
-   * 
+   *
    * @return the phone calling you
    */
   public Telephone getIncomingCall() {
@@ -121,7 +126,7 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Sets the phone that is calling you.
-   * 
+   *
    * @param phone the phone which is the origin of the call
    */
   public void setIncomingCall(final Telephone phone) {
@@ -130,7 +135,7 @@ public class Telephone implements TelephoneFunctions {
   
   /**
    * Dial a phone by it's number.
-   * 
+   *
    * @param phoneNumber the number to be dialed
    */
   public void dial(final int phoneNumber) 
@@ -149,7 +154,7 @@ public class Telephone implements TelephoneFunctions {
 
   /**
    * Dialing a call for 10 seconds.
-   * 
+   *
    * @throws BusyPhoneException if the call is not answered in time
    */
   public void dialing() throws BusyPhoneException {
@@ -206,7 +211,7 @@ public class Telephone implements TelephoneFunctions {
   
   /**
    * Compare to telephone to see if they are the same.
-   * 
+   *
    * @param o The object to compare
    * @return true if they are equal, false otherwise
    */
@@ -218,7 +223,7 @@ public class Telephone implements TelephoneFunctions {
     if (!(o instanceof Telephone)) {
       return false;
     }
-    Telephone telephone = (Telephone)o;
+    Telephone telephone = (Telephone) o;
     return this.phoneInfo.equals(telephone.phoneInfo);
   }
 

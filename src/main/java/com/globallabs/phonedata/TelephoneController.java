@@ -21,6 +21,7 @@ public class TelephoneController {
 
   /**
    * Constructor of the class.
+   *
    * @param repository the interface to connect to the database
    */
   public TelephoneController(TelephoneRepository repository, TelephoneModelAssembler assembler) {
@@ -30,8 +31,9 @@ public class TelephoneController {
 
   /**
    * API to get all the telephones in the database.
-    * @return a list with the telephones
-    */
+   *
+   * @return a list with the telephones
+   */
   @GetMapping("/telephones")
   List<TelephoneModel> all() {
     return repository.findAll();
@@ -39,9 +41,10 @@ public class TelephoneController {
 
   /**
    * API to get one telephone in the database.
-    * @param id the id of the phone
-    * @return the response
-    */
+   *
+   * @param id the id of the phone
+   * @return the response
+   */
   @GetMapping("/telephones/{id}")
   Optional<TelephoneModel> one(@PathVariable int id) {
     return repository.findById(id);
@@ -49,6 +52,7 @@ public class TelephoneController {
 
   /**
    * Add a new telephone to the network.
+   *
    * @param newTelephone the new telephone information
    * @return the information of the new telephone in the network
    */
@@ -62,6 +66,7 @@ public class TelephoneController {
 
   /**
    * Delete an existing phone from the network.
+   *
    * @param id the identifier of the phone
    * @return a response entity
    */
