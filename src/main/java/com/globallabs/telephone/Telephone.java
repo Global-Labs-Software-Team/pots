@@ -10,6 +10,28 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
+/**
+ * Telephone is the class that offers modification of the attributes of a phone model.
+ * It's goal is to perform operations for the abstract methods that it implements from
+ * 'TelephoneFunctions'
+ * 
+ * Initialize (using a constructor) a telephone model within the exchange.
+ * The functions offered includes:
+ * <ul>
+ * <li>Retrieve and set the id
+ * <li>Retrieve and set the id
+ * <li>Retrieve the entire phone model
+ * <li>Retrieve and set last call
+ * <li>Retrieve and set incoming call
+ * <li>Performs the dialing operation with another phone
+ * <li>Simulates dialing behavior for a phone
+ * <li>Answers an existing call
+ * </ul>
+ * 
+ * @since 1.0
+ * @author Byron Barkhuizen
+ */
+
 public class Telephone implements TelephoneFunctions {
   private TelephoneModel phoneInfo;
   private Exchange exchange;
@@ -36,7 +58,6 @@ public class Telephone implements TelephoneFunctions {
     
   /**
    * Returns the number of the telephone.
-   * 
    * @return the number of the telephone
    */
   public int getId() {
@@ -150,6 +171,8 @@ public class Telephone implements TelephoneFunctions {
 
   /**
    * Answer a call.
+   * @throws BusyPhoneException if you are busy
+   * @throws NoIncomingCallsException if trying to answer non-existent call
    */
   public void answer() 
       throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
