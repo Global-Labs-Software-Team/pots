@@ -213,4 +213,26 @@ public class ExchangeTests {
       exchange.closeCallBetween(2, 1);
     });
   }
+
+  /**
+   * Test that the getNumberOfPhones works correctly. First resetting
+   * the exchange and asserting that the number of phones is zero. After
+   * adding a new phone and asserting that the number of phones increases
+   * by one.
+   * @throws InvalidNumberException if the number is invalid. Less than zero
+   * @throws PhoneExistInNetworkException if the number already in the list
+   mantained by exchange.
+   */
+  @Test
+  void test_getNumberOfPhones() 
+      throws InvalidNumberException, PhoneExistInNetworkException {
+    int emptyList = 0;
+    exchange.resetExchange(); // Empty the list. size = 0
+    assertEquals(emptyList, exchange.getNumberOfPhones());
+    
+    int newPhoneId = 9;
+    new Telephone(new TelephoneModel(newPhoneId), exchange); // Add a new phone
+    int exchangeExpectedSize = 1;
+    assertEquals(exchangeExpectedSize, exchange.getNumberOfPhones());
+  }
 }
