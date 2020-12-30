@@ -12,30 +12,31 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
 // import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 public class ExchangeTests {
   
-  private static Exchange exchange;
+  private static ExchangeForTests exchange;
   private static Telephone telephone;
   private static Telephone telephoneTwo;
   
   /**
-   * Set up all the necessary functions for the tests.
+   * Set up all the necessary functions for the tests. Each time
+   * a test is executed a exchange with two phones registered is
+   * provided.
+   * 
+   * <p>If you are making a test and you want a clean slate you
+   * can reset the exchange inside your new test with the resetExchange()
+   * method.
    */
-  @BeforeAll
-  public static void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
-    exchange = Exchange.getInstance();
+  @BeforeEach
+  public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
+    exchange = ExchangeForTests.getInstance();
+    exchange.resetExchange();
     telephone = new Telephone(new TelephoneModel(1), exchange);
     telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
-  }
-  
-  @Test
-  void test_getInstance_first_time() {
-    Exchange exchange = Exchange.getInstance();
-    assertEquals(3, exchange.getNumberOfPhones());
   }
   
   /**
@@ -44,7 +45,6 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
       InvalidNumberException {
-    Exchange exchange = Exchange.getInstance();
     new Telephone(new TelephoneModel(9), exchange);
     assertEquals(3, exchange.getNumberOfPhones());
   }
@@ -56,8 +56,6 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException,
       InvalidNumberException {
-    Exchange exchange = Exchange.getInstance();
-
     assertThrows(PhoneExistInNetworkException.class, () -> {
       new Telephone(new TelephoneModel(1), exchange);
     });

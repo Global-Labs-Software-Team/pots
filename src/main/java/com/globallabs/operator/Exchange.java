@@ -52,7 +52,7 @@ import java.util.LinkedList;
  */
 public class Exchange implements ExchangeSpecification {
   
-  private LinkedList<Telephone> telephones;
+  protected LinkedList<Telephone> telephones;
   
   public Exchange() {
     telephones = new LinkedList<Telephone>();
