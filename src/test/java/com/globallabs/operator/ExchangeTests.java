@@ -41,12 +41,16 @@ public class ExchangeTests {
   
   /**
    * Test that a phone is added successfully.
+   * The tests checks the updated number of phones in the exchange, 
+   * as well as the fact that the new phone can be retrieved by its id
    */
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
       InvalidNumberException {
     new Telephone(new TelephoneModel(9), exchange);
     assertEquals(3, exchange.getNumberOfPhones());
+    Telephone addedTelephone = exchange.getPhone(9);
+    assertEquals(addedTelephone.getId(), 9);
   }
   
   /**
