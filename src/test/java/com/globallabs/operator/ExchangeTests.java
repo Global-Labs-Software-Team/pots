@@ -111,7 +111,7 @@ public class ExchangeTests {
    * updating the status of telephone one to BUSY.
    */
   @Test
-  void test_openCall_with_incomingCall() 
+  void test_openCallBetween_with_incomingCall() 
       throws PhoneExistInNetworkException, NoCommunicationPathException { 
     // Two is calling one
     telephoneTwo.setLastCall(telephone); 
@@ -135,7 +135,7 @@ public class ExchangeTests {
    * not calling him.
    */
   @Test
-  void test_openCall_without_incomingCall() {
+  void test_openCallBetween_without_incomingCall() {
     telephone.setStatus(Status.OFF_CALL);
     telephone.setIncomingCall(null);
     telephoneTwo.setStatus(Status.OFF_CALL);
@@ -150,7 +150,7 @@ public class ExchangeTests {
    * to close it.
    */
   @Test
-  void test_closeCall_successfully() throws NoCommunicationPathException {
+  void test_closeCallBetween_successfully() throws NoCommunicationPathException {
     // Set up of the scenario where telephoneOne is in a call with telephoneTwo
     telephone.setLastCall(telephoneTwo);
     telephone.setStatus(Status.BUSY);
@@ -172,7 +172,8 @@ public class ExchangeTests {
    * and before telephone2 responds, telephone1 cut the communication
    */
   @Test
-  void test_closeCall_when_a_communication_is_not_open() throws NoCommunicationPathException {
+  void test_closeCallBetween_when_a_communication_is_not_open() 
+      throws NoCommunicationPathException {
     // Set up of the scenario
     telephone.setLastCall(telephoneTwo);
     telephone.setStatus(Status.DIALING);
@@ -194,7 +195,7 @@ public class ExchangeTests {
    * but there is no path there. So NoCommunicationPathException is thrown
    */
   @Test
-  void test_closeCall_when_a_communication_path_does_not_exist() 
+  void test_closeCallBetween_when_a_communication_path_does_not_exist() 
       throws PhoneExistInNetworkException, InvalidNumberException {
     Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
 
