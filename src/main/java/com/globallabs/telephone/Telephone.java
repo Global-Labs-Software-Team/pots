@@ -15,7 +15,7 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
  * It's goal is to perform operations for the abstract methods that it implements from
  * 'TelephoneFunctions'
  * 
- * Initialize (using a constructor) a telephone model within the exchange.
+ * <p>Initialize (using a constructor) a telephone model within the exchange.
  * The functions offered includes:
  * <ul>
  * <li>Retrieve and set the id
@@ -177,7 +177,8 @@ public class Telephone implements TelephoneFunctions {
    * @throws NoIncomingCallsException if trying to answer non-existent call
    */
   public void answer() 
-      throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException {
+      throws BusyPhoneException, NoIncomingCallsException, 
+      NoCommunicationPathException, PhoneNotFoundException {
     if (getStatus().equals(Status.RINGING)) {
       exchange.openCallBetween(getId(), getIncomingCall().getId());
       setStatus(Status.BUSY);
@@ -191,7 +192,7 @@ public class Telephone implements TelephoneFunctions {
   }
 
   @Override
-  public void hangUp() throws NoCommunicationPathException {
+  public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone otherPhone;
     if (getStatus() == Status.RINGING) {
       otherPhone = getIncomingCall();

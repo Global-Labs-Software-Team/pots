@@ -118,7 +118,8 @@ class TelephoneTests {
   @Test
   public void test_answer()
       throws DialingMySelfException, BusyPhoneException, 
-      NoIncomingCallsException, NoCommunicationPathException {
+      NoIncomingCallsException, NoCommunicationPathException,
+      PhoneNotFoundException {
     phone1.setStatus(Status.DIALING);
     phone1.setLastCall(phone2);
     phone2.setStatus(Status.RINGING);
@@ -181,7 +182,8 @@ class TelephoneTests {
    * are OFF_CALL.
    */
   @Test
-  public void test_hangUp_ongoingCall() throws NoCommunicationPathException {
+  public void test_hangUp_ongoingCall() 
+      throws NoCommunicationPathException, PhoneNotFoundException {
     phone1.setStatus(Status.BUSY);
     phone1.setLastCall(phone2);
     phone2.setStatus(Status.BUSY);
@@ -199,7 +201,8 @@ class TelephoneTests {
    * incomingCall is null.
    */
   @Test
-  public void test_hangUp_incomingCall() throws NoCommunicationPathException {
+  public void test_hangUp_incomingCall() 
+      throws NoCommunicationPathException, PhoneNotFoundException {
     phone1.setStatus(Status.DIALING);
     phone1.setLastCall(phone2);
     phone2.setStatus(Status.RINGING);

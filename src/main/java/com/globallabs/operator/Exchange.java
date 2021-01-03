@@ -82,10 +82,6 @@ public class Exchange implements ExchangeSpecification {
       throws BusyPhoneException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin);
     Telephone destinationPhone = getPhone(destination);
-    if (destinationPhone == null || originPhone == null) {
-      throw new PhoneNotFoundException("Either, the phone with id " 
-        + destination + "or" + origin + " does not belongs to the network");
-    }
     if (destinationPhone.getStatus() == Status.BUSY) {
       throw new BusyPhoneException("The phone with id " + destination + " is busy");
     }
@@ -96,7 +92,7 @@ public class Exchange implements ExchangeSpecification {
   
   @Override
   public void openCallBetween(final int origin, final int destination) 
-      throws NoCommunicationPathException {
+      throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin); // Phone receiving the call
     Telephone destinationPhone = getPhone(destination); // Phone that is calling
       
@@ -114,7 +110,7 @@ public class Exchange implements ExchangeSpecification {
   
   @Override
   public void closeCallBetween(final int origin, final int destination) 
-      throws NoCommunicationPathException {
+      throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin);
     Telephone destinationPhone = getPhone(destination);
     if (!((originPhone.getLastCall() != null 
@@ -133,11 +129,13 @@ public class Exchange implements ExchangeSpecification {
   @Override
   public void addPhoneToExchange(final Telephone phone) 
       throws PhoneExistInNetworkException {
-    if (getPhone(phone.getId()) != null) {
+    try {
+      Telephone itExists = getPhone(phone.getId());
       throw new PhoneExistInNetworkException("The phone " 
-        + phone + "is already in the network");
-    }
-    telephones.add(phone);
+        + itExists + "is already in the network");
+    } catch (PhoneNotFoundException e) {
+      telephones.add(phone);
+    } 
   }
   
   public int getNumberOfPhones() {
@@ -145,12 +143,13 @@ public class Exchange implements ExchangeSpecification {
   }
   
   @Override
-  public Telephone getPhone(final int phoneNumber) {
+  public Telephone getPhone(final int phoneNumber) throws PhoneNotFoundException {
     for (Telephone phone : telephones) {
       if (phone.getId() == phoneNumber) {
         return phone;
       }
     }
-    return null;
+    throw new PhoneNotFoundException("Either, the phone with id " 
+        + phoneNumber + " does not belongs to the network");
   }
 }

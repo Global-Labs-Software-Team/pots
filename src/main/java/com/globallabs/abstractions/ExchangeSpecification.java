@@ -45,9 +45,10 @@ public interface ExchangeSpecification {
   link.
   * @throws NoCommunicationPathException when there is no communication link between origin
   and destination.
+  * @throws PhoneNotFoundException when either of the phones do not belong to the exchange
   */
   public void closeCallBetween(final int origin, final int destination) 
-      throws NoCommunicationPathException;
+      throws NoCommunicationPathException, PhoneNotFoundException;
   
   /**
   * Open the communication link with the destination phone. This method is for
@@ -65,9 +66,10 @@ public interface ExchangeSpecification {
   * @param destination The Telephone who is dialing.
   * @throws NoCommunicationPathException when there is no communication link between
   origin and destination.
+  * @throws PhoneNotFoundException when either of the phones do not belong to the exchange
   */
   public void openCallBetween(final int origin, final int destination) 
-      throws NoCommunicationPathException;
+      throws NoCommunicationPathException, PhoneNotFoundException;
   
   /**
   * Add a phone to the exchange.
@@ -89,6 +91,7 @@ public interface ExchangeSpecification {
   *
   * @param number the phone number
   * @return a phone entity with that number
+  * @throws PhoneNotFoundException when either of the phones do not belong to the exchange
   */
-  public Telephone getPhone(final int number);
+  public Telephone getPhone(final int number) throws PhoneNotFoundException;
 }

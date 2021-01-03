@@ -11,7 +11,6 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
-// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +45,7 @@ public class ExchangeTests {
    */
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
-      InvalidNumberException {
+      InvalidNumberException, PhoneNotFoundException {
     new Telephone(new TelephoneModel(9), exchange);
     assertEquals(3, exchange.getNumberOfPhones());
     Telephone addedTelephone = exchange.getPhone(9);
@@ -116,7 +115,7 @@ public class ExchangeTests {
    */
   @Test
   void test_openCallBetween_with_incomingCall() 
-      throws PhoneExistInNetworkException, NoCommunicationPathException { 
+      throws PhoneExistInNetworkException, NoCommunicationPathException, PhoneNotFoundException {
     // Two is calling one
     telephoneTwo.setLastCall(telephone); 
     telephone.setStatus(Status.DIALING);
@@ -154,7 +153,8 @@ public class ExchangeTests {
    * to close it.
    */
   @Test
-  void test_closeCallBetween_successfully() throws NoCommunicationPathException {
+  void test_closeCallBetween_successfully() 
+      throws NoCommunicationPathException, PhoneNotFoundException {
     // Set up of the scenario where telephoneOne is in a call with telephoneTwo
     telephone.setLastCall(telephoneTwo);
     telephone.setStatus(Status.BUSY);
@@ -177,7 +177,7 @@ public class ExchangeTests {
    */
   @Test
   void test_closeCallBetween_when_a_communication_is_not_open() 
-      throws NoCommunicationPathException {
+      throws NoCommunicationPathException, PhoneNotFoundException {
     // Set up of the scenario
     telephone.setLastCall(telephoneTwo);
     telephone.setStatus(Status.DIALING);
