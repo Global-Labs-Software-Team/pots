@@ -13,6 +13,12 @@ import com.globallabs.telephone.Telephone;
 //import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * PotsApplication is the class that allows to simulate the use of the Telephone application.
+ * It runs scenarious that simulate different use cases of the application
+ * 
+ * @since 1.0
+ */
 @SpringBootApplication
 public class PotsApplication {
 
