@@ -1,6 +1,6 @@
 package com.globallabs.telephone;
 
-import com.globallabs.abstractions.TelephoneFunctions;
+import com.globallabs.abstractions.TelephoneSpecification;
 import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
@@ -27,12 +27,12 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
  * <li>Simulates dialing behavior for a phone
  * <li>Answers an existing call
  * </ul>
- * 
+ *
  * @since 1.0
  * @author Byron Barkhuizen
  */
 
-public class Telephone implements TelephoneFunctions {
+public class Telephone implements TelephoneSpecification {
   private TelephoneModel phoneInfo;
   private Exchange exchange;
   private Status status;
@@ -173,6 +173,7 @@ public class Telephone implements TelephoneFunctions {
 
   /**
    * Answer a call.
+   *
    * @throws BusyPhoneException if you are busy
    * @throws NoIncomingCallsException if trying to answer non-existent call
    */
