@@ -13,7 +13,7 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
 /**
  * Telephone is the class that offers modification of the attributes of a phone model.
  * It's goal is to perform operations for the abstract methods that it implements from
- * 'TelephoneFunctions'
+ * 'TelephoneSpecification'
  * 
  * <p>Initialize (using a constructor) a telephone model within the exchange.
  * The functions offered includes:
