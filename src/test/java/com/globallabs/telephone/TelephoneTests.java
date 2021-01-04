@@ -21,79 +21,86 @@ class TelephoneTests {
 
   private static Exchange exchange;
 
-  private static Telephone phone1;
-  private static Telephone phone2;
-  private static Telephone phone3;
+  private static Telephone telephoneOne;
+  private static Telephone telephoneTwo;
+  private static Telephone telephoneThree;
+  
+  private static int ID1 = 1;
+  private static int ID2 = 2;
+  private static int ID3 = 3;
+  private static int ID_NONEXISTING = 4;
 
   @BeforeAll
   public static void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = Exchange.getInstance();
-    phone1 = new Telephone(new TelephoneModel(1), exchange);
-    phone2 = new Telephone(new TelephoneModel(2), exchange);
-    phone3 = new Telephone(new TelephoneModel(3), exchange);
+    telephoneOne = new Telephone(new TelephoneModel(ID1), exchange);
+    telephoneTwo = new Telephone(new TelephoneModel(ID2), exchange);
+    telephoneThree = new Telephone(new TelephoneModel(ID3), exchange);
   }
 
   /**
-   * Tests the constructor of the class.
+   * Tests the constructor of the class (see 
+   * {@link com.globallabs.telephone.Telephone#Telephone(TelephoneModel, Exchange)}).
    */
   @Test
   public void test_constructor() throws PhoneExistInNetworkException, InvalidNumberException {
-    Telephone phone1 = new Telephone(new TelephoneModel(4), exchange);
-    assertEquals(4, phone1.getId());
+    Telephone telephoneOne = new Telephone(new TelephoneModel(ID_NONEXISTING), exchange);
+    assertEquals(ID_NONEXISTING, telephoneOne.getId());
   }
 
   /**
-   * Tests that a phone dials successfully to another phone.
+   * Tests that a phone dials successfully to another phone (see 
+   * {@link com.globallabs.telephone.Telephone#dial(int)}).
    */
   @Test
   public void test_dial_success() 
       throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
-    phone1.dial(2);
-    Status statusPhone1 = phone1.getStatus();
-    Status statusPhone2 = phone2.getStatus();
-    assertEquals(Status.RINGING, statusPhone2);
-    assertEquals(Status.DIALING, statusPhone1);
+    telephoneOne.dial(ID2);
+    Status statustelephoneOne = telephoneOne.getStatus();
+    Status statustelephoneTwo = telephoneTwo.getStatus();
+    assertEquals(Status.RINGING, statustelephoneTwo);
+    assertEquals(Status.DIALING, statustelephoneOne);
   }
 
   /**
-   * Tests that a dial fails if the other phone is busy.
+   * Tests that a dial fails if the other phone is busy (see 
+   * {@link com.globallabs.telephone.Telephone#dial(int)}).
    */
   @Test
   public void test_dial_busy_phone() 
       throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
-    phone2.setStatus(Status.BUSY);
-    assertThrows(BusyPhoneException.class, () -> {
-      phone1.dial(2);
-    });
-    Status statusPhone1 = phone1.getStatus();
-    Status statusPhone2 = phone2.getStatus();
-    assertEquals(Status.BUSY, statusPhone2);
-    assertEquals(Status.OFF_CALL, statusPhone1);
+    telephoneTwo.setStatus(Status.BUSY);
+    telephoneOne.dial(ID2);
+    Status statusTelephoneOne = telephoneOne.getStatus();
+    Status statusTelephoneTwo = telephoneTwo.getStatus();
+    assertEquals(Status.OFF_CALL, statusTelephoneOne);
+    assertEquals(Status.BUSY, statusTelephoneTwo);
   }
 
   /**
-   * Tests that a phone can't dial itself.
+   * Tests that a phone can't dial itself (see 
+   * {@link com.globallabs.telephone.Telephone#dial(int)}).
    */
   @Test
   public void test_dial_myself() {
     assertThrows(DialingMySelfException.class, () -> {
-      phone1.dial(1);
+      telephoneOne.dial(1);
     });
   }
 
   /**
    * Tests that the status of the target phone is ringing when available and the
-   * origin phone is dialing.
+   * origin phone is dialing (see {@link com.globallabs.telephone.Telephone#dialing()}).
    */
   @Test
   public void test_dialing_phone() throws DialingMySelfException, BusyPhoneException {
-    phone1.setStatus(Status.DIALING);
-    phone1.setLastCall(phone2);
-    phone2.setStatus(Status.RINGING);
-    phone2.setIncomingCall(phone1);
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneTwo.setStatus(Status.RINGING);
+    telephoneTwo.setIncomingCall(telephoneOne);
     Runnable runnable = () -> {
       try {
-        phone1.dialing();
+        telephoneOne.dialing();
       } catch (Exception e) {
         System.out.println(e.toString());
       }
@@ -106,137 +113,145 @@ class TelephoneTests {
       System.out.println(e.toString());
     }
     ;
-    Status statusPhone1 = phone1.getStatus();
-    Status statusPhone2 = phone2.getStatus();
-    assertEquals(Status.DIALING, statusPhone1);
-    assertEquals(Status.RINGING, statusPhone2);
+    Status statustelephoneOne = telephoneOne.getStatus();
+    Status statustelephoneTwo = telephoneTwo.getStatus();
+    assertEquals(Status.DIALING, statustelephoneOne);
+    assertEquals(Status.RINGING, statustelephoneTwo);
   }
 
   /**
-   * Tests that after the target phone answers, both phones are busy.
+   * Tests that after the target phone answers, both phones are busy
+   * (see {@link com.globallabs.telephone.Telephone#answer()}).
    */
   @Test
   public void test_answer()
       throws DialingMySelfException, BusyPhoneException, 
       NoIncomingCallsException, NoCommunicationPathException,
       PhoneNotFoundException {
-    phone1.setStatus(Status.DIALING);
-    phone1.setLastCall(phone2);
-    phone2.setStatus(Status.RINGING);
-    phone2.setIncomingCall(phone1);
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneTwo.setStatus(Status.RINGING);
+    telephoneTwo.setIncomingCall(telephoneOne);
     Runnable runnable = () -> {
       try {
-        phone1.dialing();
+        telephoneOne.dialing();
       } catch (Exception e) {
         System.out.println(e.toString());
       }
     };
     Thread t = new Thread(runnable);
     t.start();
-    phone2.answer();
-    Status statusPhone1 = phone1.getStatus();
-    Status statusPhone2 = phone2.getStatus();
-    assertEquals(Status.BUSY, statusPhone1);
-    assertEquals(Status.BUSY, statusPhone2);
+    telephoneTwo.answer();
+    Status statusTelephoneOne = telephoneOne.getStatus();
+    Status statusTelephoneTwo = telephoneTwo.getStatus();
+    assertEquals(Status.BUSY, statusTelephoneOne);
+    assertEquals(Status.BUSY, statusTelephoneTwo);
   }
 
   /**
    * Test the case when the phone does not
-   * have incoming calls and try to answer a call.
+   * have incoming calls and tries to answer a call
+   * (see {@link com.globallabs.telephone.Telephone#answer()}).
    */
   @Test
   public void test_answer_without_incomingCall() {
-    phone1.setStatus(Status.OFF_CALL);
-    phone1.setIncomingCall(null);
+    telephoneOne.setStatus(Status.OFF_CALL);
+    telephoneOne.setIncomingCall(null);
     
     assertThrows(NoIncomingCallsException.class, () -> {
-      phone1.answer();
+      telephoneOne.answer();
     });
   }
   
   /**
    * Test the scenario when there is an ongoing call
    * between two telephones t1, t2 and t1 has an incoming
-   * call of t3 and tries to answer it.
+   * call of t3 and tries to answer it (see 
+   * {@link com.globallabs.telephone.Telephone#answer()}).
    */
   @Test
   public void test_answer_whenBusy() {
-    phone1.setStatus(Status.BUSY);
-    phone1.setLastCall(phone2);
-    phone1.setIncomingCall(phone3);
+    telephoneOne.setStatus(Status.BUSY);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneOne.setIncomingCall(telephoneThree);
     
-    phone2.setStatus(Status.BUSY);
-    phone2.setLastCall(phone1);
+    telephoneTwo.setStatus(Status.BUSY);
+    telephoneTwo.setLastCall(telephoneOne);
     
-    phone3.setStatus(Status.DIALING);
-    phone3.setLastCall(phone1);
+    telephoneThree.setStatus(Status.DIALING);
+    telephoneThree.setLastCall(telephoneOne);
     
     assertThrows(BusyPhoneException.class, () -> {
-      phone1.answer();
+      telephoneOne.answer();
     });
   }
   
   /**
-   * Test that in at on going call between phone1 and phone2
-   * if phone1 hang up the call, phone1 and phone2 status
-   * are OFF_CALL.
+   * Test that in at on going call between telephoneOne and telephoneTwo
+   * if telephoneOne hang up the call, telephoneOne and telephoneTwo status
+   * are OFF_CALL (see {@link com.globallabs.telephone.Telephone#hangUp()}).
    */
   @Test
   public void test_hangUp_ongoingCall() 
       throws NoCommunicationPathException, PhoneNotFoundException {
-    phone1.setStatus(Status.BUSY);
-    phone1.setLastCall(phone2);
-    phone2.setStatus(Status.BUSY);
-    phone2.setLastCall(phone1);
+    telephoneOne.setStatus(Status.BUSY);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneTwo.setStatus(Status.BUSY);
+    telephoneTwo.setLastCall(telephoneOne);
     
-    phone1.hangUp();
-    assertEquals(Status.OFF_CALL, phone1.getStatus());
-    assertEquals(Status.OFF_CALL, phone2.getStatus());
+    telephoneOne.hangUp();
+    assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
+    assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
   }
   
   /**
-   * Test that at incoming call from phone1 if phone2
-   * cancel the incoming the call the status of phone1
-   * and phone2 become OFF_CALL and the variable
-   * incomingCall is null.
+   * Test that at incoming call from telephoneOne if telephoneTwo
+   * cancel the incoming the call the status of telephoneOne
+   * and telephoneTwo become OFF_CALL and the variable
+   * incomingCall is null (see {@link com.globallabs.telephone.Telephone#hangUp()}).
    */
   @Test
   public void test_hangUp_incomingCall() 
       throws NoCommunicationPathException, PhoneNotFoundException {
-    phone1.setStatus(Status.DIALING);
-    phone1.setLastCall(phone2);
-    phone2.setStatus(Status.RINGING);
-    phone2.setIncomingCall(phone1);
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneTwo.setStatus(Status.RINGING);
+    telephoneTwo.setIncomingCall(telephoneOne);
     
-    phone2.hangUp();
-    assertEquals(Status.OFF_CALL, phone1.getStatus());
-    assertEquals(Status.OFF_CALL, phone2.getStatus());
-    assertEquals(null, phone2.getIncomingCall());
+    telephoneTwo.hangUp();
+    assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
+    assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
+    assertEquals(null, telephoneTwo.getIncomingCall());
   }
 
+  /**
+   * Test the case when a telephone wants to hang up but is does not have any
+   * ongoing calls (see {@link com.globallabs.telephone.Telephone#hangUp()}).
+   */
   @Test
   public void test_hangUp_whenThereIsNoCall() {
-    phone1.setStatus(Status.OFF_CALL);
-    phone1.setLastCall(null);
+    telephoneOne.setStatus(Status.OFF_CALL);
+    telephoneOne.setLastCall(null);
     assertThrows(NoCommunicationPathException.class, () -> {
-      phone1.hangUp();
+      telephoneOne.hangUp();
     });
   }
   
   /**
-   * Tests that a phone becomes available if it's dial is not answered.
+   * Tests that a phone becomes available if it's dial is not answered 
+   * (see {@link com.globallabs.telephone.Telephone#dialing()}).
    */
   @Test
   public void test_dialing_unavailable_phone()
       throws DialingMySelfException, BusyPhoneException, 
       NoIncomingCallsException, InterruptedException {
-    phone1.setStatus(Status.DIALING);
-    phone1.setLastCall(phone2);
-    phone2.setStatus(Status.RINGING);
-    phone2.setIncomingCall(phone1);
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneTwo.setStatus(Status.RINGING);
+    telephoneTwo.setIncomingCall(telephoneOne);
     Runnable runnable = () -> {
       try {
-        phone1.dialing();
+        telephoneOne.dialing();
       } catch (Exception e) {
         System.out.println(e.toString());
       }
@@ -249,8 +264,8 @@ class TelephoneTests {
       System.out.println(e.toString());
     }
     ;
-    Status statusPhone1 = phone1.getStatus();
-    assertEquals(Status.OFF_CALL, statusPhone1);
+    Status statustelephoneOne = telephoneOne.getStatus();
+    assertEquals(Status.OFF_CALL, statustelephoneOne);
   }
 
 }

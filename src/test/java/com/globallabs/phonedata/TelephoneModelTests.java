@@ -11,6 +11,10 @@ import org.junit.jupiter.api.Test;
 
 public class TelephoneModelTests {
   
+  /**
+   * Verifies the constructor of the Telephone model for a number that is accepted
+   * (see {@link com.globallabs.phonedata.TelephoneModel#TelephoneModel(int)}).
+   */
   @Test
   void test_constructor_rightNumber() throws InvalidNumberException {
     int number = 1;
@@ -18,6 +22,10 @@ public class TelephoneModelTests {
     assertEquals(number, phone.getId());
   }
   
+  /**
+   * Verifies the constructor of the Telephone model for a number that is not
+   * allowed (see {@link com.globallabs.phonedata.TelephoneModel#TelephoneModel(int)}).
+   */
   @Test
   void test_constructor_negativeNumber() {
     int number = -1;
@@ -26,6 +34,10 @@ public class TelephoneModelTests {
     });
   }
   
+  /**
+   * Verifies that two TelephoneModels created with the same id are identical
+   * (see {@link com.globallabs.phonedata.TelephoneModel#TelephoneModel(int)}).
+   */
   @Test
   void test_equals_success() throws InvalidNumberException {
     int number = 1;
@@ -34,6 +46,10 @@ public class TelephoneModelTests {
     assertTrue(phoneOne.equals(phoneTwo));
   }
   
+  /**
+   * Verifies that two TelephoneModels created with the differtent ids are different
+   * (see {@link com.globallabs.phonedata.TelephoneModel#TelephoneModel(int)}).
+   */
   @Test
   void test_equals_failure() throws InvalidNumberException {
     int numberOne = 1;
@@ -57,6 +73,10 @@ public class TelephoneModelTests {
     assertFalse(phoneOne.equals(numberOne));
   }
   
+  /**
+   * Verifies the correct behaviour of the toString method in TelephoneModel
+   * (see {@link com.globallabs.phonedata.TelephoneModel#toString()}).
+   */
   @Test
   void test_toString() throws InvalidNumberException {
     int numberOne = 1;

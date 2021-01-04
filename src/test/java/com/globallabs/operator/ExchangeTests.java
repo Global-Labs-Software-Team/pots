@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 public class ExchangeTests {
   
   private static ExchangeForTests exchange;
-  private static Telephone telephone;
+  private static Telephone telephoneOne;
   private static Telephone telephoneTwo;
   
   /**
@@ -34,14 +34,17 @@ public class ExchangeTests {
   public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = ExchangeForTests.getInstance();
     exchange.resetExchange();
-    telephone = new Telephone(new TelephoneModel(1), exchange);
+    telephoneOne = new Telephone(new TelephoneModel(1), exchange);
     telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
   }
   
   /**
    * Test that a phone is added successfully.
    * The tests checks the updated number of phones in the exchange, 
-   * as well as the fact that the new phone can be retrieved by its id
+   * as well as the fact that the new phone can be retrieved by its id.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.telephone.Telephone#Telephone(TelephoneModel, Exchange)}
+   * <li> {@link com.globallabs.operator.ExchangeForTests#getPhone(int)}
    */
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
@@ -55,6 +58,8 @@ public class ExchangeTests {
   /**
    * Test that a same phone is not added two times
    * in the exchange.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.telephone.Telephone#Telephone(TelephoneModel, Exchange)}
    */
   @Test
   void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException,
@@ -68,37 +73,45 @@ public class ExchangeTests {
    * Exchange try to create a path between telephone two and telephone one with two as origin.
    * Because one is in "OFF_CALL" then a path can be establish and the status of one is
    * updated to RINGING and the telephone two is set as an Incoming Call of phone one.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#enrouteCall(int, int)}
    */
   @Test 
   void test_enrouteCall_success() throws BusyPhoneException, 
       PhoneNotFoundException, PhoneExistInNetworkException {
     // Telephone two decides to call telephone one and
     // telephone one is free
-    telephone.setStatus(Status.OFF_CALL);
+    telephoneOne.setStatus(Status.OFF_CALL);
     exchange.enrouteCall(2, 1);
     // The telephone one receive the notification
-    assertEquals(Status.RINGING, telephone.getStatus());
-    assertEquals(telephoneTwo, telephone.getIncomingCall());
+    assertEquals(Status.RINGING, telephoneOne.getStatus());
+    assertEquals(telephoneOne, telephoneTwo.getLastCall());
+    assertEquals(telephoneTwo, telephoneOne.getIncomingCall());
   }
   
   /**
    * Exchange try to create a path between telephone two and one with two as origin
    * of the call. Because one is in a call then the path cannot be created and a
    * BusyPhoneException is thrown.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#enrouteCall(int, int)}
    */
   @Test
   void test_enrouteCall_when_busy() throws PhoneExistInNetworkException {
-    telephone.setStatus(Status.BUSY);
+    telephoneOne.setStatus(Status.BUSY);
 
     assertThrows(BusyPhoneException.class, () -> {
       exchange.enrouteCall(2, 1);
     });
+    assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
   }
   
   /**
    * The exchange try to create a path between the telephone two and one
    * but one does not exist in the network. A PhoneNotFoundExcetion is
    * thrown.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#enrouteCall(int, int)}
    */
   @Test
   void test_enrouteCall_when_phone_no_exist() {
@@ -112,35 +125,40 @@ public class ExchangeTests {
    * The exchange has a path between the telephone one and telephone two because
    * telephone two is calling telephone one. The exchange will open the communication 
    * updating the status of telephone one to BUSY.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#openCallBetween(int, int)}
    */
   @Test
   void test_openCallBetween_with_incomingCall() 
       throws PhoneExistInNetworkException, NoCommunicationPathException, PhoneNotFoundException {
     // Two is calling one
-    telephoneTwo.setLastCall(telephone); 
-    telephone.setStatus(Status.DIALING);
+    telephoneTwo.setLastCall(telephoneOne); 
+    telephoneOne.setStatus(Status.DIALING);
     
     // Telephone one is receiving a call from telephone two
-    telephone.setStatus(Status.RINGING);
-    telephone.setIncomingCall(telephoneTwo);
+    telephoneOne.setStatus(Status.RINGING);
+    telephoneOne.setIncomingCall(telephoneTwo);
     
     //  Telephone one decides to accept the call
-    telephone.setStatus(Status.BUSY);
+    telephoneOne.setStatus(Status.BUSY);
     exchange.openCallBetween(1, 2); // One sends signal to open the call to two
     
-    // Then telephone two get the status busy also
+    // Then telephone two also get the status busy
     assertEquals(Status.BUSY, telephoneTwo.getStatus());
+    assertEquals(Status.BUSY, telephoneOne.getStatus());
   }
   
   /**
    * Exchange try to open a communication path that does not exists. For example
    * this can happen when telephone one try to open a call with two but two is
    * not calling him.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#openCallBetween(int, int)}
    */
   @Test
   void test_openCallBetween_without_incomingCall() {
-    telephone.setStatus(Status.OFF_CALL);
-    telephone.setIncomingCall(null);
+    telephoneOne.setStatus(Status.OFF_CALL);
+    telephoneOne.setIncomingCall(null);
     telephoneTwo.setStatus(Status.OFF_CALL);
     telephoneTwo.setLastCall(null);
     assertThrows(NoCommunicationPathException.class, () -> {
@@ -151,20 +169,22 @@ public class ExchangeTests {
   /**
    * Exchange close the call between one and two when one decided
    * to close it.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#closeCallBetween(int, int)}
    */
   @Test
   void test_closeCallBetween_successfully() 
       throws NoCommunicationPathException, PhoneNotFoundException {
-    // Set up of the scenario where telephoneOne is in a call with telephoneTwo
-    telephone.setLastCall(telephoneTwo);
-    telephone.setStatus(Status.BUSY);
+    // Set up of the scenario where telephone is in a call with telephoneTwo
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneOne.setStatus(Status.BUSY);
     
-    telephoneTwo.setLastCall(telephone);
+    telephoneTwo.setLastCall(telephoneOne);
     telephoneTwo.setStatus(Status.BUSY);
     
     // telephoneOne close the call
     exchange.closeCallBetween(1, 2);
-    telephone.setStatus(Status.OFF_CALL);
+    telephoneOne.setStatus(Status.OFF_CALL);
     
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
@@ -172,22 +192,24 @@ public class ExchangeTests {
   
   /**
    * Exchange close the communication when a communication path
-   * is not open. This mean that telephone1 is dialing telephone2
-   * and before telephone2 responds, telephone1 cut the communication
+   * is not open. This mean that telephone1 is dialing telephone two
+   * and before telephone two responds, telephone one cuts the communication.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#closeCallBetween(int, int)}
    */
   @Test
   void test_closeCallBetween_when_a_communication_is_not_open() 
       throws NoCommunicationPathException, PhoneNotFoundException {
     // Set up of the scenario
-    telephone.setLastCall(telephoneTwo);
-    telephone.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo);
+    telephoneOne.setStatus(Status.DIALING);
     
-    telephoneTwo.setIncomingCall(telephone);
+    telephoneTwo.setIncomingCall(telephoneOne);
     telephoneTwo.setStatus(Status.RINGING);
     
     // TelephoneOne cancel the call
     exchange.closeCallBetween(1, 2);
-    telephone.setStatus(Status.OFF_CALL);
+    telephoneOne.setStatus(Status.OFF_CALL);
     
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
@@ -196,7 +218,9 @@ public class ExchangeTests {
   
   /**
    * Exchange try to close a communication path between one and two
-   * but there is no path there. So NoCommunicationPathException is thrown
+   * but there is no path there. So NoCommunicationPathException is thrown.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#closeCallBetween(int, int)}
    */
   @Test
   void test_closeCallBetween_when_a_communication_path_does_not_exist() 
@@ -204,10 +228,10 @@ public class ExchangeTests {
     Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
 
     // Set up of the scenario: One is in a call with three
-    telephone.setLastCall(telephoneThree);
-    telephone.setStatus(Status.BUSY);
+    telephoneOne.setLastCall(telephoneThree);
+    telephoneOne.setStatus(Status.BUSY);
     
-    telephoneThree.setLastCall(telephone);
+    telephoneThree.setLastCall(telephoneOne);
     telephoneThree.setStatus(Status.BUSY);
 
     telephoneTwo.setLastCall(null);
@@ -224,6 +248,9 @@ public class ExchangeTests {
    * the exchange and asserting that the number of phones is zero. After
    * adding a new phone and asserting that the number of phones increases
    * by one.
+   * This test aims to check the correct behaviour of:
+   * <li> {@link com.globallabs.operator.ExchangeForTests#getNumberOfPhones()}
+   *
    * @throws InvalidNumberException if the number is invalid. Less than zero
    * @throws PhoneExistInNetworkException if the number already in the list
    mantained by exchange.
