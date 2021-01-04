@@ -14,8 +14,7 @@ public interface TelephoneSpecification {
    * @param number number of the destination phone
    * @throws DialingMySelfException if the phone you are dialing is you
   */
-  public void dial(final int number)
-      throws DialingMySelfException, BusyPhoneException, PhoneNotFoundException;
+  public void dial(final int number) throws DialingMySelfException;
     
   /**
    * Sets the current device in a ringing state.
@@ -29,9 +28,17 @@ public interface TelephoneSpecification {
    *
    * @throws BusyPhoneException if we are already in a call
    * @throws NoIncomingCallsException if there are no incoming calls
-     */
+   */
   public void answer() 
-      throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
-  //
-  // public void hangUp();
+      throws BusyPhoneException, NoIncomingCallsException, 
+      NoCommunicationPathException, PhoneNotFoundException;
+  
+  /**
+   * Current device hangs the ongoing call.
+   *
+   * @throws NoCommunicationPathException there is no ongoing call
+   * @throws PhoneNotFoundException the phone we are trying to finish 
+   *     the call with is not in the exchange.
+   */
+  public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException;
 }

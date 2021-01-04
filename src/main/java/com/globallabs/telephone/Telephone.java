@@ -135,17 +135,17 @@ public class Telephone implements TelephoneSpecification {
    *
    * @param phoneNumber the number to be dialed
    */
-  public void dial(final int phoneNumber) 
-      throws DialingMySelfException, PhoneNotFoundException, BusyPhoneException {
+  public void dial(final int phoneNumber) throws DialingMySelfException {
     if (phoneNumber == phoneInfo.getId()) {
       throw new DialingMySelfException("You are calling yourself");
     }
     setStatus(Status.DIALING);
     try {
       exchange.enrouteCall(phoneInfo.getId(), phoneNumber);
-    } catch (Exception e) {
+    } catch (PhoneNotFoundException e) {
       setStatus(Status.OFF_CALL);
-      throw e;
+    } catch (BusyPhoneException e) {
+      setStatus(Status.OFF_CALL);
     }
   }
 
