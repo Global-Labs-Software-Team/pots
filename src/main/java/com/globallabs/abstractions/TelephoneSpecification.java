@@ -13,6 +13,8 @@ public interface TelephoneSpecification {
    *
    * @param number number of the destination phone
    * @throws DialingMySelfException if the phone you are dialing is you
+   * @throws PhoneNotFoundException when the phone you try to answer does
+   not belong to the exchange
   */
   public void dial(final int number)
       throws DialingMySelfException, BusyPhoneException, PhoneNotFoundException;
@@ -29,9 +31,20 @@ public interface TelephoneSpecification {
    *
    * @throws BusyPhoneException if we are already in a call
    * @throws NoIncomingCallsException if there are no incoming calls
+   * @throws PhoneNotFoundException when the phone you try to answer does
+   not belong to the exchange
      */
   public void answer() 
-      throws BusyPhoneException, NoIncomingCallsException, NoCommunicationPathException;
-  //
-  // public void hangUp();
+      throws BusyPhoneException, NoIncomingCallsException, 
+      NoCommunicationPathException, PhoneNotFoundException;
+  
+  /**
+   * Hang up the ongoing call or the incoming call.
+   *
+   * @throws NoCommunicationPathException when you are hanging up to
+   a phone you are not connected
+   * @throws PhoneNotFoundException when the phone you try to hangUp does
+   not belong to the exchange
+   */
+  public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException;
 }
