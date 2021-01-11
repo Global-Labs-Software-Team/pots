@@ -98,8 +98,7 @@ public class Exchange implements ExchangeSpecification {
     // If the origin phone is not the one calling the other phone
     // or
     // the origin last call is not the same as the other phone
-    if (destinationPhone.getId() != originPhone.getIncomingCall() 
-        || originPhone.getId() != destinationPhone.getLastCall()) {
+    if (!communicationExists(originPhone, destinationPhone)) {
       throw new NoCommunicationPathException("There is no path between " 
       + destinationPhone + " and " + originPhone);
     } 
@@ -111,7 +110,7 @@ public class Exchange implements ExchangeSpecification {
       throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin);
     Telephone destinationPhone = getPhone(destination);
-    if (communicationExists(originPhone, destinationPhone)) {
+    if (!communicationExists(originPhone, destinationPhone)) {
       throw new NoCommunicationPathException(
                 "There is no path between " + originPhone + " and " + destinationPhone);
     }

@@ -87,7 +87,7 @@ public class ExchangeTests {
     exchange.enrouteCall(2, 1);
     // The telephone one receive the notification
     assertEquals(Status.RINGING, telephoneOne.getStatus());
-    assertEquals(telephoneTwo, telephoneOne.getIncomingCall());
+    assertEquals(telephoneTwo.getId(), telephoneOne.getIncomingCall());
   }
   
   /**
@@ -133,17 +133,18 @@ public class ExchangeTests {
   void test_openCallBetween_with_incomingCall() 
       throws PhoneExistInNetworkException, NoCommunicationPathException, PhoneNotFoundException {
     // Two is calling one
+    telephoneTwo.setStatus(Status.DIALING);
     telephoneTwo.setLastCall(telephoneOne.getId()); 
-    telephoneOne.setStatus(Status.DIALING);
     
     // Telephone one is receiving a call from telephone two
     telephoneOne.setStatus(Status.RINGING);
     telephoneOne.setIncomingCall(telephoneTwo.getId());
     
     //  Telephone one decides to accept the call
+    exchange.openCallBetween(telephoneOne.getId(), 
+        telephoneTwo.getId()); // One sends signal to open the call to two
     telephoneOne.setStatus(Status.BUSY);
-    exchange.openCallBetween(1, 2); // One sends signal to open the call to two
-    
+
     // Then telephone two also get the status busy
     assertEquals(Status.BUSY, telephoneTwo.getStatus());
     assertEquals(Status.BUSY, telephoneOne.getStatus());
@@ -184,7 +185,7 @@ public class ExchangeTests {
     telephoneTwo.setStatus(Status.BUSY);
     
     // telephoneOne close the call
-    exchange.closeCallBetween(1, 2);
+    exchange.closeCallBetween(telephoneOne.getId(), telephoneTwo.getId());
     telephoneOne.setStatus(Status.OFF_CALL);
     
     // Verification of status
