@@ -85,26 +85,24 @@ public class Exchange implements ExchangeSpecification {
     if (destinationPhone.getStatus() == Status.BUSY) {
       throw new BusyPhoneException("The phone with id " + destination + " is busy");
     }
-    originPhone.setLastCall(destinationPhone);
+    originPhone.setLastCall(destinationPhone.getId());
     destinationPhone.setStatus(Status.RINGING);
-    destinationPhone.setIncomingCall(originPhone);
+    destinationPhone.setIncomingCall(originPhone.getId());
   }
   
   @Override
   public void openCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin); // Phone receiving the call
-    Telephone destinationPhone = getPhone(destination); // Phone that is calling
-      
+    Telephone destinationPhone = getPhone(destination); // Phone that is calling     
     // If the origin phone is not the one calling the other phone
     // or
     // the origin last call is not the same as the other phone
-    if (!destinationPhone.equals(originPhone.getIncomingCall()) 
-        || !originPhone.equals(destinationPhone.getLastCall())) {
+    if (destinationPhone.getId() != originPhone.getIncomingCall() 
+        || originPhone.getId() != destinationPhone.getLastCall()) {
       throw new NoCommunicationPathException("There is no path between " 
       + destinationPhone + " and " + originPhone);
-    }
-      
+    } 
     destinationPhone.setStatus(Status.BUSY);
   }
   
@@ -113,19 +111,44 @@ public class Exchange implements ExchangeSpecification {
       throws NoCommunicationPathException, PhoneNotFoundException {
     Telephone originPhone = getPhone(origin);
     Telephone destinationPhone = getPhone(destination);
-    if (!((originPhone.getLastCall() != null 
-        && originPhone.getLastCall().equals(destinationPhone)) 
-          || (originPhone.getIncomingCall() != null 
-          && originPhone.getIncomingCall().equals(destinationPhone)))) {
+    if (communicationExists(originPhone, destinationPhone)) {
       throw new NoCommunicationPathException(
                 "There is no path between " + originPhone + " and " + destinationPhone);
     }
     if (destinationPhone.getStatus() == Status.RINGING) {
-      destinationPhone.setIncomingCall(null);
+      destinationPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
     }
     destinationPhone.setStatus(Status.OFF_CALL);
   }
   
+  @Override
+  public boolean communicationExists(final Telephone telephoneOne, final Telephone telephoneTwo) {
+    int phoneOneNumber = telephoneOne.getId();
+    int phoneTwoNumber = telephoneTwo.getId();
+    // Scenario One
+    if ((telephoneOne.getStatus() == Status.BUSY 
+        && telephoneTwo.getStatus() == Status.BUSY) && // Both BUSY
+        // The last call of telephone one is telephone two and vice versa for telephone two
+        (telephoneOne.getLastCall() == phoneTwoNumber 
+        && telephoneTwo.getLastCall() == phoneOneNumber) 
+    ) {
+      return true;
+    // Scenario Two
+    } else if ((telephoneOne.getStatus() == Status.DIALING // One is dialing Two
+        && telephoneTwo.getStatus() == Status.RINGING)
+        && (telephoneOne.getLastCall() == phoneTwoNumber 
+        && telephoneTwo.getIncomingCall() == phoneOneNumber)) {
+      return true;
+    // Scenario Two but parameters inverted
+    } else if ((telephoneOne.getStatus() == Status.RINGING // One is dialing Two
+        && telephoneTwo.getStatus() == Status.DIALING)
+        && (telephoneTwo.getLastCall() == phoneOneNumber 
+        && telephoneOne.getIncomingCall() == phoneTwoNumber)) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void addPhoneToExchange(final Telephone phone) 
       throws PhoneExistInNetworkException {

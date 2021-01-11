@@ -1,7 +1,9 @@
 package com.globallabs.operator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
@@ -85,7 +87,6 @@ public class ExchangeTests {
     exchange.enrouteCall(2, 1);
     // The telephone one receive the notification
     assertEquals(Status.RINGING, telephoneOne.getStatus());
-    assertEquals(telephoneOne, telephoneTwo.getLastCall());
     assertEquals(telephoneTwo, telephoneOne.getIncomingCall());
   }
   
@@ -132,12 +133,12 @@ public class ExchangeTests {
   void test_openCallBetween_with_incomingCall() 
       throws PhoneExistInNetworkException, NoCommunicationPathException, PhoneNotFoundException {
     // Two is calling one
-    telephoneTwo.setLastCall(telephoneOne); 
+    telephoneTwo.setLastCall(telephoneOne.getId()); 
     telephoneOne.setStatus(Status.DIALING);
     
     // Telephone one is receiving a call from telephone two
     telephoneOne.setStatus(Status.RINGING);
-    telephoneOne.setIncomingCall(telephoneTwo);
+    telephoneOne.setIncomingCall(telephoneTwo.getId());
     
     //  Telephone one decides to accept the call
     telephoneOne.setStatus(Status.BUSY);
@@ -158,9 +159,9 @@ public class ExchangeTests {
   @Test
   void test_openCallBetween_without_incomingCall() {
     telephoneOne.setStatus(Status.OFF_CALL);
-    telephoneOne.setIncomingCall(null);
+    telephoneOne.setIncomingCall(-1);
     telephoneTwo.setStatus(Status.OFF_CALL);
-    telephoneTwo.setLastCall(null);
+    telephoneTwo.setLastCall(-1);
     assertThrows(NoCommunicationPathException.class, () -> {
       exchange.openCallBetween(1, 2);
     });
@@ -176,10 +177,10 @@ public class ExchangeTests {
   void test_closeCallBetween_successfully() 
       throws NoCommunicationPathException, PhoneNotFoundException {
     // Set up of the scenario where telephone is in a call with telephoneTwo
-    telephoneOne.setLastCall(telephoneTwo);
+    telephoneOne.setLastCall(telephoneTwo.getId());
     telephoneOne.setStatus(Status.BUSY);
     
-    telephoneTwo.setLastCall(telephoneOne);
+    telephoneTwo.setLastCall(telephoneOne.getId());
     telephoneTwo.setStatus(Status.BUSY);
     
     // telephoneOne close the call
@@ -201,10 +202,10 @@ public class ExchangeTests {
   void test_closeCallBetween_when_a_communication_is_not_open() 
       throws NoCommunicationPathException, PhoneNotFoundException {
     // Set up of the scenario
-    telephoneOne.setLastCall(telephoneTwo);
+    telephoneOne.setLastCall(telephoneTwo.getId());
     telephoneOne.setStatus(Status.DIALING);
     
-    telephoneTwo.setIncomingCall(telephoneOne);
+    telephoneTwo.setIncomingCall(telephoneOne.getId());
     telephoneTwo.setStatus(Status.RINGING);
     
     // TelephoneOne cancel the call
@@ -213,7 +214,7 @@ public class ExchangeTests {
     
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
-    assertEquals(null, telephoneTwo.getIncomingCall());
+    assertEquals(-1, telephoneTwo.getIncomingCall());
   }
   
   /**
@@ -228,13 +229,13 @@ public class ExchangeTests {
     Telephone telephoneThree = new Telephone(new TelephoneModel(3), exchange);
 
     // Set up of the scenario: One is in a call with three
-    telephoneOne.setLastCall(telephoneThree);
+    telephoneOne.setLastCall(telephoneThree.getId());
     telephoneOne.setStatus(Status.BUSY);
     
-    telephoneThree.setLastCall(telephoneOne);
+    telephoneThree.setLastCall(telephoneOne.getId());
     telephoneThree.setStatus(Status.BUSY);
 
-    telephoneTwo.setLastCall(null);
+    telephoneTwo.setLastCall(-1);
     telephoneTwo.setStatus(Status.OFF_CALL);
     
     // Exchange try to cancel a call between 1 and 2 but there is no connection
@@ -266,5 +267,76 @@ public class ExchangeTests {
     new Telephone(new TelephoneModel(newPhoneId), exchange); // Add a new phone
     int exchangeExpectedSize = 1;
     assertEquals(exchangeExpectedSize, exchange.getNumberOfPhones());
+  }
+
+  /**
+   * The scenario:
+   * 
+   * <p>There is two telephones: t1 and t2. t1 is currently talking
+   * to t2, so t1 and t2 status are BUSY and t1 last call is t2 and
+   * t2 last call is t1. So the function will return true.
+   */
+  @Test
+  void test_communicationExists_scenario_one() {
+    // Setting the scenario
+    telephoneOne.setStatus(Status.BUSY);
+    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneTwo.setStatus(Status.BUSY);
+    telephoneTwo.setLastCall(telephoneOne.getId());
+
+    assertTrue(exchange.communicationExists(telephoneOne, telephoneTwo));
+    assertTrue(exchange.communicationExists(telephoneTwo, telephoneOne), 
+        "The method must work independently of the position of the parameters");
+
+    // Postconditions, the same state have to be mantain for both telephones
+    assertEquals(Status.BUSY, telephoneOne.getStatus());
+    assertEquals(telephoneTwo.getId(), telephoneOne.getLastCall());
+    assertEquals(Status.BUSY, telephoneTwo.getStatus());
+    assertEquals(telephoneOne.getId(), telephoneTwo.getLastCall());
+  }
+
+  /**
+   * The scenario:
+   * 
+   * <p>There is two telephone: t1 and t2. t1 is currently dialing
+   * t2, so t1 status is DIALING and t1 last call t2 and t2 is RINGING
+   * and the incoming call is t1. So there is a communication, the
+   * function must return true.
+   */
+  @Test
+  void test_communicationExists_scenario_two() {
+    // Setting the scenario
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneTwo.setStatus(Status.RINGING);
+    telephoneTwo.setIncomingCall(telephoneOne.getId());
+
+    assertTrue(exchange.communicationExists(telephoneOne, telephoneTwo));
+    assertTrue(exchange.communicationExists(telephoneTwo, telephoneOne), 
+        "The method must work independently of the position of the parameters");
+
+    assertEquals(Status.DIALING, telephoneOne.getStatus());
+    assertEquals(telephoneTwo.getId(), telephoneOne.getLastCall());
+    assertEquals(Status.RINGING, telephoneTwo.getStatus());
+    assertEquals(telephoneOne.getId(), telephoneTwo.getIncomingCall());
+  }
+
+  /**
+   * The scenario:
+   * 
+   * <p>In here the two telephones statuses do not enter in any of the
+   * cases exposed in the previous two scenarios to have a communication.
+   * The method must return false in these cases
+   */
+  @Test
+  void test_communicationExists_scenario_three() {
+    telephoneOne.setStatus(Status.DIALING);
+    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneTwo.setStatus(Status.OFF_CALL);
+    telephoneTwo.setIncomingCall(telephoneOne.getId());
+
+    assertFalse(exchange.communicationExists(telephoneOne, telephoneTwo));
+    assertFalse(exchange.communicationExists(telephoneTwo, telephoneTwo), 
+        "The method must work independently of the position of the parameters");
   }
 }

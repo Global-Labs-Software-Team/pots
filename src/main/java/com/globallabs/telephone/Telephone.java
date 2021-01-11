@@ -33,12 +33,18 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
  */
 
 public class Telephone implements TelephoneSpecification {
+  // This number is used when for lastCall and incominCall do
+  // not have any number assigned. For example, lastCall when
+  // the Telephone object is created or incomingCall when
+  // a call is answered
+  public static int PHONE_NOT_SET = -1;
+
   private TelephoneModel phoneInfo;
   private Exchange exchange;
   private Status status;
-  
-  private Telephone lastCall;
-  private Telephone incomingCall;
+
+  private int lastCall;
+  private int incomingCall;
   
   /**
    * Telephone constructor. 
@@ -98,17 +104,17 @@ public class Telephone implements TelephoneSpecification {
    *
    * @return a Telephone object of the last phone you were in a call with
    */
-  public Telephone getLastCall() {
+  public int getLastCall() {
     return lastCall;
   }
     
   /**
    * Sets the last phone you were in a call with.
    *
-   * @param phone a Telephone object of the last phone you were in a call with
+   * @param phoneNumber a Telephone object of the last phone you were in a call with
    */
-  public void setLastCall(final Telephone phone) {
-    lastCall = phone;
+  public void setLastCall(final int phoneNumber) {
+    lastCall = phoneNumber;
   }
     
   /**
@@ -117,17 +123,17 @@ public class Telephone implements TelephoneSpecification {
    *
    * @return the phone calling you
    */
-  public Telephone getIncomingCall() {
+  public int getIncomingCall() {
     return incomingCall;
   }
     
   /**
    * Sets the phone that is calling you.
    *
-   * @param phone the phone which is the origin of the call
+   * @param phoneNumber the phone which is the origin of the call
    */
-  public void setIncomingCall(final Telephone phone) {
-    incomingCall = phone;
+  public void setIncomingCall(final int phoneNumber) {
+    incomingCall = phoneNumber;
   }
   
   /**
@@ -181,10 +187,10 @@ public class Telephone implements TelephoneSpecification {
       throws BusyPhoneException, NoIncomingCallsException, 
       NoCommunicationPathException, PhoneNotFoundException {
     if (getStatus().equals(Status.RINGING)) {
-      exchange.openCallBetween(getId(), getIncomingCall().getId());
+      exchange.openCallBetween(getId(), getIncomingCall());
       setStatus(Status.BUSY);
       setLastCall(getIncomingCall());
-      setIncomingCall(null);
+      setIncomingCall(-1);
     } else if (getStatus().equals(Status.BUSY)) {
       throw new BusyPhoneException("You can't answer while you are in another call");
     } else {
@@ -194,18 +200,18 @@ public class Telephone implements TelephoneSpecification {
 
   @Override
   public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException {
-    Telephone otherPhone;
+    int otherPhoneNumber;
     if (getStatus() == Status.RINGING) {
-      otherPhone = getIncomingCall();
+      otherPhoneNumber = getIncomingCall();
     } else if (getStatus() == Status.DIALING || getStatus() == Status.BUSY) {
-      otherPhone = getLastCall();
+      otherPhoneNumber = getLastCall();
     } else {
       throw new NoCommunicationPathException("You don't have any active call");
     }
     
-    exchange.closeCallBetween(this.getId(), otherPhone.getId());
+    exchange.closeCallBetween(this.getId(), otherPhoneNumber);
     setStatus(Status.OFF_CALL);
-    setIncomingCall(null);
+    setIncomingCall(PHONE_NOT_SET);
   }
   
   /**
@@ -231,11 +237,7 @@ public class Telephone implements TelephoneSpecification {
    */
   @Override
   public String toString() {
-    String lastCall = this.lastCall == null ? null :
-        this.lastCall.getPhoneInfo().toString();
-    String incomingCall = this.incomingCall == null ? null :
-        this.incomingCall.getPhoneInfo().toString(); 
-    return phoneInfo.toString() + " {" + "last call: " + lastCall
-      + ", incoming call: " + incomingCall + ", status: " + status + "}";
+    return phoneInfo.toString() + " {" + "last call phone id: " + lastCall
+      + ", incoming call id: " + incomingCall + ", status: " + status + "}";
   }
 }

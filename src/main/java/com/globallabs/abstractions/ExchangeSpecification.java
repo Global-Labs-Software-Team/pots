@@ -72,6 +72,26 @@ public interface ExchangeSpecification {
       throws NoCommunicationPathException, PhoneNotFoundException;
   
   /**
+   * Detects if there is an existing communication between two telephones.
+   * This method will check, through the statuses of the two telephones, if
+   * they are connected.
+   * 
+   * <p>Important: This method does not care about the order of the parameters.
+   Because it will check all the possible ways that two phones can be connected.
+   Either:
+   * <ul>
+   * <li> Telephone one and telephone two are connected and talking
+   * <li> Telephone one is dialing telephone two
+   * <li> Telephone two is dialing telephone one
+   * </ul>
+   * 
+   * @param telephoneOne the telephone number of one end of the call
+   * @param telephoneTwo the telephone number of the other end of the call
+   * @return
+   */
+  public boolean communicationExists(final Telephone telephoneOne, final Telephone telephoneTwo);
+
+  /**
   * Add a phone to the exchange.
   *
   * @param phone the Telephone device to be added.
