@@ -60,6 +60,8 @@ public class Telephone implements TelephoneSpecification {
     this.exchange = exchange;
     this.exchange.addPhoneToExchange(this);
     this.status = Status.OFF_CALL;
+    lastCall = PHONE_NOT_SET;
+    incomingCall = PHONE_NOT_SET;
   }
     
   /**
