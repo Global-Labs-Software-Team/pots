@@ -1,38 +1,48 @@
 package com.globallabs.telephone;
 
+import com.globallabs.operator.Pipeline;
 import java.util.Random;
 
 /**
- * Consumer class to add fields to a thread in order to manage a queue and the time for which it runs
- * 
+ * Producer class to add fields to a thread in order to manage a queue and the time for
+ * which it runs.
+ *
  * @version 1.0
- * @author Byron Barkhuizen
+ * @author Byron Barkhuizen and Angelica Acosta
  */
 
 public class Producer extends Thread {
-    Pipeline queue;
-    int time;
-    Random rand = new Random();
+  Pipeline queue;
+  int time;
+  Random rand = new Random();
 
-    public Producer(String str, Pipeline q, int seconds) {
-        super(str);
-        queue = q;
-        time = seconds;
-    }
+  /**
+   * Producer constructor.
+   */
+  public Producer(String str, Pipeline q, int seconds) {
+    super(str);
+    queue = q;
+    time = seconds;
+  }
 
-    public void run() {
-        int current_message;
-        for (int = 0; i < time; i++) {
-            current_message = rand.nextInt(2);
-            publishMessage (current_message);
-            try {
-                sleep((int)(Math.random()*500));
-            } catch (InterruptedException e) {}
-        }
+  /**
+   * The run method will be executed when the thread starts.
+   */
+  public void run() {
+    int currentMessage;
+    for (int i = 0; i < time; i++) {
+      currentMessage = rand.nextInt(2);
+      publishMessage(currentMessage);
+      try {
+        sleep((int) (Math.random() * 500));
+      } catch (InterruptedException e) {
+        System.out.println("The execution of the thread was interrupted.");
+      }
     }
+  }
 
-    syncrhonized void publishMessage(int current_message) {
-        System.out.println("Produceer" + getName() + "produced " + Integer.toSring(current_message));
-        queue.publish(current_message)
-    }
+  synchronized void publishMessage(int currentMessage){
+    System.out.println("Produceer" + getName() + "produced " + Integer.toSring(currentMessage));
+    queue.publish(currentMessage);
+  }
 }

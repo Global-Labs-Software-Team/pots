@@ -29,7 +29,7 @@ public class Consumer extends Thread {
   }
 
   /**
-   * This will be executed when the thread starts.
+   * The run method will be executed when the thread starts.
    */
   public void run() {
     for (int i = 0; i < time; i++) {
