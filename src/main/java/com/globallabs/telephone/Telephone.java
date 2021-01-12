@@ -69,7 +69,7 @@ public class Telephone implements TelephoneSpecification {
    * It only takes the information from the model and initialize the
    * variables lastCall and incomingCall. It is used for testing, to
    * be able to add phones manually into the exchange.
-   * 
+   *
    * @param phoneInfo the basic information of the telephone
    */
   public Telephone(TelephoneModel phoneInfo) {
@@ -84,7 +84,7 @@ public class Telephone implements TelephoneSpecification {
    *
    * @return the number of the telephone
    */
-  public int getId() {
+  public int getTelephoneId() {
     return phoneInfo.getId();
   }
 
@@ -204,7 +204,7 @@ public class Telephone implements TelephoneSpecification {
       throws BusyPhoneException, NoIncomingCallsException, 
       NoCommunicationPathException, PhoneNotFoundException {
     if (getStatus().equals(Status.RINGING)) {
-      exchange.openCallBetween(getId(), getIncomingCall());
+      exchange.openCallBetween(getTelephoneId(), getIncomingCall());
       setStatus(Status.BUSY);
       setLastCall(getIncomingCall());
       setIncomingCall(-1);
@@ -226,7 +226,7 @@ public class Telephone implements TelephoneSpecification {
       throw new NoCommunicationPathException("You don't have any active call");
     }
     
-    exchange.closeCallBetween(this.getId(), otherPhoneNumber);
+    exchange.closeCallBetween(this.getTelephoneId(), otherPhoneNumber);
     setStatus(Status.OFF_CALL);
     setIncomingCall(PHONE_NOT_SET);
   }

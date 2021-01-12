@@ -85,9 +85,9 @@ public class Exchange implements ExchangeSpecification {
     if (destinationPhone.getStatus() == Status.BUSY) {
       throw new BusyPhoneException("The phone with id " + destination + " is busy");
     }
-    originPhone.setLastCall(destinationPhone.getId());
+    originPhone.setLastCall(destinationPhone.getTelephoneId());
     destinationPhone.setStatus(Status.RINGING);
-    destinationPhone.setIncomingCall(originPhone.getId());
+    destinationPhone.setIncomingCall(originPhone.getTelephoneId());
   }
   
   @Override
@@ -122,8 +122,8 @@ public class Exchange implements ExchangeSpecification {
   
   @Override
   public boolean communicationExists(final Telephone telephoneOne, final Telephone telephoneTwo) {
-    int phoneOneNumber = telephoneOne.getId();
-    int phoneTwoNumber = telephoneTwo.getId();
+    int phoneOneNumber = telephoneOne.getTelephoneId();
+    int phoneTwoNumber = telephoneTwo.getTelephoneId();
     // Scenario One
     if ((telephoneOne.getStatus() == Status.BUSY 
         && telephoneTwo.getStatus() == Status.BUSY) && // Both BUSY
@@ -152,7 +152,7 @@ public class Exchange implements ExchangeSpecification {
   public void addPhoneToExchange(final Telephone phone) 
       throws PhoneExistInNetworkException {
     try {
-      Telephone itExists = getPhone(phone.getId());
+      Telephone itExists = getPhone(phone.getTelephoneId());
       throw new PhoneExistInNetworkException("The phone " 
         + itExists + "is already in the network");
     } catch (PhoneNotFoundException e) {
@@ -167,7 +167,7 @@ public class Exchange implements ExchangeSpecification {
   @Override
   public Telephone getPhone(final int phoneNumber) throws PhoneNotFoundException {
     for (Telephone phone : telephones) {
-      if (phone.getId() == phoneNumber) {
+      if (phone.getTelephoneId() == phoneNumber) {
         return phone;
       }
     }
