@@ -63,6 +63,21 @@ public class Telephone implements TelephoneSpecification {
     lastCall = PHONE_NOT_SET;
     incomingCall = PHONE_NOT_SET;
   }
+
+  /**
+   * Alternative telephone constructor.
+   * It only takes the information from the model and initialize the
+   * variables lastCall and incomingCall. It is used for testing, to
+   * be able to add phones manually into the exchange.
+   * 
+   * @param phoneInfo the basic information of the telephone
+   */
+  public Telephone(TelephoneModel phoneInfo) {
+    this.phoneInfo = phoneInfo;
+    status = Status.OFF_CALL;
+    lastCall = PHONE_NOT_SET;
+    incomingCall = PHONE_NOT_SET;
+  }
     
   /**
    * Returns the number of the telephone.

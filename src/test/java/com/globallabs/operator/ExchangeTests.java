@@ -53,11 +53,12 @@ public class ExchangeTests {
       InvalidNumberException, PhoneNotFoundException {
     int expectedNumberPhonesBefore = 2;
     int expectedNumberPhonesAfter = 3;
+    Telephone newPhone = new Telephone(new TelephoneModel(9));
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
-    new Telephone(new TelephoneModel(9), exchange);
+    exchange.addPhoneToExchange(newPhone); 
     assertEquals(expectedNumberPhonesAfter, exchange.getNumberOfPhones());
     Telephone addedTelephone = exchange.getPhone(9);
-    assertEquals(addedTelephone.getId(), 9);
+    assertEquals(addedTelephone.getId(), newPhone.getId());
   }
   
   /**
@@ -72,7 +73,8 @@ public class ExchangeTests {
     int expectedNumberPhonesBefore = 2;
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     assertThrows(PhoneExistInNetworkException.class, () -> {
-      new Telephone(new TelephoneModel(1), exchange);
+      Telephone repeatedPhone = new Telephone(new TelephoneModel(1));
+      exchange.addPhoneToExchange(repeatedPhone);
     });
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
   }
