@@ -49,7 +49,7 @@ public class PotsApplication {
     System.out.println(t2 + "\nanswered\n" + t1);
     System.out.println("------------------------");
     // They talk for a while and then t2 hang up the call
-    // t2.hangUp();
+    t2.hangUp();
     System.out.println(t2 + "\nhang up\n" + t1);
   }
 
