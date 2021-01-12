@@ -84,7 +84,7 @@ public class ExchangeTests {
     // Telephone two decides to call telephone one and
     // telephone one is free
     telephoneOne.setStatus(Status.OFF_CALL);
-    exchange.enrouteCall(2, 1);
+    exchange.enrouteCall(telephoneTwo.getId(), telephoneOne.getId());
     // The telephone one receive the notification
     assertEquals(Status.RINGING, telephoneOne.getStatus());
     assertEquals(telephoneTwo.getId(), telephoneOne.getIncomingCall());
@@ -102,7 +102,7 @@ public class ExchangeTests {
     telephoneOne.setStatus(Status.BUSY);
 
     assertThrows(BusyPhoneException.class, () -> {
-      exchange.enrouteCall(2, 1);
+      exchange.enrouteCall(telephoneTwo.getId(), telephoneOne.getId());
     });
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
   }
@@ -117,8 +117,9 @@ public class ExchangeTests {
   @Test
   void test_enrouteCall_when_phone_no_exist() {
     Exchange exchange = Exchange.getInstance();
+    int phoneNumberNotExists = 4;
     assertThrows(PhoneNotFoundException.class, () -> {
-      exchange.enrouteCall(4, 1);
+      exchange.enrouteCall(phoneNumberNotExists, telephoneOne.getId());
     });
   }
   
@@ -160,11 +161,11 @@ public class ExchangeTests {
   @Test
   void test_openCallBetween_without_incomingCall() {
     telephoneOne.setStatus(Status.OFF_CALL);
-    telephoneOne.setIncomingCall(-1);
+    telephoneOne.setIncomingCall(Telephone.PHONE_NOT_SET);
     telephoneTwo.setStatus(Status.OFF_CALL);
-    telephoneTwo.setLastCall(-1);
+    telephoneTwo.setLastCall(Telephone.PHONE_NOT_SET);
     assertThrows(NoCommunicationPathException.class, () -> {
-      exchange.openCallBetween(1, 2);
+      exchange.openCallBetween(telephoneOne.getId(), telephoneTwo.getId());
     });
   }
   
@@ -215,7 +216,7 @@ public class ExchangeTests {
     
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
-    assertEquals(-1, telephoneTwo.getIncomingCall());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getIncomingCall());
   }
   
   /**
@@ -236,12 +237,12 @@ public class ExchangeTests {
     telephoneThree.setLastCall(telephoneOne.getId());
     telephoneThree.setStatus(Status.BUSY);
 
-    telephoneTwo.setLastCall(-1);
+    telephoneTwo.setLastCall(Telephone.PHONE_NOT_SET);
     telephoneTwo.setStatus(Status.OFF_CALL);
     
     // Exchange try to cancel a call between 1 and 2 but there is no connection
     assertThrows(NoCommunicationPathException.class, () -> {
-      exchange.closeCallBetween(2, 1);
+      exchange.closeCallBetween(telephoneTwo.getId(), telephoneOne.getId());
     });
   }
 
