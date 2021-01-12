@@ -45,7 +45,7 @@ class TelephoneTests {
   @Test
   public void test_constructor() throws PhoneExistInNetworkException, InvalidNumberException {
     Telephone telephoneOne = new Telephone(new TelephoneModel(ID_NONEXISTING), exchange);
-    assertEquals(ID_NONEXISTING, telephoneOne.getId());
+    assertEquals(ID_NONEXISTING, telephoneOne.getTelephoneId());
   }
 
   /**
@@ -95,9 +95,9 @@ class TelephoneTests {
   @Test
   public void test_dialing_phone() throws DialingMySelfException, BusyPhoneException {
     telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
     telephoneTwo.setStatus(Status.RINGING);
-    telephoneTwo.setIncomingCall(telephoneOne.getId());
+    telephoneTwo.setIncomingCall(telephoneOne.getTelephoneId());
     Runnable runnable = () -> {
       try {
         telephoneOne.dialing();
@@ -129,9 +129,9 @@ class TelephoneTests {
       NoIncomingCallsException, NoCommunicationPathException,
       PhoneNotFoundException {
     telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
     telephoneTwo.setStatus(Status.RINGING);
-    telephoneTwo.setIncomingCall(telephoneOne.getId());
+    telephoneTwo.setIncomingCall(telephoneOne.getTelephoneId());
     Runnable runnable = () -> {
       try {
         telephoneOne.dialing();
@@ -172,14 +172,14 @@ class TelephoneTests {
   @Test
   public void test_answer_whenBusy() {
     telephoneOne.setStatus(Status.BUSY);
-    telephoneOne.setLastCall(telephoneTwo.getId());
-    telephoneOne.setIncomingCall(telephoneThree.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
+    telephoneOne.setIncomingCall(telephoneThree.getTelephoneId());
     
     telephoneTwo.setStatus(Status.BUSY);
-    telephoneTwo.setLastCall(telephoneOne.getId());
+    telephoneTwo.setLastCall(telephoneOne.getTelephoneId());
     
     telephoneThree.setStatus(Status.DIALING);
-    telephoneThree.setLastCall(telephoneOne.getId());
+    telephoneThree.setLastCall(telephoneOne.getTelephoneId());
     
     assertThrows(BusyPhoneException.class, () -> {
       telephoneOne.answer();
@@ -195,9 +195,9 @@ class TelephoneTests {
   public void test_hangUp_ongoingCall() 
       throws NoCommunicationPathException, PhoneNotFoundException {
     telephoneOne.setStatus(Status.BUSY);
-    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
     telephoneTwo.setStatus(Status.BUSY);
-    telephoneTwo.setLastCall(telephoneOne.getId());
+    telephoneTwo.setLastCall(telephoneOne.getTelephoneId());
     
     telephoneOne.hangUp();
     assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
@@ -214,9 +214,9 @@ class TelephoneTests {
   public void test_hangUp_incomingCall() 
       throws NoCommunicationPathException, PhoneNotFoundException {
     telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
     telephoneTwo.setStatus(Status.RINGING);
-    telephoneTwo.setIncomingCall(telephoneOne.getId());
+    telephoneTwo.setIncomingCall(telephoneOne.getTelephoneId());
     
     telephoneTwo.hangUp();
     assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
@@ -246,9 +246,9 @@ class TelephoneTests {
       throws DialingMySelfException, BusyPhoneException, 
       NoIncomingCallsException, InterruptedException {
     telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setLastCall(telephoneTwo.getId());
+    telephoneOne.setLastCall(telephoneTwo.getTelephoneId());
     telephoneTwo.setStatus(Status.RINGING);
-    telephoneTwo.setIncomingCall(telephoneOne.getId());
+    telephoneTwo.setIncomingCall(telephoneOne.getTelephoneId());
     Runnable runnable = () -> {
       try {
         telephoneOne.dialing();
