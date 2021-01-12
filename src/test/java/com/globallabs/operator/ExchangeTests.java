@@ -51,8 +51,11 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_success() throws PhoneExistInNetworkException, 
       InvalidNumberException, PhoneNotFoundException {
+    int expectedNumberPhonesBefore = 2;
+    int expectedNumberPhonesAfter = 3;
+    assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     new Telephone(new TelephoneModel(9), exchange);
-    assertEquals(3, exchange.getNumberOfPhones());
+    assertEquals(expectedNumberPhonesAfter, exchange.getNumberOfPhones());
     Telephone addedTelephone = exchange.getPhone(9);
     assertEquals(addedTelephone.getId(), 9);
   }
@@ -66,9 +69,12 @@ public class ExchangeTests {
   @Test
   void test_addPhoneToExchange_phoneExists() throws PhoneExistInNetworkException,
       InvalidNumberException {
+    int expectedNumberPhonesBefore = 2;
+    assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     assertThrows(PhoneExistInNetworkException.class, () -> {
       new Telephone(new TelephoneModel(1), exchange);
     });
+    assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
   }
   
   /**
@@ -100,11 +106,12 @@ public class ExchangeTests {
   @Test
   void test_enrouteCall_when_busy() throws PhoneExistInNetworkException {
     telephoneOne.setStatus(Status.BUSY);
-
+    telephoneTwo.setStatus(Status.OFF_CALL);
     assertThrows(BusyPhoneException.class, () -> {
       exchange.enrouteCall(telephoneTwo.getId(), telephoneOne.getId());
     });
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
+    assertEquals(Status.BUSY, telephoneOne.getStatus());
   }
   
   /**
@@ -116,11 +123,14 @@ public class ExchangeTests {
    */
   @Test
   void test_enrouteCall_when_phone_no_exist() {
-    Exchange exchange = Exchange.getInstance();
     int phoneNumberNotExists = 4;
+    telephoneOne.setStatus(Status.OFF_CALL);
+    telephoneOne.setIncomingCall(Telephone.PHONE_NOT_SET);
     assertThrows(PhoneNotFoundException.class, () -> {
       exchange.enrouteCall(phoneNumberNotExists, telephoneOne.getId());
     });
+    assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneOne.getIncomingCall());
   }
   
   /**
@@ -167,6 +177,11 @@ public class ExchangeTests {
     assertThrows(NoCommunicationPathException.class, () -> {
       exchange.openCallBetween(telephoneOne.getId(), telephoneTwo.getId());
     });
+
+    assertEquals(Status.OFF_CALL, telephoneOne.getStatus());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneOne.getIncomingCall());
+    assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getIncomingCall());
   }
   
   /**
@@ -191,6 +206,7 @@ public class ExchangeTests {
     
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getIncomingCall());
   }
   
   /**
@@ -244,6 +260,13 @@ public class ExchangeTests {
     assertThrows(NoCommunicationPathException.class, () -> {
       exchange.closeCallBetween(telephoneTwo.getId(), telephoneOne.getId());
     });
+
+    assertEquals(Status.BUSY, telephoneOne.getStatus());
+    assertEquals(telephoneThree.getId(), telephoneOne.getLastCall());
+    assertEquals(Status.BUSY, telephoneThree.getStatus());
+    assertEquals(telephoneOne.getId(), telephoneThree.getLastCall());
+    assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
+    assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getLastCall());
   }
 
   /**
