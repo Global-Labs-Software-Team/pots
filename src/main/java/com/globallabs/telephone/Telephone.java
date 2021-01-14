@@ -162,7 +162,6 @@ public class Telephone implements TelephoneSpecification {
     if (phoneNumber == phoneInfo.getId()) {
       throw new DialingMySelfException("You are calling yourself");
     }
-    setStatus(Status.DIALING);
     try {
       exchange.enrouteCall(phoneInfo.getId(), phoneNumber);
     } catch (PhoneNotFoundException e) {
