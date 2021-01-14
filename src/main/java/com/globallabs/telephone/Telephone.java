@@ -33,7 +33,7 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
  */
 
 public class Telephone implements TelephoneSpecification {
-  // This number is used when for lastCall and incominCall do
+  // This number is used when for lastCall and incomingCall do
   // not have any number assigned. For example, lastCall when
   // the Telephone object is created or incomingCall when
   // a call is answered
