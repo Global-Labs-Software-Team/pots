@@ -223,8 +223,6 @@ public class Telephone implements TelephoneSpecification {
     }
     
     exchange.closeCallBetween(this.getTelephoneId(), otherPhoneNumber);
-    setStatus(Status.OFF_CALL);
-    setIncomingCall(PHONE_NOT_SET);
   }
   
   /**

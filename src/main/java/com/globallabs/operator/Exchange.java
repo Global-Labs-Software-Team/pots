@@ -122,10 +122,10 @@ public class Exchange implements ExchangeSpecification {
       throw new NoCommunicationPathException(
                 "There is no path between " + originPhone + " and " + destinationPhone);
     }
-    if (destinationPhone.getStatus() == Status.RINGING) {
-      destinationPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
-    }
     destinationPhone.setStatus(Status.OFF_CALL);
+    destinationPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
+    originPhone.setStatus(Status.OFF_CALL);
+    originPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
   }
   
   @Override
