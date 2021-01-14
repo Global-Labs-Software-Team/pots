@@ -102,8 +102,15 @@ public class Exchange implements ExchangeSpecification {
     if (!communicationExists(originPhone, destinationPhone)) {
       throw new NoCommunicationPathException("There is no path between " 
       + destinationPhone + " and " + originPhone);
-    } 
+    }
+    // Destination phone only needs to change the status
+    // because it is the one that is making the call. In other terms,
+    // it is the one that used the enrouteCall. So it last call will be
+    // the id of the originPhone.
     destinationPhone.setStatus(Status.BUSY);
+    originPhone.setStatus(Status.BUSY);
+    originPhone.setLastCall(destinationPhone.getTelephoneId());
+    originPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
   }
   
   @Override

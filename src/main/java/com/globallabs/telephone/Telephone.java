@@ -204,9 +204,6 @@ public class Telephone implements TelephoneSpecification {
       NoCommunicationPathException, PhoneNotFoundException {
     if (getStatus().equals(Status.RINGING)) {
       exchange.openCallBetween(getTelephoneId(), getIncomingCall());
-      setStatus(Status.BUSY);
-      setLastCall(getIncomingCall());
-      setIncomingCall(-1);
     } else if (getStatus().equals(Status.BUSY)) {
       throw new BusyPhoneException("You can't answer while you are in another call");
     } else {
