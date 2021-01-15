@@ -58,7 +58,6 @@ public class Telephone implements TelephoneSpecification {
       throws PhoneExistInNetworkException {
     this.phoneInfo = phoneInfo;
     this.exchange = exchange;
-    this.exchange.addPhoneToExchange(this);
     this.status = Status.OFF_CALL;
     lastCall = PHONE_NOT_SET;
     incomingCall = PHONE_NOT_SET;

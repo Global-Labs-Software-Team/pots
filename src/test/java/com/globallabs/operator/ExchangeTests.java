@@ -60,7 +60,7 @@ public class ExchangeTests {
       InvalidNumberException, PhoneNotFoundException {
     int expectedNumberPhonesBefore = 2;
     int expectedNumberPhonesAfter = 3;
-    Telephone newPhone = new Telephone(new TelephoneModel(9));
+    TelephoneWithPipeline newPhone = new TelephoneWithPipeline(new TelephoneModel(9));
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     exchange.addPhoneToExchange(newPhone); 
     assertEquals(expectedNumberPhonesAfter, exchange.getNumberOfPhones());
@@ -80,7 +80,7 @@ public class ExchangeTests {
     int expectedNumberPhonesBefore = 2;
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     assertThrows(PhoneExistInNetworkException.class, () -> {
-      Telephone repeatedPhone = new Telephone(new TelephoneModel(1));
+      TelephoneWithPipeline repeatedPhone = new TelephoneWithPipeline(new TelephoneModel(1));
       exchange.addPhoneToExchange(repeatedPhone);
     });
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
@@ -171,10 +171,11 @@ public class ExchangeTests {
     assertEquals(telephoneOne.getLastCall(), telephoneTwo.getTelephoneId());
     assertEquals(telephoneTwo.getLastCall(), telephoneOne.getTelephoneId());
     // Verification of the pipelines setup
-    assertEquals(telephoneOne.getConsumePipe().getPipeName(), 
-        telephoneTwo.getPublishPipe().getPipeName());
-    assertEquals(telephoneTwo.getConsumePipe().getPipeName(), 
-        telephoneOne.getPublishPipe().getPipeName());
+    
+    assertEquals(telephoneOne.getConsumePipe(), 
+        telephoneTwo.getPublishPipe());
+    assertEquals(telephoneTwo.getConsumePipe(), 
+        telephoneOne.getPublishPipe());
   }
   
   /**
@@ -224,8 +225,8 @@ public class ExchangeTests {
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
     assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getIncomingCall());
     // Verification of the pipelines setup
-    assertNull(telephoneOne.getConsumePipe().getPipeName());
-    assertNull(telephoneTwo.getConsumePipe().getPipeName());
+    assertNull(telephoneOne.getConsumePipe());
+    assertNull(telephoneTwo.getConsumePipe());
   }
   
   /**
@@ -308,7 +309,7 @@ public class ExchangeTests {
     assertEquals(emptyList, exchange.getNumberOfPhones());
     
     int newPhoneId = 9;
-    new Telephone(new TelephoneModel(newPhoneId), exchange); // Add a new phone
+    new TelephoneWithPipeline(new TelephoneModel(newPhoneId), exchange); // Add a new phone
     int exchangeExpectedSize = 1;
     assertEquals(exchangeExpectedSize, exchange.getNumberOfPhones());
   }

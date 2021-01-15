@@ -10,10 +10,28 @@ public class TelephoneWithPipeline extends Telephone {
   Pipeline publishPipe;
   Pipeline consumePipe;
 
+  /**
+   * Complete.
+   * @param phoneInfo a
+   * @param exchange a
+   * @param publishPipe a
+   * @throws PhoneExistInNetworkException a
+   */
   public TelephoneWithPipeline(TelephoneModel phoneInfo, Exchange exchange, Pipeline publishPipe) 
       throws PhoneExistInNetworkException {
     super(phoneInfo, exchange);
+    exchange.addPhoneToExchange(this);
     this.publishPipe = publishPipe;
+  }
+
+  public TelephoneWithPipeline(TelephoneModel phoneInfo, Exchange exchange)
+      throws PhoneExistInNetworkException {
+    super(phoneInfo, exchange);
+    exchange.addPhoneToExchange(this); 
+  }
+
+  public TelephoneWithPipeline(TelephoneModel phoneInfo) {
+    super(phoneInfo);
   }
 
   public void setConsumePipe(Pipeline consumePipe) {

@@ -7,6 +7,8 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
+import com.globallabs.telephone.TelephoneWithPipeline;
+
 import java.util.LinkedList;
 
 /**
@@ -52,10 +54,10 @@ import java.util.LinkedList;
  */
 public class Exchange implements ExchangeSpecification {
   
-  protected LinkedList<Telephone> telephones;
+  protected LinkedList<TelephoneWithPipeline> telephones;
   
   public Exchange() {
-    telephones = new LinkedList<Telephone>();
+    telephones = new LinkedList<TelephoneWithPipeline>();
   }
 
   /**
@@ -94,8 +96,8 @@ public class Exchange implements ExchangeSpecification {
   @Override
   public void openCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException, PhoneNotFoundException {
-    Telephone originPhone = getPhone(origin); // Phone receiving the call
-    Telephone destinationPhone = getPhone(destination); // Phone that is calling     
+    TelephoneWithPipeline originPhone = getPhone(origin); // Phone receiving the call
+    TelephoneWithPipeline destinationPhone = getPhone(destination); // Phone that is calling     
     // If the origin phone is not the one calling the other phone
     // or
     // the origin last call is not the same as the other phone
@@ -116,8 +118,8 @@ public class Exchange implements ExchangeSpecification {
   @Override
   public void closeCallBetween(final int origin, final int destination) 
       throws NoCommunicationPathException, PhoneNotFoundException {
-    Telephone originPhone = getPhone(origin);
-    Telephone destinationPhone = getPhone(destination);
+    TelephoneWithPipeline originPhone = getPhone(origin);
+    TelephoneWithPipeline destinationPhone = getPhone(destination);
     if (!communicationExists(originPhone, destinationPhone)) {
       throw new NoCommunicationPathException(
                 "There is no path between " + originPhone + " and " + destinationPhone);
@@ -129,7 +131,7 @@ public class Exchange implements ExchangeSpecification {
   }
   
   @Override
-  public boolean communicationExists(final Telephone telephoneOne, final Telephone telephoneTwo) {
+  public boolean communicationExists(final TelephoneWithPipeline telephoneOne, final TelephoneWithPipeline telephoneTwo) {
     int phoneOneNumber = telephoneOne.getTelephoneId();
     int phoneTwoNumber = telephoneTwo.getTelephoneId();
     // Scenario One
@@ -157,7 +159,7 @@ public class Exchange implements ExchangeSpecification {
   }
 
   @Override
-  public void addPhoneToExchange(final Telephone phone) 
+  public void addPhoneToExchange(final TelephoneWithPipeline phone) 
       throws PhoneExistInNetworkException {
     try {
       Telephone itExists = getPhone(phone.getTelephoneId());
@@ -173,8 +175,8 @@ public class Exchange implements ExchangeSpecification {
   }
   
   @Override
-  public Telephone getPhone(final int phoneNumber) throws PhoneNotFoundException {
-    for (Telephone phone : telephones) {
+  public TelephoneWithPipeline getPhone(final int phoneNumber) throws PhoneNotFoundException {
+    for (TelephoneWithPipeline phone : telephones) {
       if (phone.getTelephoneId() == phoneNumber) {
         return phone;
       }

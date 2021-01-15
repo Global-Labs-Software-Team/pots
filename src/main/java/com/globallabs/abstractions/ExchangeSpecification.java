@@ -4,7 +4,7 @@ import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-import com.globallabs.telephone.Telephone;
+import com.globallabs.telephone.TelephoneWithPipeline;
 
 public interface ExchangeSpecification {
     
@@ -89,7 +89,8 @@ public interface ExchangeSpecification {
    * @param telephoneTwo the telephone number of the other end of the call
    * @return
    */
-  public boolean communicationExists(final Telephone telephoneOne, final Telephone telephoneTwo);
+  public boolean communicationExists(final TelephoneWithPipeline telephoneOne, 
+      final TelephoneWithPipeline telephoneTwo);
 
   /**
   * Add a phone to the exchange.
@@ -97,7 +98,8 @@ public interface ExchangeSpecification {
   * @param phone the Telephone device to be added.
   * @throws PhoneExistInNetworkException if the Telephone is already inside the network.
   */
-  public void addPhoneToExchange(final Telephone phone) throws PhoneExistInNetworkException;
+  public void addPhoneToExchange(final TelephoneWithPipeline phone) 
+      throws PhoneExistInNetworkException;
   
   /**
   * Get the number of phone currently in the exchange.
@@ -113,5 +115,5 @@ public interface ExchangeSpecification {
   * @return a phone entity with that number
   * @throws PhoneNotFoundException when either of the phones do not belong to the exchange
   */
-  public Telephone getPhone(final int number) throws PhoneNotFoundException;
+  public TelephoneWithPipeline getPhone(final int number) throws PhoneNotFoundException;
 }
