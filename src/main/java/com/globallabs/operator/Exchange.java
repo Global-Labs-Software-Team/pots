@@ -110,9 +110,11 @@ public class Exchange implements ExchangeSpecification {
     // it is the one that used the enrouteCall. So it last call will be
     // the id of the originPhone.
     destinationPhone.setStatus(Status.BUSY);
+    destinationPhone.setConsumePipe(originPhone.getPublishPipe());
     originPhone.setStatus(Status.BUSY);
     originPhone.setLastCall(destinationPhone.getTelephoneId());
     originPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
+    originPhone.setConsumePipe(destinationPhone.getPublishPipe());
   }
   
   @Override
@@ -126,8 +128,10 @@ public class Exchange implements ExchangeSpecification {
     }
     destinationPhone.setStatus(Status.OFF_CALL);
     destinationPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
+    destinationPhone.setConsumePipe(null);
     originPhone.setStatus(Status.OFF_CALL);
     originPhone.setIncomingCall(Telephone.PHONE_NOT_SET);
+    originPhone.setConsumePipe(null);
   }
   
   @Override
