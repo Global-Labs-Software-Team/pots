@@ -20,6 +20,14 @@ public class TelephoneWithPipeline extends Telephone {
     
   }
 
+  public Pipeline getConsumePipe() {
+    return new Pipeline();
+  }
+
+  public void setPublishPipe(Pipeline publishPipe) {
+
+  }
+
   public Pipeline getPublishPipe() {
     return new Pipeline();
   }
