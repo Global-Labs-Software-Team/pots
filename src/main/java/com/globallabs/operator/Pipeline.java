@@ -37,4 +37,8 @@ public class Pipeline {
     int bitRead = pipe.remove();
     return bitRead;
   }
+
+  public boolean equals(Pipeline pipe) {
+    return getPipeName().equals(pipe.getPipeName());
+  }
 }
