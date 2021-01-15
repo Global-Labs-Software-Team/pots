@@ -2,6 +2,7 @@ package com.globallabs.operator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,6 +14,8 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
+import com.globallabs.telephone.TelephoneWithPipeline;
+import java.util.LinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +23,10 @@ import org.junit.jupiter.api.Test;
 public class ExchangeTests {
   
   private static ExchangeForTests exchange;
-  private static Telephone telephoneOne;
-  private static Telephone telephoneTwo;
+  private static TelephoneWithPipeline telephoneOne;
+  private static TelephoneWithPipeline telephoneTwo;
+  private static Pipeline pipelineOne;
+  private static Pipeline pipelineTwo;
   
   /**
    * Set up all the necessary functions for the tests. Each time
@@ -36,8 +41,10 @@ public class ExchangeTests {
   public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = ExchangeForTests.getInstance();
     exchange.resetExchange();
-    telephoneOne = new Telephone(new TelephoneModel(1), exchange);
-    telephoneTwo = new Telephone(new TelephoneModel(2), exchange);
+    pipelineOne = new Pipeline(new LinkedList<Integer>(), "pipe1");
+    pipelineTwo = new Pipeline(new LinkedList<Integer>(), "pipe2");
+    telephoneOne = new TelephoneWithPipeline(new TelephoneModel(1), exchange, pipelineOne);
+    telephoneTwo = new TelephoneWithPipeline(new TelephoneModel(2), exchange, pipelineTwo);
   }
   
   /**
@@ -161,6 +168,13 @@ public class ExchangeTests {
     // Then telephone two also get the status busy
     assertEquals(Status.BUSY, telephoneTwo.getStatus());
     assertEquals(Status.BUSY, telephoneOne.getStatus());
+    assertEquals(telephoneOne.getLastCall(), telephoneTwo.getTelephoneId());
+    assertEquals(telephoneTwo.getLastCall(), telephoneOne.getTelephoneId());
+    // Verification of the pipelines setup
+    assertEquals(telephoneOne.getConsumePipe().getPipeName(), 
+        telephoneTwo.getPublishPipe().getPipeName());
+    assertEquals(telephoneTwo.getConsumePipe().getPipeName(), 
+        telephoneOne.getPublishPipe().getPipeName());
   }
   
   /**
@@ -209,6 +223,9 @@ public class ExchangeTests {
     // Verification of status
     assertEquals(Status.OFF_CALL, telephoneTwo.getStatus());
     assertEquals(Telephone.PHONE_NOT_SET, telephoneTwo.getIncomingCall());
+    // Verification of the pipelines setup
+    assertNull(telephoneOne.getConsumePipe().getPipeName());
+    assertNull(telephoneTwo.getConsumePipe().getPipeName());
   }
   
   /**
