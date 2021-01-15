@@ -84,10 +84,10 @@ public interface ExchangeSpecification {
    * <li> Telephone one is dialing telephone two
    * <li> Telephone two is dialing telephone one
    * </ul>
-   * 
+   *
    * @param telephoneOne the telephone number of one end of the call
    * @param telephoneTwo the telephone number of the other end of the call
-   * @return
+   * @return boolean
    */
   public boolean communicationExists(final TelephoneWithPipeline telephoneOne, 
       final TelephoneWithPipeline telephoneTwo);

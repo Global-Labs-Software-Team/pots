@@ -8,7 +8,6 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Status;
 import com.globallabs.telephone.Telephone;
 import com.globallabs.telephone.TelephoneWithPipeline;
-
 import java.util.LinkedList;
 
 /**
@@ -135,7 +134,8 @@ public class Exchange implements ExchangeSpecification {
   }
   
   @Override
-  public boolean communicationExists(final TelephoneWithPipeline telephoneOne, final TelephoneWithPipeline telephoneTwo) {
+  public boolean communicationExists(final TelephoneWithPipeline telephoneOne, 
+      final TelephoneWithPipeline telephoneTwo) {
     int phoneOneNumber = telephoneOne.getTelephoneId();
     int phoneTwoNumber = telephoneTwo.getTelephoneId();
     // Scenario One

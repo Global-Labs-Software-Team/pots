@@ -6,6 +6,7 @@ public interface TelephoneWithPipelineSpecification {
   
   /**
    * Complete javadoc.
+   *
    * @param consumePipe complete
    */
   public void setConsumePipe(Pipeline consumePipe);
@@ -14,7 +15,8 @@ public interface TelephoneWithPipelineSpecification {
 
   /**
    * Complete javadoc.
-   * @return
+   *
+   * @return p
    */
   public Pipeline getPublishPipe();
 
