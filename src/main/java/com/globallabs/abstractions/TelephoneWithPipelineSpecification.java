@@ -21,4 +21,12 @@ public interface TelephoneWithPipelineSpecification {
   public Pipeline getPublishPipe();
 
   public Pipeline setPublishPipe();
+
+  /**
+   * Check the status of the phone to see if it is able to
+   * use the methods in exchange.
+   * @param nameOfFunction the name of the method in exchange
+   * @return true if it is able, otherwise false
+   */
+  public boolean isAbleTo(String nameOfFunction);
 }
