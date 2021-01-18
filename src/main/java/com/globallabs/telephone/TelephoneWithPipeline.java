@@ -49,4 +49,14 @@ public class TelephoneWithPipeline extends Telephone {
   public Pipeline getPublishPipe() {
     return new Pipeline();
   }
+
+  @Override
+  public boolean isAbleTo(String nameOfFunction) {
+    if (nameOfFunction.equals("enrouteCall")) {
+      boolean validStatus = (getStatus() == Status.OFF_CALL);
+      boolean incomingCallNotSet = (getIncomingCall() == PHONE_NOT_SET);
+      return validStatus && incomingCallNotSet;
+    }
+    return false;
+  }
 }
