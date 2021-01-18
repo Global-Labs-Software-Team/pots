@@ -20,7 +20,7 @@ public interface TelephoneWithPipelineSpecification {
    */
   public Pipeline getPublishPipe();
 
-  public Pipeline setPublishPipe();
+  public void setPublishPipe(Pipeline publishPipe);
 
   /**
    * Check the status of the phone to see if it is able to
