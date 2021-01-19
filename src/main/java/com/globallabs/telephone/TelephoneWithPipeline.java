@@ -45,7 +45,7 @@ public class TelephoneWithPipeline extends Telephone
   }
 
   public void setPublishPipe(Pipeline publishPipe) {
-
+    
   }
 
   public Pipeline getPublishPipe() {
