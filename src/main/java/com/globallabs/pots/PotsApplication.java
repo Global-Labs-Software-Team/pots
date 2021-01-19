@@ -10,6 +10,8 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Telephone;
+import com.globallabs.telephone.TelephoneWithPipeline;
+
 //import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -22,6 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PotsApplication {
 
+  public static Exchange exchange = Exchange.getInstance();
+  
   /**
    * The first scenario is the simplest one. It consists
    * of two phones t1 and t2 that call each other. t1 dial the
@@ -54,6 +58,25 @@ public class PotsApplication {
   }
 
   /**
+   * Simple scenario where two telephones are talking with each other.
+   */
+  public static void secondScenario() 
+      throws InvalidNumberException, PhoneExistInNetworkException, DialingMySelfException,
+      PhoneNotFoundException, BusyPhoneException, NoIncomingCallsException, 
+      NoCommunicationPathException {
+    TelephoneModel myinfoOne = new TelephoneModel(1);
+    TelephoneWithPipeline telephoneOne = new TelephoneWithPipeline(myinfoOne, exchange);
+    TelephoneModel myinfoTwo = new TelephoneModel(2);
+    TelephoneWithPipeline telephoneTwo = new TelephoneWithPipeline(myinfoTwo, exchange);
+
+    telephoneOne.dial(2);
+    telephoneTwo.answer();
+
+    telephoneOne.start();
+    telephoneTwo.start();
+  }
+
+  /**
    * Simulation of the pots applications.
    *
    * @param args arguments
@@ -68,6 +91,7 @@ public class PotsApplication {
   public static void main(String[] args) throws PhoneExistInNetworkException, 
           BusyPhoneException, PhoneNotFoundException, DialingMySelfException,
           NoCommunicationPathException, NoIncomingCallsException, InvalidNumberException {
-    firstScenario();
+    // firstScenario();
+    secondScenario(); // Connection between two telephone and transfer of data;
   }
 }

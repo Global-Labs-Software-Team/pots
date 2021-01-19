@@ -42,7 +42,7 @@ public class Producer extends Thread {
   }
 
   synchronized void publishMessage(int currentMessage) {
-    System.out.println("Produceer" + getName() + "produced " + Integer.toString(currentMessage));
+    System.out.println("Producer " + getName() + " produced " + Integer.toString(currentMessage));
     queue.publish(currentMessage);
   }
 }

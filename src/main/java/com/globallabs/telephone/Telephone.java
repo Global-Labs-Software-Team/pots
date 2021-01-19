@@ -32,7 +32,7 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
  * @author Byron Barkhuizen
  */
 
-public class Telephone implements TelephoneSpecification {
+public class Telephone extends Thread implements TelephoneSpecification {
   // This number is used when for lastCall and incomingCall do
   // not have any number assigned. For example, lastCall when
   // the Telephone object is created or incomingCall when
@@ -56,6 +56,7 @@ public class Telephone implements TelephoneSpecification {
    */
   public Telephone(TelephoneModel phoneInfo, Exchange exchange) 
       throws PhoneExistInNetworkException {
+    super(Integer.toString(phoneInfo.getId()));
     this.phoneInfo = phoneInfo;
     this.exchange = exchange;
     this.status = Status.OFF_CALL;
@@ -72,6 +73,7 @@ public class Telephone implements TelephoneSpecification {
    * @param phoneInfo the basic information of the telephone
    */
   public Telephone(TelephoneModel phoneInfo) {
+    super(Integer.toString(phoneInfo.getId()));
     this.phoneInfo = phoneInfo;
     status = Status.OFF_CALL;
     lastCall = PHONE_NOT_SET;

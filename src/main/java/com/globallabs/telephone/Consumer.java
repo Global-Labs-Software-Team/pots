@@ -29,6 +29,16 @@ public class Consumer extends Thread {
   }
 
   /**
+   * Consumer constructor in the case of three or more phones connected.
+   */
+  public Consumer(String str, Pipeline toConsume, int seconds) {
+    super(str);
+    this.bitsReceived = new ArrayList<Integer>();
+    this.toConsume = toConsume;
+    time = seconds;
+  }
+
+  /**
    * The run method will be executed when the thread starts.
    */
   public void run() {
@@ -46,7 +56,7 @@ public class Consumer extends Thread {
     try {
       int infoReceived = toConsume.consume();
       bitsReceived.add(infoReceived); // Change to receive in other part
-      // System.out.println("Bit received by " + getName() + " is: 0");
+      System.out.println("Bit received from " + toConsume.getPipeName() + " is: 0");
     } catch (NoSuchElementException e) {
       System.out.println("There was a problem with the consumption from the Pipeline.");
     } 

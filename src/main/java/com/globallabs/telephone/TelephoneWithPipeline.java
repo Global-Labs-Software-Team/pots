@@ -5,6 +5,7 @@ import com.globallabs.operator.Exchange;
 import com.globallabs.operator.Pipeline;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
+import java.util.ArrayList;
 
 public class TelephoneWithPipeline extends Telephone 
     implements TelephoneWithPipelineSpecification {
@@ -26,9 +27,16 @@ public class TelephoneWithPipeline extends Telephone
     this.publishPipe = publishPipe;
   }
 
+  /**
+   * complet.
+   * @param phoneInfo complet
+   * @param exchange complet
+   * @throws PhoneExistInNetworkException complet
+   */
   public TelephoneWithPipeline(TelephoneModel phoneInfo, Exchange exchange)
       throws PhoneExistInNetworkException {
     super(phoneInfo, exchange);
+    publishPipe = new Pipeline("pipe" + getTelephoneId());
     exchange.addPhoneToExchange(this); 
   }
 
@@ -50,6 +58,25 @@ public class TelephoneWithPipeline extends Telephone
 
   public Pipeline getPublishPipe() {
     return publishPipe;
+  }
+
+  /**
+   * Main loop of the phone.
+   */
+  public void run() {
+    System.out.println("Telephone with id " + getTelephoneId() + " is starting");
+    ArrayList<Integer> infoReceived = new ArrayList<Integer>();
+    Producer producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
+    Consumer consumer = new Consumer("consumer_" + getTelephoneId(), 
+        getConsumePipe(), infoReceived, 30);
+    producer.start();
+    consumer.start();
+    
+    while (producer.isAlive() || consumer.isAlive()) {};
+
+    System.out.println("Call finished");
+    System.out.println("(Telephone " + getTelephoneId() + ") " 
+        + "The information received from the call was: " + infoReceived);
   }
 
   @Override

@@ -19,6 +19,11 @@ public class Pipeline {
     pipeName = name;
   }
 
+  public Pipeline(String name) {
+    pipeName = name;
+    pipe = new LinkedList<Integer>();
+  }
+
   public void publish(int bit) {
     pipe.addLast(bit);
   }
