@@ -5,7 +5,6 @@ import com.globallabs.operator.Exchange;
 import com.globallabs.operator.Pipeline;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-import java.util.ArrayList;
 
 public class TelephoneWithPipeline extends Telephone 
     implements TelephoneWithPipelineSpecification {
@@ -64,19 +63,19 @@ public class TelephoneWithPipeline extends Telephone
    * Main loop of the phone.
    */
   public void run() {
-    System.out.println("Telephone with id " + getTelephoneId() + " is starting");
-    ArrayList<Integer> infoReceived = new ArrayList<Integer>();
+    System.out.println("Telephone with id " + getTelephoneId() + " is starting in thread: " 
+        + getId());
     Producer producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
     Consumer consumer = new Consumer("consumer_" + getTelephoneId(), 
-        getConsumePipe(), infoReceived, 30);
+        getConsumePipe(), 30);
     producer.start();
     consumer.start();
     
     while (producer.isAlive() || consumer.isAlive()) {};
 
     System.out.println("Call finished");
-    System.out.println("(Telephone " + getTelephoneId() + ") " 
-        + "The information received from the call was: " + infoReceived);
+    System.out.println("(Telephone " + getTelephoneId() + ", " + consumer.getName() + ")"
+        + "The information received from the call was : " + consumer.getBitsReceived());
   }
 
   @Override

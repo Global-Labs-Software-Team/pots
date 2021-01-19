@@ -38,6 +38,11 @@ public class Consumer extends Thread {
     time = seconds;
   }
 
+
+  public ArrayList<Integer> getBitsReceived() {
+    return bitsReceived;
+  }
+  
   /**
    * The run method will be executed when the thread starts.
    */
