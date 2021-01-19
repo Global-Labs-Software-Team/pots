@@ -9,8 +9,8 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 public class TelephoneWithPipeline extends Telephone 
     implements TelephoneWithPipelineSpecification {
 
-  Pipeline publishPipe;
-  Pipeline consumePipe;
+  private Pipeline publishPipe;
+  private Pipeline consumePipe;
 
   /**
    * Complete.
@@ -37,11 +37,11 @@ public class TelephoneWithPipeline extends Telephone
   }
 
   public void setConsumePipe(Pipeline consumePipe) {
-      this.consumePipe = consumePipe;
+    this.consumePipe = consumePipe;
   }
 
   public Pipeline getConsumePipe() {
-    return new Pipeline();
+    return consumePipe;
   }
 
   public void setPublishPipe(Pipeline publishPipe) {
@@ -49,7 +49,7 @@ public class TelephoneWithPipeline extends Telephone
   }
 
   public Pipeline getPublishPipe() {
-    return new Pipeline();
+    return publishPipe;
   }
 
   @Override
