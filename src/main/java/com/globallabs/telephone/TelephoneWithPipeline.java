@@ -37,7 +37,7 @@ public class TelephoneWithPipeline extends Telephone
   }
 
   public void setConsumePipe(Pipeline consumePipe) {
-    
+      this.consumePipe = consumePipe;
   }
 
   public Pipeline getConsumePipe() {
@@ -45,7 +45,7 @@ public class TelephoneWithPipeline extends Telephone
   }
 
   public void setPublishPipe(Pipeline publishPipe) {
-    
+    this.publishPipe = publishPipe;
   }
 
   public Pipeline getPublishPipe() {
