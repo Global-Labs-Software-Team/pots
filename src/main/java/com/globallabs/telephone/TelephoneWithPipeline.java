@@ -65,6 +65,20 @@ public class TelephoneWithPipeline extends Telephone
   public void run() {
     System.out.println("Telephone with id " + getTelephoneId() + " is starting in thread: " 
         + getId());
+    String telephoneName = "( Telephone " + getTelephoneId() + " ) ";
+    while (true) {
+      System.out.println(telephoneName + getStatus());
+      if (getStatus() == Status.RINGING) {
+        System.out.println(telephoneName + "You are receiving a call....");
+      } else if (getStatus() == Status.BUSY) {
+        System.out.println(telephoneName + "The call has been answered");
+        break;
+      }
+    }
+    activateConsumerProducerThreads();
+  }
+
+  public void activateConsumerProducerThreads() {
     Producer producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
     Consumer consumer = new Consumer("consumer_" + getTelephoneId(), 
         getConsumePipe(), 30);

@@ -68,12 +68,15 @@ public class PotsApplication {
     TelephoneWithPipeline telephoneOne = new TelephoneWithPipeline(myinfoOne, exchange);
     TelephoneModel myinfoTwo = new TelephoneModel(2);
     TelephoneWithPipeline telephoneTwo = new TelephoneWithPipeline(myinfoTwo, exchange);
-
-    telephoneOne.dial(2);
-    telephoneTwo.answer();
-
     telephoneOne.start();
     telephoneTwo.start();
+
+    telephoneOne.dial(2);
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+    }
+    telephoneTwo.answer();
   }
 
   /**
