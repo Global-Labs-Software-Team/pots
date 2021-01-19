@@ -62,6 +62,21 @@ public class TelephoneWithPipeline extends Telephone
       boolean validStatus = (getStatus() == Status.RINGING);
       boolean incomingCallSet = (getIncomingCall() != PHONE_NOT_SET);
       return validStatus && incomingCallSet;
+    } else if (nameOfFunction.equals("closeCallBetween")) {
+      Status phoneStatus = getStatus();
+      boolean isBusy = phoneStatus == Status.BUSY;
+      boolean isRinging = phoneStatus == Status.RINGING;
+      boolean isDialing = phoneStatus == Status.DIALING;
+      if (isBusy) {
+        boolean lastCallSet = (getLastCall() != PHONE_NOT_SET);
+        return lastCallSet;
+      } else if (isRinging) {
+        boolean incomingCallSet = (getIncomingCall() != PHONE_NOT_SET);
+        return incomingCallSet;
+      } else if (isDialing) {
+        boolean lastCallSet = (getLastCall() != PHONE_NOT_SET);
+        return lastCallSet;
+      }
     }
     return false;
   }
