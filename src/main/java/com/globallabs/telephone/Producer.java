@@ -28,9 +28,9 @@ public class Producer extends Thread {
 
   /**
    * Producer constructor.
-   * @param str a
-   * @param q b
-   * @param phone d
+   * @param str The name of the thread
+   * @param q the queue where the phone can publish
+   * @param phone information about the status of phone
    */
   public Producer(String str, Pipeline q, TelephoneWithPipeline phone) {
     super(str);
