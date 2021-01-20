@@ -49,13 +49,14 @@ public class Producer extends Thread {
       try {
         sleep((int) (1000));
       } catch (InterruptedException e) {
-        System.out.println("The execution of the thread was interrupted.");
+        System.out.println(phone.logInfo + "The execution of the thread was interrupted.");
       }
     }
   }
 
   synchronized void publishMessage(int currentMessage) {
-    System.out.println("Producer " + getName() + " produced " + Integer.toString(currentMessage));
+    System.out.println(phone.logInfo + "Producer " + getName() + " produced " 
+        + Integer.toString(currentMessage));
     queue.publish(currentMessage);
   }
 }

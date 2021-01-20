@@ -31,6 +31,8 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 public class TelephoneWithPipeline extends Telephone 
     implements TelephoneWithPipelineSpecification {
 
+  protected String logInfo;
+  
   private Pipeline publishPipe;
   private Pipeline consumePipe;
   protected Producer producer;
@@ -49,6 +51,7 @@ public class TelephoneWithPipeline extends Telephone
     super(phoneInfo, exchange);
     exchange.addPhoneToExchange(this);
     this.publishPipe = publishPipe;
+    logInfo = "( Telephone " + getTelephoneId() + " ) ";
   }
 
   /**
@@ -63,6 +66,7 @@ public class TelephoneWithPipeline extends Telephone
     super(phoneInfo, exchange);
     publishPipe = new Pipeline("pipe" + getTelephoneId());
     exchange.addPhoneToExchange(this); 
+    logInfo = "( Telephone " + getTelephoneId() + " ) ";
   }
 
   /**
@@ -72,6 +76,7 @@ public class TelephoneWithPipeline extends Telephone
    */
   public TelephoneWithPipeline(TelephoneModel phoneInfo) {
     super(phoneInfo);
+    logInfo = "( Telephone " + getTelephoneId() + " ) ";
   }
 
   @Override
@@ -100,13 +105,12 @@ public class TelephoneWithPipeline extends Telephone
   public void run() {
     System.out.println("Telephone with id " + getTelephoneId() + " is starting in thread: " 
         + getId());
-    String telephoneName = "( Telephone " + getTelephoneId() + " ) ";
     while (true) {
-      System.out.println(telephoneName + getStatus());
+      System.out.println(logInfo + getStatus());
       if (getStatus() == Status.RINGING) {
-        System.out.println(telephoneName + "You are receiving a call....");
+        System.out.println(logInfo + "You are receiving a call....");
       } else if (getStatus() == Status.BUSY) {
-        System.out.println(telephoneName + "The call has been answered");
+        System.out.println(logInfo + "The call has been answered");
         break;
       }
     }
@@ -123,8 +127,8 @@ public class TelephoneWithPipeline extends Telephone
     
     while (producer.isAlive() || consumer.isAlive()) {};
 
-    System.out.println("Call finished");
-    System.out.println("(Telephone " + getTelephoneId() + ", " + consumer.getName() + ")"
+    System.out.println(logInfo + "Call finished");
+    System.out.println(logInfo
         + "The information received from the call was : " + consumer.getBitsReceived());
   }
 

@@ -62,7 +62,7 @@ public class Consumer extends Thread {
       try {
         sleep((int) (1000));
       } catch (InterruptedException e) {
-        System.out.println("The execution of the thread was interrupted.");
+        System.out.println(phone.logInfo + "The execution of the thread was interrupted.");
       }
       receiveBit();
     }
@@ -72,9 +72,9 @@ public class Consumer extends Thread {
     try {
       int infoReceived = toConsume.consume();
       bitsReceived.add(infoReceived); // Change to receive in other part
-      System.out.println("Bit received from " + toConsume.getPipeName() + " is: 0");
+      System.out.println(phone.logInfo + "Bit received from " + toConsume.getPipeName() + " is: 0");
     } catch (NoSuchElementException e) {
-      System.out.println("There is no information in the pipe");
+      System.out.println(phone.logInfo + "There is no information in the pipe");
     } 
   }
 }

@@ -38,7 +38,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
   // the Telephone object is created or incomingCall when
   // a call is answered
   public static int PHONE_NOT_SET = -1;
-
+  
   private TelephoneModel phoneInfo;
   private Exchange exchange;
   private Status status;
