@@ -7,20 +7,16 @@ public class ProducerForTests extends Producer {
 
   LinkedList<Integer> streamToSend;
 
-  public ProducerForTests(String str, Pipeline q, LinkedList<Integer> streamToSend, int seconds) {
-    super(str, q, seconds);
+  public ProducerForTests(String str, Pipeline q, 
+      LinkedList<Integer> streamToSend, TelephoneWithPipeline phone) {
+    super(str, q, phone);
     this.streamToSend = streamToSend;
   }
 
   @Override
   public void run() {
     for (int bit : streamToSend) {
-      try {
-        sleep(1000);
-        publishMessage(bit);
-      } catch (InterruptedException e) {
-        System.out.println(e);
-      }
+      publishMessage(bit);
     }
   }
 }

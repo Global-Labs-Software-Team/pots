@@ -30,7 +30,6 @@ public class Producer extends Thread {
    * Producer constructor.
    * @param str a
    * @param q b
-   * @param seconds c
    * @param phone d
    */
   public Producer(String str, Pipeline q, TelephoneWithPipeline phone) {

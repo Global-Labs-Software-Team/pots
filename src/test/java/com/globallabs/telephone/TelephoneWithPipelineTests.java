@@ -134,13 +134,13 @@ public class TelephoneWithPipelineTests {
    * Integration test. The scenario is the following two phones are communicating and send 
    * a different stream of information. The test is to see if the information is transmitted
    * correctly
-   * @throws DialingMySelfException
-   * @throws BusyPhoneException
-   * @throws NoIncomingCallsException
-   * @throws NoCommunicationPathException
-   * @throws PhoneNotFoundException
-   * @throws PhoneExistInNetworkException
-   * @throws InvalidNumberException
+   * @throws DialingMySelfException If you are calling yourself
+   * @throws BusyPhoneException If the other phone is busy
+   * @throws NoIncomingCallsException You do not have any receiving call
+   * @throws NoCommunicationPathException There is no communication path between the phones
+   * @throws PhoneNotFoundException The phone does not exists in the exchange
+   * @throws PhoneExistInNetworkException The phone already exist in the network
+   * @throws InvalidNumberException the number for the phone is invalid
    */
   @Test
   public void test_communicationBetweenTwoPhones() 
@@ -167,7 +167,14 @@ public class TelephoneWithPipelineTests {
     telephoneThree.start();
     telephoneFour.start();
 
-    while (telephoneThree.isAlive() || telephoneFour.isAlive()) {}
+    // Talking period
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      System.out.println(e);
+    }
+
+    telephoneThree.hangUp();
 
     LinkedList<Integer> streamReceivedByThree = telephoneThree.getConsumer().getBitsReceived();
     LinkedList<Integer> streamReceivedByFour = telephoneFour.getConsumer().getBitsReceived();

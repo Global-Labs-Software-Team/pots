@@ -19,9 +19,9 @@ public class TelephoneWithPipelineForTests extends TelephoneWithPipeline {
   @Override
   public void activateConsumerProducerThreads() {
     producer = new ProducerForTests("producer_" + getTelephoneId(), 
-        getPublishPipe(), streamToSend, 30);
+        getPublishPipe(), streamToSend, this);
     consumer = new Consumer("consumer_" + getTelephoneId(), 
-        getConsumePipe(), 30);
+        getConsumePipe(), this);
     producer.start();
     consumer.start();
     
