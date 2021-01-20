@@ -1,8 +1,7 @@
 package com.globallabs.telephone;
 
-import java.util.LinkedList;
-
 import com.globallabs.operator.Pipeline;
+import java.util.LinkedList;
 
 public class ProducerForTests extends Producer {
 
@@ -19,7 +18,9 @@ public class ProducerForTests extends Producer {
       try {
         sleep(1000);
         publishMessage(bit);
-      } catch(InterruptedException e) {}
+      } catch (InterruptedException e) {
+        System.out.println(e);
+      }
     }
   }
 }

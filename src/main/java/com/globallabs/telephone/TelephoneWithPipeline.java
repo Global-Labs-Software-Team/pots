@@ -6,6 +6,28 @@ import com.globallabs.operator.Pipeline;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 
+/**
+ * This special class that extends from Telephone add the feature
+ * of transmitting information. For making this communication, four
+ * variables are defined:
+ * <ul>
+ * <li> publishPipe: It is a pipeline. It is where the Telephone will publish
+ * its messages. Other phones cannot publish into this publishPipe, only the one
+ * who created it. From this pipeline other phones in connection can obtain the messages
+ * from this phone.
+ * <li> consumePipe: It is also a pipeline. Here will be store the publish pipeline of the
+ * phone you are connected. Through this pipe you will be able to obtain the information
+ * send by the other peer.
+ * <li> producer: It is the thread in charge of publishing messages into the publishPipe.
+ * <li> consumer: It is the thread that will read the consumePipe constantly to process
+ * information
+ * </ul>
+ * Example: Let's say that we have two telephones: Telephone One (t1) and Telephone Two (t2).
+ * Then, t1 establish a communication with t2 (This means t1 dial t2 and t2 answer t1). After this
+ * process t1.consumePipe will contain the t2.publishPipe and t2.consumePipe will 
+ * contain t1.publishPipe. Now the two telephones can transmit information just publishing in their
+ * own publishPipes.
+ */
 public class TelephoneWithPipeline extends Telephone 
     implements TelephoneWithPipelineSpecification {
 
