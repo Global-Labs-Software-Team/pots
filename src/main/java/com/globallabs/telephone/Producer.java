@@ -34,7 +34,7 @@ public class Producer extends Thread {
       currentMessage = rand.nextInt(2);
       publishMessage(currentMessage);
       try {
-        sleep((int) (Math.random() * 500));
+        sleep((int) (1000));
       } catch (InterruptedException e) {
         System.out.println("The execution of the thread was interrupted.");
       }

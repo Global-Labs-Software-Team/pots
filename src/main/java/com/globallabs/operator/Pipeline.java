@@ -6,15 +6,7 @@ public class Pipeline {
   LinkedList<Integer> pipe;
   String pipeName;
 
-  public Pipeline() {
-    pipe = new LinkedList<Integer>();
-  }
-
-  public Pipeline(LinkedList<Integer> data) {
-    pipe = data;
-  }
-
-  public Pipeline(LinkedList<Integer> data, String name) {
+  public Pipeline(String name, LinkedList<Integer> data) {
     pipe = data;
     pipeName = name;
   }

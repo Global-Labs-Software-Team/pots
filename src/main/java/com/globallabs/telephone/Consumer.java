@@ -1,7 +1,7 @@
 package com.globallabs.telephone;
 
 import com.globallabs.operator.Pipeline;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /**
@@ -14,14 +14,14 @@ import java.util.NoSuchElementException;
  */
 
 public class Consumer extends Thread {
-  ArrayList<Integer> bitsReceived;
+  LinkedList<Integer> bitsReceived;
   Pipeline toConsume;
   int time;
 
   /**
    * Consumer constructor.
    */
-  public Consumer(String str, Pipeline toConsume, ArrayList<Integer> bitsReceived, int seconds) {
+  public Consumer(String str, Pipeline toConsume, LinkedList<Integer> bitsReceived, int seconds) {
     super(str);
     this.bitsReceived = bitsReceived;
     this.toConsume = toConsume;
@@ -33,13 +33,13 @@ public class Consumer extends Thread {
    */
   public Consumer(String str, Pipeline toConsume, int seconds) {
     super(str);
-    this.bitsReceived = new ArrayList<Integer>();
+    this.bitsReceived = new LinkedList<Integer>();
     this.toConsume = toConsume;
     time = seconds;
   }
 
 
-  public ArrayList<Integer> getBitsReceived() {
+  public LinkedList<Integer> getBitsReceived() {
     return bitsReceived;
   }
   
@@ -49,7 +49,7 @@ public class Consumer extends Thread {
   public void run() {
     for (int i = 0; i < time; i++) {
       try {
-        sleep((int) (Math.random() * 500));
+        sleep((int) (1000));
       } catch (InterruptedException e) {
         System.out.println("The execution of the thread was interrupted.");
       }

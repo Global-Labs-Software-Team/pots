@@ -4,23 +4,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
+import com.globallabs.phoneexceptions.BusyPhoneException;
+import com.globallabs.phoneexceptions.DialingMySelfException;
 import com.globallabs.phoneexceptions.InvalidNumberException;
+import com.globallabs.phoneexceptions.NoCommunicationPathException;
+import com.globallabs.phoneexceptions.NoIncomingCallsException;
+import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
+import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TelephoneWithPipelineTests {
   private static TelephoneWithPipeline telephoneOne;
+  private static Exchange exchange = Exchange.getInstance();
   private static int ID1 = 1;
+  private static int ID3 = 3;
+  private static int ID4 = 4;
   private static int numberOfTelephoneTwo = 2;
   private static String enrouteCallString = "enrouteCall";
   private static String openCallBetweenString = "openCallBetween";
   private static String closeCallBetweenString = "closeCallBetween";
 
   @BeforeAll
-  public static void setUp() throws InvalidNumberException {
-    telephoneOne = new TelephoneWithPipeline(new TelephoneModel(ID1));
+  public static void setUp() throws InvalidNumberException, PhoneExistInNetworkException {
+    telephoneOne = new TelephoneWithPipeline(new TelephoneModel(ID1), exchange);
   }
 
   /**
@@ -118,8 +130,50 @@ public class TelephoneWithPipelineTests {
         "Invalid state for third scenario");
   }
 
+  /**
+   * Integration test. The scenario is the following two phones are communicating and send 
+   * a different stream of information. The test is to see if the information is transmitted
+   * correctly
+   * @throws DialingMySelfException
+   * @throws BusyPhoneException
+   * @throws NoIncomingCallsException
+   * @throws NoCommunicationPathException
+   * @throws PhoneNotFoundException
+   * @throws PhoneExistInNetworkException
+   * @throws InvalidNumberException
+   */
   @Test
-  public void test_isAbleTo_useCloseCallBetweenMethod_fail() {
+  public void test_communicationBetweenTwoPhones() 
+      throws DialingMySelfException, BusyPhoneException, NoIncomingCallsException,
+      NoCommunicationPathException, PhoneNotFoundException, PhoneExistInNetworkException, 
+      InvalidNumberException {
+    // Stream to send
+    LinkedList<Integer> streamFromThree = 
+        new LinkedList<Integer>(Arrays.asList(0, 1, 0, 1, 0, 1, 1));
+    LinkedList<Integer> streamFromFour = 
+        new LinkedList<Integer>(Arrays.asList(1, 1, 0, 0, 1, 1, 1));
     
+    // Creation of the two phones that will communicate with each other
+    TelephoneWithPipelineForTests telephoneThree = 
+        new TelephoneWithPipelineForTests(new TelephoneModel(ID3), exchange, streamFromThree);
+
+    TelephoneWithPipelineForTests telephoneFour = 
+        new TelephoneWithPipelineForTests(new TelephoneModel(ID4), exchange, streamFromFour);
+    
+    telephoneThree.dial(ID4); // Telephone Three call telephone Two
+    telephoneFour.answer(); // Telephone Four answer the call
+    
+    // Start the communication between each other
+    telephoneThree.start();
+    telephoneFour.start();
+
+    while (telephoneThree.isAlive() || telephoneFour.isAlive()) {}
+
+    LinkedList<Integer> streamReceivedByThree = telephoneThree.getConsumer().getBitsReceived();
+    LinkedList<Integer> streamReceivedByFour = telephoneFour.getConsumer().getBitsReceived();
+    
+    // Verify that the information was send properly
+    assertEquals(streamFromThree, streamReceivedByFour);
+    assertEquals(streamFromFour, streamReceivedByThree);
   }
 }

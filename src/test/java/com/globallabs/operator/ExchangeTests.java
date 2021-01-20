@@ -41,8 +41,8 @@ public class ExchangeTests {
   public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
     exchange = ExchangeForTests.getInstance();
     exchange.resetExchange();
-    pipelineOne = new Pipeline(new LinkedList<Integer>(), "pipe1");
-    pipelineTwo = new Pipeline(new LinkedList<Integer>(), "pipe2");
+    pipelineOne = new Pipeline("pipe1", new LinkedList<Integer>());
+    pipelineTwo = new Pipeline("pipe2", new LinkedList<Integer>());
     telephoneOne = new TelephoneWithPipeline(new TelephoneModel(1), exchange, pipelineOne);
     telephoneTwo = new TelephoneWithPipeline(new TelephoneModel(2), exchange, pipelineTwo);
   }

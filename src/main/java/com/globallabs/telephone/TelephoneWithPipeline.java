@@ -11,6 +11,8 @@ public class TelephoneWithPipeline extends Telephone
 
   private Pipeline publishPipe;
   private Pipeline consumePipe;
+  protected Producer producer;
+  protected Consumer consumer;
 
   /**
    * Complete.
@@ -43,18 +45,22 @@ public class TelephoneWithPipeline extends Telephone
     super(phoneInfo);
   }
 
+  @Override
   public void setConsumePipe(Pipeline consumePipe) {
     this.consumePipe = consumePipe;
   }
 
+  @Override
   public Pipeline getConsumePipe() {
     return consumePipe;
   }
 
+  @Override
   public void setPublishPipe(Pipeline publishPipe) {
     this.publishPipe = publishPipe;
   }
 
+  @Override
   public Pipeline getPublishPipe() {
     return publishPipe;
   }
@@ -78,9 +84,10 @@ public class TelephoneWithPipeline extends Telephone
     activateConsumerProducerThreads();
   }
 
+  @Override
   public void activateConsumerProducerThreads() {
-    Producer producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
-    Consumer consumer = new Consumer("consumer_" + getTelephoneId(), 
+    producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
+    consumer = new Consumer("consumer_" + getTelephoneId(), 
         getConsumePipe(), 30);
     producer.start();
     consumer.start();
@@ -90,6 +97,14 @@ public class TelephoneWithPipeline extends Telephone
     System.out.println("Call finished");
     System.out.println("(Telephone " + getTelephoneId() + ", " + consumer.getName() + ")"
         + "The information received from the call was : " + consumer.getBitsReceived());
+  }
+
+  public Consumer getConsumer() {
+    return consumer;
+  }
+
+  public Producer getProducer() {
+    return producer;
   }
 
   @Override

@@ -5,22 +5,40 @@ import com.globallabs.operator.Pipeline;
 public interface TelephoneWithPipelineSpecification {
   
   /**
-   * Complete javadoc.
+   * Set the pipe where the phone is going to consume information.
+   * For example, telephone one and telephone two are connected, telephone
+   * one will obtain the messages reading its pipeline, the same for telephone two. 
    *
-   * @param consumePipe complete
+   * @param consumePipe The pipeline of the other phone
    */
   public void setConsumePipe(Pipeline consumePipe);
   
+  /**
+   * Obtain the consume pipe of the current connection.
+   * @return the consume pipeline
+   */
   public Pipeline getConsumePipe();
 
   /**
-   * Complete javadoc.
+   * Obtain the pipeline where the telephone can publish its messages.
+   * With this pipeline other phone can read the messages
    *
-   * @return p
+   * @return the publish pipe
    */
   public Pipeline getPublishPipe();
 
+  /**
+   * Set the publish pipe of the Telephone.
+   * @param publishPipe the pipeline where you want to publish messages
+   */
   public void setPublishPipe(Pipeline publishPipe);
+
+  /**
+   * When a call is established the producer and consumer are started
+   * by the use of this method. It will create the threads in charge
+   * of transmitting and receiving information. 
+   */
+  public void activateConsumerProducerThreads();
 
   /**
    * Check the status of the phone to see if it is able to
