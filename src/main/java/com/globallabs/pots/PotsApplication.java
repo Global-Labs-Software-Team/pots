@@ -75,8 +75,18 @@ public class PotsApplication {
     try {
       Thread.sleep(100);
     } catch (InterruptedException e) {
+      System.out.println(e);
     }
     telephoneTwo.answer();
+
+    // Talk for 5 seconds
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      System.out.println(e);
+    }
+
+    telephoneOne.hangUp(); // Telephone one finish the communication
   }
 
   /**

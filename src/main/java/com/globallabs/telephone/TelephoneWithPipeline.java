@@ -115,9 +115,9 @@ public class TelephoneWithPipeline extends Telephone
 
   @Override
   public void activateConsumerProducerThreads() {
-    producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), 30);
+    producer = new Producer("producer_" + getTelephoneId(), getPublishPipe(), this);
     consumer = new Consumer("consumer_" + getTelephoneId(), 
-        getConsumePipe(), 30);
+        getConsumePipe(), this);
     producer.start();
     consumer.start();
     

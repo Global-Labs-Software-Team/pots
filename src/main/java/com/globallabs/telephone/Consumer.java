@@ -17,6 +17,7 @@ public class Consumer extends Thread {
   LinkedList<Integer> bitsReceived;
   Pipeline toConsume;
   int time;
+  TelephoneWithPipeline phone;
 
   /**
    * Consumer constructor.
@@ -38,6 +39,16 @@ public class Consumer extends Thread {
     time = seconds;
   }
 
+  /**
+   * Consumer constructor in the case of three or more phones connected.
+   */
+  public Consumer(String str, Pipeline toConsume, TelephoneWithPipeline phone) {
+    super(str);
+    this.bitsReceived = new LinkedList<Integer>();
+    this.toConsume = toConsume;
+    this.phone = phone;
+  }
+
 
   public LinkedList<Integer> getBitsReceived() {
     return bitsReceived;
@@ -47,7 +58,7 @@ public class Consumer extends Thread {
    * The run method will be executed when the thread starts.
    */
   public void run() {
-    for (int i = 0; i < time; i++) {
+    while (phone.getStatus() == Status.BUSY) {
       try {
         sleep((int) (1000));
       } catch (InterruptedException e) {
@@ -63,7 +74,7 @@ public class Consumer extends Thread {
       bitsReceived.add(infoReceived); // Change to receive in other part
       System.out.println("Bit received from " + toConsume.getPipeName() + " is: 0");
     } catch (NoSuchElementException e) {
-      System.out.println("There was a problem with the consumption from the Pipeline.");
+      System.out.println("There is no information in the pipe");
     } 
   }
 }
