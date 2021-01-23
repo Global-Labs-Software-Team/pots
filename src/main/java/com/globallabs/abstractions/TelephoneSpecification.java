@@ -1,13 +1,73 @@
 package com.globallabs.abstractions;
 
+import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
 import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
+import com.globallabs.telephone.Status;
 
 public interface TelephoneSpecification {
-    
+
+  /**
+   * Returns the number of the telephone.
+   *
+   * @return the number of the telephone
+   */ 
+  public int getTelephoneId();
+
+  /**
+   * Returns the phone model to get all the info.
+   *
+   * @return a phone model object
+   */
+  public TelephoneModel getPhoneInfo();  
+
+  /**
+   * Returns the status of the telephone.
+   *
+   * @return the status of the telephone
+   */
+  public Status getStatus();
+
+  /**
+   * Update the status of the telephone.
+   *
+   * @param updatedStatus the status to be set
+   */
+  public void setStatus(final Status updatedStatus);
+
+  /**
+   * Returns the last phone you were in a call with.
+   * If you are in a call, returns the phone you are connected with
+   *
+   * @return a Telephone object of the last phone you were in a call with
+   */
+  public int getLastCall();
+
+  /**
+   * Sets the last phone you were in a call with.
+   *
+   * @param phoneNumber a Telephone object of the last phone you were in a call with
+   */
+  public void setLastCall(final int phoneNumber);
+
+  /**
+   * Returns the phone that is calling you.
+   * Returns null if nobody is calling
+   *
+   * @return the phone calling you
+   */
+  public int getIncomingCall();
+
+  /**
+   * Sets the phone that is calling you.
+   *
+   * @param phoneNumber the phone which is the origin of the call
+   */
+  public void setIncomingCall(final int phoneNumber);
+
   /**
    * Dial a phone from the current device.
    *
@@ -46,4 +106,5 @@ public interface TelephoneSpecification {
    not belong to the exchange
    */
   public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException;
+
 }

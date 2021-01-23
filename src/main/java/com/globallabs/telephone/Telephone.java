@@ -79,86 +79,48 @@ public class Telephone extends Thread implements TelephoneSpecification {
     lastCall = PHONE_NOT_SET;
     incomingCall = PHONE_NOT_SET;
   }
-    
-  /**
-   * Returns the number of the telephone.
-   *
-   * @return the number of the telephone
-   */
+
+  @Override
   public int getTelephoneId() {
     return phoneInfo.getId();
   }
 
-  /**
-   * Returns the phone model to get all the info.
-   *
-   * @return a phone model object
-   */
+  @Override
   public TelephoneModel getPhoneInfo() {
     return phoneInfo;
   }
-    
-  /**
-   * Returns the status of the telephone.
-   *
-   * @return the status of the telephone
-   */
+  
+  @Override
   public Status getStatus() {
     return status;
   }
     
-  /**
-   * Sets a new status of the telephone.
-   *
-   * @param newStatus the status to be set
-   */
-  public void setStatus(final Status newStatus) {
-    status = newStatus;
+  @Override
+  public void setStatus(final Status updatedStatus) {
+    status = updatedStatus;
   }
     
-  /**
-   * Returns the last phone you were in a call with.
-   * If you are in a call, returns the phone you are connected with
-   *
-   * @return a Telephone object of the last phone you were in a call with
-   */
+  @Override
   public int getLastCall() {
     return lastCall;
   }
     
-  /**
-   * Sets the last phone you were in a call with.
-   *
-   * @param phoneNumber a Telephone object of the last phone you were in a call with
-   */
+  @Override
   public void setLastCall(final int phoneNumber) {
     lastCall = phoneNumber;
   }
     
-  /**
-   * Returns the phone that is calling you.
-   * Returns null if nobody is calling
-   *
-   * @return the phone calling you
-   */
+  @Override
   public int getIncomingCall() {
     return incomingCall;
   }
     
-  /**
-   * Sets the phone that is calling you.
-   *
-   * @param phoneNumber the phone which is the origin of the call
-   */
+  @Override
   public void setIncomingCall(final int phoneNumber) {
     incomingCall = phoneNumber;
   }
   
-  /**
-   * Dial a phone by it's number.
-   *
-   * @param phoneNumber the number to be dialed
-   */
+  @Override
   public void dial(final int phoneNumber) throws DialingMySelfException {
     if (phoneNumber == phoneInfo.getId()) {
       throw new DialingMySelfException("You are calling yourself");
@@ -172,11 +134,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
     }
   }
 
-  /**
-   * Dialing a call for 10 seconds.
-   *
-   * @throws BusyPhoneException if the call is not answered in time
-   */
+  @Override
   public void dialing() throws BusyPhoneException {
     if (getStatus().equals(Status.DIALING)) {
       long start = System.currentTimeMillis();
@@ -194,12 +152,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
     
   }
 
-  /**
-   * Answer a call.
-   *
-   * @throws BusyPhoneException if you are busy
-   * @throws NoIncomingCallsException if trying to answer non-existent call
-   */
+  @Override
   public void answer() 
       throws BusyPhoneException, NoIncomingCallsException, 
       NoCommunicationPathException, PhoneNotFoundException {
@@ -226,12 +179,6 @@ public class Telephone extends Thread implements TelephoneSpecification {
     exchange.closeCallBetween(this.getTelephoneId(), otherPhoneNumber);
   }
   
-  /**
-   * Compare to telephone to see if they are the same.
-   *
-   * @param o The object to compare
-   * @return true if they are equal, false otherwise
-   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -244,9 +191,6 @@ public class Telephone extends Thread implements TelephoneSpecification {
     return this.phoneInfo.equals(telephone.phoneInfo);
   }
 
-  /**
-   * String representation of the object.
-   */
   @Override
   public String toString() {
     return phoneInfo.toString() + " {" + "last call phone id: " + lastCall
