@@ -8,22 +8,25 @@ import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
 public class TelephoneCallerID extends TelephoneWithPipeline {
 
-    private int incoming;
-    private TelephoneWithPipeline phone;
-    private int information;
-    private Exchange exchange;
+  private int incoming;
+  private TelephoneWithPipeline phone;
+  private int information;
+  private Exchange exchange;
 
-    public TelephoneCallerID(TelephoneModel phoneInfo, Exchange exchange, Pipeline publishPipe)
-            throws PhoneExistInNetworkException {
-        super(phoneInfo, exchange, publishPipe);
-        this.exchange = exchange;
-    }
-    
-    public int findCallerID(TelephoneWithPipeline incomingPhone)
-            throws PhoneNotFoundException {
-        incoming = incomingPhone.getIncomingCall();
-        phone = exchange.getPhone(incoming);
-        information = phone.getTelephoneId();
-        return information;
-    }
+  public TelephoneCallerID(TelephoneModel phoneInfo, Exchange exchange, Pipeline publishPipe)
+          throws PhoneExistInNetworkException {
+    super(phoneInfo, exchange, publishPipe);
+    this.exchange = exchange;
+  }
+  
+  /**
+   * Comments.
+   */
+  public int findCallerID(TelephoneWithPipeline incomingPhone)
+          throws PhoneNotFoundException {
+    incoming = incomingPhone.getIncomingCall();
+    phone = exchange.getPhone(incoming);
+    information = phone.getTelephoneId();
+    return information;
+  }
 }
