@@ -1,8 +1,10 @@
 package com.globallabs.abstractions;
 
 import com.globallabs.operator.Pipeline;
+import com.globallabs.telephone.Consumer;
+import com.globallabs.telephone.Producer;
 
-public interface TelephoneWithPipelineSpecification {
+public interface TelephoneWithPipelineSpecification extends TelephoneSpecification {
   
   /**
    * Set the pipe where the phone is going to consume information.
@@ -39,6 +41,18 @@ public interface TelephoneWithPipelineSpecification {
    * of transmitting and receiving information. 
    */
   public void activateConsumerProducerThreads();
+
+  /**
+   * Get the Consumer thread of the telephone.
+   * @return a consumer
+   */
+  public Consumer getConsumer();
+  
+  /**
+   * Get the Producer thread of the telephone.
+   * @return a producer
+   */
+  public Producer getProducer();
 
   /**
    * Check the status of the phone to see if it is able to

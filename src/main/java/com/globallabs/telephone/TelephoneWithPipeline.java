@@ -132,10 +132,12 @@ public class TelephoneWithPipeline extends Telephone
         + "The information received from the call was : " + consumer.getBitsReceived());
   }
 
+  @Override
   public Consumer getConsumer() {
     return consumer;
   }
 
+  @Override
   public Producer getProducer() {
     return producer;
   }
