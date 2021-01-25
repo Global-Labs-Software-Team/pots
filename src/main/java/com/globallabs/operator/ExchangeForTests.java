@@ -1,5 +1,8 @@
 package com.globallabs.operator;
 
+import com.globallabs.abstractions.ExchangeSpecification;
+import com.globallabs.decorators.ExchangeDecorator;
+
 import java.util.LinkedList;
 
 /**
@@ -10,8 +13,12 @@ import java.util.LinkedList;
  * 
  * <p>IMPORTANT: Not for production use
  */
-public class ExchangeForTests extends Exchange {
+public class ExchangeForTests extends ExchangeDecorator {
   
+  public ExchangeForTests(ExchangeSpecification exchange) {
+    super(exchange);
+  }
+
   /**
    * This private class will create an only exchange
    * when a Telephone try to get it (Singleton Pattern).
@@ -19,7 +26,7 @@ public class ExchangeForTests extends Exchange {
    * else it will retrieve it. 
    */
   private static class ExchangeForTestsHolder {
-    private static final ExchangeForTests INSTANCE = new ExchangeForTests();
+    private static final ExchangeForTests INSTANCE = new ExchangeForTests(Exchange.getInstance());
   }
 
   /**
@@ -37,6 +44,6 @@ public class ExchangeForTests extends Exchange {
    * only. It is to be able to have a clean slate for each test
    */
   public void resetExchange() {
-    this.telephones = new LinkedList<>();
+    exchange.setTelephones(new LinkedList<>());
   }
 }

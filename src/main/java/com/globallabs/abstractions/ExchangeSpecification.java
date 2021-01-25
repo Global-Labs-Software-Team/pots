@@ -6,8 +6,10 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.TelephoneWithPipeline;
 
+import java.util.LinkedList;
+
 public interface ExchangeSpecification {
-    
+  
   /**
   * Create a communication link between two Telephone devices. This method is
   for the use of the device initiating the call (dialing). The remark to this
@@ -100,7 +102,19 @@ public interface ExchangeSpecification {
   */
   public void addPhoneToExchange(final TelephoneWithPipeline phone) 
       throws PhoneExistInNetworkException;
-  
+
+  /**
+   * Set the list of telephones register in the exchange.
+   * @param telephones the list of telephones objects
+   */
+  public void setTelephones(LinkedList<TelephoneWithPipeline> telephones);
+
+  /**
+   * Get the list of telephones registered in the exchange.
+   * @return a LinkedList of telephone objects
+   */
+  public LinkedList<TelephoneWithPipeline> getTelephones();
+
   /**
   * Get the number of phone currently in the exchange.
   *

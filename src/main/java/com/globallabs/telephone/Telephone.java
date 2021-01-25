@@ -1,7 +1,7 @@
 package com.globallabs.telephone;
 
+import com.globallabs.abstractions.ExchangeSpecification;
 import com.globallabs.abstractions.TelephoneSpecification;
-import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
@@ -40,7 +40,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
   public static int PHONE_NOT_SET = -1;
   
   private TelephoneModel phoneInfo;
-  private Exchange exchange;
+  private ExchangeSpecification exchange;
   private Status status;
 
   private int lastCall;
@@ -54,7 +54,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
    * @param phoneInfo a telephone model containing the phone's information
    * @param exchange the exchange where the phone belongs
    */
-  public Telephone(TelephoneModel phoneInfo, Exchange exchange) 
+  public Telephone(TelephoneModel phoneInfo, ExchangeSpecification exchange) 
       throws PhoneExistInNetworkException {
     super(Integer.toString(phoneInfo.getId()));
     this.phoneInfo = phoneInfo;

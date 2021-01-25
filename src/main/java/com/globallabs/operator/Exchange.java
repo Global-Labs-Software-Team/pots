@@ -173,7 +173,18 @@ public class Exchange implements ExchangeSpecification {
       telephones.add(phone);
     } 
   }
+
+  @Override
+  public void setTelephones(LinkedList<TelephoneWithPipeline> telephones) {
+    this.telephones = telephones;
+  }
+
+  @Override
+  public LinkedList<TelephoneWithPipeline> getTelephones() {
+    return telephones;
+  }
   
+  @Override
   public int getNumberOfPhones() {
     return telephones.size();
   }

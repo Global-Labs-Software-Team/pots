@@ -1,7 +1,7 @@
 package com.globallabs.telephone;
 
+import com.globallabs.abstractions.ExchangeSpecification;
 import com.globallabs.abstractions.TelephoneWithPipelineSpecification;
-import com.globallabs.operator.Exchange;
 import com.globallabs.operator.Pipeline;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
@@ -46,8 +46,8 @@ public class TelephoneWithPipeline extends Telephone
    its messages
    * @throws PhoneExistInNetworkException a
    */
-  public TelephoneWithPipeline(TelephoneModel phoneInfo, Exchange exchange, Pipeline publishPipe) 
-      throws PhoneExistInNetworkException {
+  public TelephoneWithPipeline(TelephoneModel phoneInfo, ExchangeSpecification exchange, 
+      Pipeline publishPipe) throws PhoneExistInNetworkException {
     super(phoneInfo, exchange);
     exchange.addPhoneToExchange(this);
     this.publishPipe = publishPipe;
@@ -61,7 +61,7 @@ public class TelephoneWithPipeline extends Telephone
    * @param exchange complet
    * @throws PhoneExistInNetworkException complet
    */
-  public TelephoneWithPipeline(TelephoneModel phoneInfo, Exchange exchange)
+  public TelephoneWithPipeline(TelephoneModel phoneInfo, ExchangeSpecification exchange)
       throws PhoneExistInNetworkException {
     super(phoneInfo, exchange);
     publishPipe = new Pipeline("pipe" + getTelephoneId());
