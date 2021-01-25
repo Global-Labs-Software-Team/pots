@@ -5,11 +5,13 @@ import com.globallabs.operator.Pipeline;
 import com.globallabs.telephone.Consumer;
 import com.globallabs.telephone.Producer;
 
-public abstract class TelephoneWithPipelineDecorator implements TelephoneWithPipelineSpecification {
+public abstract class TelephoneWithPipelineDecorator 
+    extends TelephoneDecorator implements TelephoneWithPipelineSpecification {
+
   public TelephoneWithPipelineSpecification telephone;
 
-  public TelephoneWithPipelineDecorator(TelephoneWithPipelineDecorator telephone) {
-    this.telephone = telephone;
+  public TelephoneWithPipelineDecorator(TelephoneWithPipelineSpecification telephone) {
+    super(telephone);
   }
 
   @Override

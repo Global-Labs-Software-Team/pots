@@ -1,32 +1,34 @@
 package com.globallabs.telephone;
 
-import com.globallabs.operator.Exchange;
-import com.globallabs.operator.Pipeline;
-import com.globallabs.phonedata.TelephoneModel;
+import com.globallabs.abstractions.TelephoneWithPipelineSpecification;
+import com.globallabs.decorators.TelephoneWithPipelineDecorator;
+// import com.globallabs.operator.Exchange;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
-public class TelephoneCallerID extends TelephoneWithPipeline {
+public class TelephoneCallerID extends TelephoneWithPipelineDecorator {
 
-  private int incoming;
-  private TelephoneWithPipeline phone;
-  private int information;
-  private Exchange exchange;
+  // private int incoming;
+  // private TelephoneWithPipeline phone;
+  // private int information;
+  // private Exchange exchange;
 
-  public TelephoneCallerID(TelephoneModel phoneInfo, Exchange exchange, Pipeline publishPipe)
+  public TelephoneCallerID(TelephoneWithPipelineSpecification telephone)
           throws PhoneExistInNetworkException {
-    super(phoneInfo, exchange, publishPipe);
-    this.exchange = exchange;
+    super(telephone);
   }
   
   /**
    * Comments.
    */
-  public int findCallerID(TelephoneWithPipeline incomingPhone)
-          throws PhoneNotFoundException {
-    incoming = incomingPhone.getIncomingCall();
-    phone = exchange.getPhone(incoming);
-    information = phone.getTelephoneId();
-    return information;
+  // public int findCallerID(TelephoneWithPipeline incomingPhone)
+  //         throws PhoneNotFoundException {
+  //   incoming = incomingPhone.getIncomingCall();
+  //   phone = exchange.getPhone(incoming);
+  //   information = phone.getTelephoneId();
+  //   return information;
+  // }
+
+  public int findCallerID() {
+    return getIncomingCall();
   }
 }
