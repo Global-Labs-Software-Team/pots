@@ -2,7 +2,6 @@ package com.globallabs.operator;
 
 import com.globallabs.abstractions.ExchangeSpecification;
 import com.globallabs.decorators.ExchangeDecorator;
-
 import java.util.LinkedList;
 
 /**

@@ -11,13 +11,12 @@ import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for the {@link com.globallabs.telephone.Producer} class.
- * 
+ *
  * @version 1.0
  * @author Ilia Didenko
  */

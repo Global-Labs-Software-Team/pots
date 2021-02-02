@@ -2,28 +2,25 @@ package com.globallabs.telephone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.LinkedList;
-
 import com.globallabs.operator.Exchange;
 import com.globallabs.operator.Pipeline;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class ConsumerTests {
 
-    public static String name;
-    public static Pipeline toConsume = new Pipeline("consumerPipe");
+  public static String name;
+  public static Pipeline toConsume = new Pipeline("consumerPipe");
 
-    private static int ID1 = 1;
+  private static int ID1 = 1;
 
-    private static Consumer consumerOne;
-    private static Exchange exchange;
-    private static TelephoneWithPipeline telephoneOne;
-    private static Pipeline q;
+  private static Consumer consumerOne;
+  private static Exchange exchange;
+  private static TelephoneWithPipeline telephoneOne;
+  private static Pipeline q;
 
   /**
     * Set up all the necessary functionality for the tests. Each time

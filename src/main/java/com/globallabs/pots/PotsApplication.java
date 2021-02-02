@@ -11,9 +11,8 @@ import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.Telephone;
 import com.globallabs.telephone.TelephoneWithPipeline;
-
-//import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.SpringApplication;
 
 /**
  * PotsApplication is the class that allows to simulate the use of the Telephone application.

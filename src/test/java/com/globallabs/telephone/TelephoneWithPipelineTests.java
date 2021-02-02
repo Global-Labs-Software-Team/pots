@@ -13,7 +13,6 @@ import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import org.junit.jupiter.api.BeforeAll;
@@ -133,7 +132,8 @@ public class TelephoneWithPipelineTests {
   /**
    * Integration test. The scenario is the following two phones are communicating and send 
    * a different stream of information. The test is to see if the information is transmitted
-   * correctly
+   * correctly.
+   *
    * @throws DialingMySelfException If you are calling yourself
    * @throws BusyPhoneException If the other phone is busy
    * @throws NoIncomingCallsException You do not have any receiving call

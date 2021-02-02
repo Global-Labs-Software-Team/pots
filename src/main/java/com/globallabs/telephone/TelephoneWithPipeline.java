@@ -40,6 +40,7 @@ public class TelephoneWithPipeline extends Telephone
 
   /**
    * First constructor.
+   *
    * @param phoneInfo The basic information of the phone
    * @param exchange The exchange where it will be added
    * @param publishPipe The pipeline where the phone it is going to publish
@@ -57,6 +58,7 @@ public class TelephoneWithPipeline extends Telephone
   /**
    * Second constructor. This leave the creation of the publish pipeline 
    * to the constructor.
+   *
    * @param phoneInfo complet
    * @param exchange complet
    * @throws PhoneExistInNetworkException complet
@@ -72,6 +74,7 @@ public class TelephoneWithPipeline extends Telephone
   /**
    * Third constructor. This is made to be able to test
    * in exchange the function addPhoneToExchange.
+   *
    * @param phoneInfo The basic information of the phone
    */
   public TelephoneWithPipeline(TelephoneModel phoneInfo) {

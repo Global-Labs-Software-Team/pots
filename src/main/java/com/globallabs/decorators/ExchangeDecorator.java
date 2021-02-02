@@ -6,7 +6,6 @@ import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import com.globallabs.telephone.TelephoneWithPipeline;
-
 import java.util.LinkedList;
 
 public abstract class ExchangeDecorator implements ExchangeSpecification {

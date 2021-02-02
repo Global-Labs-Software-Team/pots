@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * consume from t1. Important: They can only consume from the pipes
  * of the other pair, not publish. And with they can comunicate with
  * each other.
- * 
+ *
  * @author Daniel RODRIGUEZ
  * @since 0.0
  */
@@ -28,7 +28,8 @@ public class Pipeline {
   /**
    * First constructor. This was made for testing purposes
    * only. It receives the data you want to send, with the goal
-   * to see if the data gets through correctly
+   * to see if the data gets through correctly.
+   *
    * @param name the name of the pipe
    * @param data a list containing a sequence of bits to stream
    */
@@ -41,6 +42,7 @@ public class Pipeline {
    * Main constructor. For the use in production. It creates
    * an empty pipeline ideal for the brand new Telephone to
    * use.
+   *
    * @param name String with the name of the pipe
    */
   public Pipeline(String name) {
@@ -50,6 +52,7 @@ public class Pipeline {
 
   /**
    * Gets the name of the Pipe.
+   *
    * @return an String containing the pipe name
    */
   public String getPipeName() {
@@ -59,6 +62,7 @@ public class Pipeline {
   /**
    * Gets the list containing the data to send
    * of the pipe.
+   *
    * @return An integer LinkedList with the stream
    */
   public LinkedList<Integer> getPipe() {
@@ -68,6 +72,7 @@ public class Pipeline {
   /**
    * It will add the bit to send in the end of the
    * queue. 
+   *
    * @param bit information to send
    */
   public void publish(int bit) {

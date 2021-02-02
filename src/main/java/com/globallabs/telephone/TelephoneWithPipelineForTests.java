@@ -3,7 +3,6 @@ package com.globallabs.telephone;
 import com.globallabs.operator.Exchange;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-
 import java.util.LinkedList;
 
 public class TelephoneWithPipelineForTests extends TelephoneWithPipeline {

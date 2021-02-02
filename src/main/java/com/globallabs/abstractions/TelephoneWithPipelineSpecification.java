@@ -17,6 +17,7 @@ public interface TelephoneWithPipelineSpecification extends TelephoneSpecificati
   
   /**
    * Obtain the consume pipe of the current connection.
+   *
    * @return the consume pipeline
    */
   public Pipeline getConsumePipe();
@@ -31,6 +32,7 @@ public interface TelephoneWithPipelineSpecification extends TelephoneSpecificati
 
   /**
    * Set the publish pipe of the Telephone.
+   *
    * @param publishPipe the pipeline where you want to publish messages
    */
   public void setPublishPipe(Pipeline publishPipe);
@@ -44,12 +46,14 @@ public interface TelephoneWithPipelineSpecification extends TelephoneSpecificati
 
   /**
    * Get the Consumer thread of the telephone.
+   *
    * @return a consumer
    */
   public Consumer getConsumer();
   
   /**
    * Get the Producer thread of the telephone.
+   *
    * @return a producer
    */
   public Producer getProducer();
@@ -57,6 +61,7 @@ public interface TelephoneWithPipelineSpecification extends TelephoneSpecificati
   /**
    * Check the status of the phone to see if it is able to
    * use the methods in exchange.
+   *
    * @param nameOfFunction the name of the method in exchange
    * @return true if it is able, otherwise false
    */

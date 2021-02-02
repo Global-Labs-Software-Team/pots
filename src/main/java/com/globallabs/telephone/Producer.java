@@ -18,6 +18,7 @@ public class Producer extends Thread {
 
   /**
    * Producer constructor.
+   *
    * @param str The name of the thread
    * @param q the queue where the phone can publish
    * @param phone information about the status of phone
@@ -47,6 +48,7 @@ public class Producer extends Thread {
 
   /**
    * Publishes a message into the pipeline.
+   *
    * @param currentMessage the message to be published
    */
   synchronized void publishMessage(int currentMessage) {

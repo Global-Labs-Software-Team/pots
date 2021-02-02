@@ -7,7 +7,6 @@ import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.DialingMySelfException;
 import com.globallabs.phoneexceptions.InvalidNumberException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +26,7 @@ public class TelephoneCallerIdTests {
   /**
    * Populate the exchange with three telephones, two of them are plain telephones
    * and telephone three has the new feature callerID.
+   *
    * @throws PhoneExistInNetworkException if the telephone already exists in the exchange
    * @throws InvalidNumberException if the number is invalid
    */
