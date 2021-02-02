@@ -25,6 +25,13 @@ public interface TelephoneSpecification {
   public TelephoneModel getPhoneInfo();  
 
   /**
+   * Sets the phone model of the phone.
+   *
+   * @param phoneInfo a phone model object
+   */
+  public void setPhoneInfo(TelephoneModel phoneInfo); 
+
+  /**
    * Returns the status of the telephone.
    *
    * @return the status of the telephone
@@ -37,6 +44,20 @@ public interface TelephoneSpecification {
    * @param updatedStatus the status to be set
    */
   public void setStatus(final Status updatedStatus);
+
+  /**
+   * Returns the exchange to which the phone belongs.
+   *
+   * @return a phone model object
+   */
+  public ExchangeSpecification getExchange();  
+
+  /**
+   * Sets the exchange to which the phone belongs.
+   *
+   * @param exchange a exchange specification object
+   */
+  public void setExchange(ExchangeSpecification exchange); 
 
   /**
    * Returns the last phone you were in a call with.

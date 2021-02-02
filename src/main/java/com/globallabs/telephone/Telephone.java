@@ -1,43 +1,31 @@
 package com.globallabs.telephone;
 
 import com.globallabs.abstractions.ExchangeSpecification;
-import com.globallabs.abstractions.TelephoneSpecification;
+import com.globallabs.abstractions.TelephoneAbstraction;
 import com.globallabs.phonedata.TelephoneModel;
-import com.globallabs.phoneexceptions.BusyPhoneException;
-import com.globallabs.phoneexceptions.DialingMySelfException;
-import com.globallabs.phoneexceptions.NoCommunicationPathException;
-import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
-import com.globallabs.phoneexceptions.PhoneNotFoundException;
 
 /**
  * Telephone is the class that offers modification of the attributes of a phone model.
- * It's goal is to perform operations for the abstract methods that it implements from
- * 'TelephoneSpecification'
+ * It's goal is to perform operations for the abstract methods that are not implemented
+ * in 'TelephoneAbstraction'
  * 
  * <p>Initialize (using a constructor) a telephone model within the exchange.
- * The functions offered includes:
+ * The methods implemented in this class include:
  * <ul>
- * <li>Retrieve and set the id
- * <li>Retrieve and set the id
- * <li>Retrieve the entire phone model
- * <li>Retrieve and set last call
- * <li>Retrieve and set incoming call
- * <li>Performs the dialing operation with another phone
- * <li>Simulates dialing behavior for a phone
- * <li>Answers an existing call
+ * <li>Retrieve the id
+ * <li>Retrieve and set the entire phone model
+ * <li>Retrieve and set the status
+ * <li>Retrieve and set the last call
+ * <li>Retrieve and set the incoming call
+ * <li>Retrieve and set the exchange
  * </ul>
  *
  * @since 1.0
- * @author Byron Barkhuizen
+ * @author Angelica Acosta and Byron Barkhuizen
  */
 
-public class Telephone extends Thread implements TelephoneSpecification {
-  // This number is used when for lastCall and incomingCall do
-  // not have any number assigned. For example, lastCall when
-  // the Telephone object is created or incomingCall when
-  // a call is answered
-  public static int PHONE_NOT_SET = -1;
+public class Telephone extends TelephoneAbstraction {
   
   private TelephoneModel phoneInfo;
   private ExchangeSpecification exchange;
@@ -56,12 +44,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
    */
   public Telephone(TelephoneModel phoneInfo, ExchangeSpecification exchange) 
       throws PhoneExistInNetworkException {
-    super(Integer.toString(phoneInfo.getId()));
-    this.phoneInfo = phoneInfo;
-    this.exchange = exchange;
-    this.status = Status.OFF_CALL;
-    lastCall = PHONE_NOT_SET;
-    incomingCall = PHONE_NOT_SET;
+    super(phoneInfo, exchange);
   }
 
   /**
@@ -73,11 +56,7 @@ public class Telephone extends Thread implements TelephoneSpecification {
    * @param phoneInfo the basic information of the telephone
    */
   public Telephone(TelephoneModel phoneInfo) {
-    super(Integer.toString(phoneInfo.getId()));
-    this.phoneInfo = phoneInfo;
-    status = Status.OFF_CALL;
-    lastCall = PHONE_NOT_SET;
-    incomingCall = PHONE_NOT_SET;
+    super(phoneInfo);
   }
 
   @Override
@@ -90,6 +69,11 @@ public class Telephone extends Thread implements TelephoneSpecification {
     return phoneInfo;
   }
   
+  @Override
+  public void setPhoneInfo(TelephoneModel phoneInfo) {
+    this.phoneInfo = phoneInfo;
+  }
+
   @Override
   public Status getStatus() {
     return status;
@@ -119,81 +103,15 @@ public class Telephone extends Thread implements TelephoneSpecification {
   public void setIncomingCall(final int phoneNumber) {
     incomingCall = phoneNumber;
   }
-  
+
   @Override
-  public void dial(final int phoneNumber) throws DialingMySelfException {
-    if (phoneNumber == phoneInfo.getId()) {
-      throw new DialingMySelfException("You are calling yourself");
-    }
-    try {
-      exchange.enrouteCall(phoneInfo.getId(), phoneNumber);
-    } catch (PhoneNotFoundException e) {
-      setStatus(Status.OFF_CALL);
-    } catch (BusyPhoneException e) {
-      setStatus(Status.OFF_CALL);
-    }
+  public ExchangeSpecification getExchange() {
+    return exchange;
   }
 
   @Override
-  public void dialing() throws BusyPhoneException {
-    if (getStatus().equals(Status.DIALING)) {
-      long start = System.currentTimeMillis();
-      long end = start + 10 * 1000;
-      while (System.currentTimeMillis() < end) {
-        if (getStatus().equals(Status.BUSY)) {
-          return;
-        }
-        //System.out.println("Ringing");
-      }
-      setStatus(Status.OFF_CALL);
-    } else {
-      throw new BusyPhoneException("");
-    }
-    
-  }
-
-  @Override
-  public void answer() 
-      throws BusyPhoneException, NoIncomingCallsException, 
-      NoCommunicationPathException, PhoneNotFoundException {
-    if (getStatus().equals(Status.RINGING)) {
-      exchange.openCallBetween(getTelephoneId(), getIncomingCall());
-    } else if (getStatus().equals(Status.BUSY)) {
-      throw new BusyPhoneException("You can't answer while you are in another call");
-    } else {
-      throw new NoIncomingCallsException("No one is calling you");
-    }
-  }
-
-  @Override
-  public void hangUp() throws NoCommunicationPathException, PhoneNotFoundException {
-    int otherPhoneNumber;
-    if (getStatus() == Status.RINGING) {
-      otherPhoneNumber = getIncomingCall();
-    } else if (getStatus() == Status.DIALING || getStatus() == Status.BUSY) {
-      otherPhoneNumber = getLastCall();
-    } else {
-      throw new NoCommunicationPathException("You don't have any active call");
-    }
-    
-    exchange.closeCallBetween(this.getTelephoneId(), otherPhoneNumber);
+  public void setExchange(ExchangeSpecification exchange) {
+    this.exchange = exchange;
   }
   
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Telephone)) {
-      return false;
-    }
-    Telephone telephone = (Telephone) o;
-    return this.phoneInfo.equals(telephone.phoneInfo);
-  }
-
-  @Override
-  public String toString() {
-    return phoneInfo.toString() + " {" + "last call phone id: " + lastCall
-      + ", incoming call id: " + incomingCall + ", status: " + status + "}";
-  }
 }

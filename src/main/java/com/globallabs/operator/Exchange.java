@@ -166,7 +166,7 @@ public class Exchange implements ExchangeSpecification {
   public void addPhoneToExchange(final TelephoneWithPipeline phone) 
       throws PhoneExistInNetworkException {
     try {
-      Telephone itExists = getPhone(phone.getTelephoneId());
+      TelephoneWithPipeline itExists = getPhone(phone.getTelephoneId());
       throw new PhoneExistInNetworkException("The phone " 
         + itExists + "is already in the network");
     } catch (PhoneNotFoundException e) {
