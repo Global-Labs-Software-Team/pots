@@ -13,18 +13,8 @@ import java.util.Random;
 
 public class Producer extends Thread {
   Pipeline queue;
-  int time;
   Random rand = new Random();
   TelephoneWithPipeline phone;
-
-  /**
-   * Producer constructor.
-   */
-  public Producer(String str, Pipeline q, int seconds) {
-    super(str);
-    queue = q;
-    time = seconds;
-  }
 
   /**
    * Producer constructor.
@@ -40,6 +30,7 @@ public class Producer extends Thread {
 
   /**
    * The run method will be executed when the thread starts.
+   * As long as the phone is in the call (Status.BUSY), it sends a random number into the pipeline
    */
   public void run() {
     int currentMessage;
@@ -54,6 +45,10 @@ public class Producer extends Thread {
     }
   }
 
+  /**
+   * Publishes a message into the pipeline.
+   * @param currentMessage the message to be published
+   */
   synchronized void publishMessage(int currentMessage) {
     System.out.println(phone.logInfo + "Producer " + getName() + " produced " 
         + Integer.toString(currentMessage));
