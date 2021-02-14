@@ -48,9 +48,4 @@ public abstract class TelephoneWithPipelineDecorator
   public Producer getProducer() {
     return telephone.getProducer();
   }
-
-  @Override
-  public boolean isAbleTo(String nameOfFunction) {
-    return telephone.isAbleTo(nameOfFunction);
-  }
 }

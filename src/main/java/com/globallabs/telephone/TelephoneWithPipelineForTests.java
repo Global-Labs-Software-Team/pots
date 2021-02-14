@@ -1,6 +1,6 @@
 package com.globallabs.telephone;
 
-import com.globallabs.operator.Exchange;
+import com.globallabs.abstractions.ExchangeSpecification;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ public class TelephoneWithPipelineForTests extends TelephoneWithPipeline {
 
   LinkedList<Integer> streamToSend;
 
-  public TelephoneWithPipelineForTests(TelephoneModel phoneInfo, Exchange exchange, 
+  public TelephoneWithPipelineForTests(TelephoneModel phoneInfo, ExchangeSpecification exchange, 
       LinkedList<Integer> streamToSend) throws PhoneExistInNetworkException {
     super(phoneInfo, exchange);
     this.streamToSend = streamToSend;

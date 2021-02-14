@@ -64,7 +64,7 @@ public class ExchangeTests {
     assertEquals(expectedNumberPhonesBefore, exchange.getNumberOfPhones());
     exchange.addPhoneToExchange(newPhone); 
     assertEquals(expectedNumberPhonesAfter, exchange.getNumberOfPhones());
-    Telephone addedTelephone = exchange.getPhone(9);
+    Telephone addedTelephone = (Telephone) exchange.getPhone(9);
     assertEquals(addedTelephone.getTelephoneId(), newPhone.getTelephoneId());
   }
   

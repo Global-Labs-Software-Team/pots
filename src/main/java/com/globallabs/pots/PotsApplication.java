@@ -9,9 +9,7 @@ import com.globallabs.phoneexceptions.NoCommunicationPathException;
 import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
-import com.globallabs.telephone.Telephone;
 import com.globallabs.telephone.TelephoneWithPipeline;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 //import org.springframework.boot.SpringApplication;
 
 /**
@@ -20,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * @since 1.0
  */
-@SpringBootApplication
 public class PotsApplication {
 
   public static Exchange exchange = Exchange.getInstance();
@@ -42,8 +39,8 @@ public class PotsApplication {
       BusyPhoneException, PhoneNotFoundException, DialingMySelfException,
       NoCommunicationPathException, NoIncomingCallsException, InvalidNumberException {
     Exchange exchange = Exchange.getInstance();
-    Telephone t1 = new Telephone(new TelephoneModel(1), exchange);
-    Telephone t2 = new Telephone(new TelephoneModel(2), exchange);
+    TelephoneWithPipeline t1 = new TelephoneWithPipeline(new TelephoneModel(1), exchange);
+    TelephoneWithPipeline t2 = new TelephoneWithPipeline(new TelephoneModel(2), exchange);
 
     t1.dial(2); // t1 dial t2
     System.out.println(t1 + "\nis dialing\n" + t2);

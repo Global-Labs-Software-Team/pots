@@ -144,33 +144,4 @@ public class TelephoneWithPipeline extends Telephone
   public Producer getProducer() {
     return producer;
   }
-
-  @Override
-  public boolean isAbleTo(String nameOfFunction) {
-    if (nameOfFunction.equals("enrouteCall")) {
-      boolean validStatus = (getStatus() == Status.OFF_CALL);
-      boolean incomingCallNotSet = (getIncomingCall() == PHONE_NOT_SET);
-      return validStatus && incomingCallNotSet;
-    } else if (nameOfFunction.equals("openCallBetween")) {
-      boolean validStatus = (getStatus() == Status.RINGING);
-      boolean incomingCallSet = (getIncomingCall() != PHONE_NOT_SET);
-      return validStatus && incomingCallSet;
-    } else if (nameOfFunction.equals("closeCallBetween")) {
-      Status phoneStatus = getStatus();
-      boolean isBusy = phoneStatus == Status.BUSY;
-      boolean isRinging = phoneStatus == Status.RINGING;
-      boolean isDialing = phoneStatus == Status.DIALING;
-      if (isBusy) {
-        boolean lastCallSet = (getLastCall() != PHONE_NOT_SET);
-        return lastCallSet;
-      } else if (isRinging) {
-        boolean incomingCallSet = (getIncomingCall() != PHONE_NOT_SET);
-        return incomingCallSet;
-      } else if (isDialing) {
-        boolean lastCallSet = (getLastCall() != PHONE_NOT_SET);
-        return lastCallSet;
-      }
-    }
-    return false;
-  }
 }

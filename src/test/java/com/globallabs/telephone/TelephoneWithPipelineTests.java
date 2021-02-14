@@ -1,10 +1,8 @@
 package com.globallabs.telephone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.globallabs.operator.Exchange;
+import com.globallabs.operator.ExchangeForTests;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
@@ -19,32 +17,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TelephoneWithPipelineTests {
-  private static TelephoneWithPipeline telephoneOne;
-  private static Exchange exchange = Exchange.getInstance();
-  private static int ID1 = 1;
+  // private static TelephoneWithPipeline telephoneOne;
+  private static ExchangeForTests exchange = ExchangeForTests.getInstance();
+  // private static int ID1 = 1;
   private static int ID3 = 3;
   private static int ID4 = 4;
-  private static int numberOfTelephoneTwo = 2;
-  private static String enrouteCallString = "enrouteCall";
-  private static String openCallBetweenString = "openCallBetween";
-  private static String closeCallBetweenString = "closeCallBetween";
 
   @BeforeAll
   public static void setUp() throws InvalidNumberException, PhoneExistInNetworkException {
-    telephoneOne = new TelephoneWithPipeline(new TelephoneModel(ID1), exchange);
-  }
-
-  /**
-   * A telephone can use the enroute a call (use the enrouteCall method
-   * from exchange) iff it is free. This means that it does not have any
-   * ongoing call (Status in OFF_CALL) or receiving a call (Incoming Call
-   * not set).
-   */
-  @Test
-  public void test_isAbleTo_useEnrouteCallMethod_success() {
-    telephoneOne.setStatus(Status.OFF_CALL);
-    telephoneOne.setIncomingCall(Telephone.PHONE_NOT_SET);
-    assertTrue(telephoneOne.isAbleTo(enrouteCallString));
+    exchange.resetExchange();
+    // telephoneOne = new TelephoneWithPipeline(new TelephoneModel(ID1), exchange);
   }
 
   /**
@@ -55,79 +37,7 @@ public class TelephoneWithPipelineTests {
    * </ul>
    * 
    */
-  @Test
-  public void test_isAbleTo_useEnrouteCallMethod_failed() {
-    // It is receiving a call
-    telephoneOne.setStatus(Status.RINGING);
-    telephoneOne.setIncomingCall(numberOfTelephoneTwo);
-    assertFalse(telephoneOne.isAbleTo(enrouteCallString));
 
-    // It is busy with an ongoing call
-    telephoneOne.setStatus(Status.BUSY);
-    assertFalse(telephoneOne.isAbleTo(enrouteCallString));
-  }
-
-  /**
-   * A telephone can open a communication with the phone that is
-   * calling it, iff its status is RINGING and its incoming call variable
-   * it is set.
-   */
-  @Test
-  public void test_isAbleTo_useOpenCallBetweenMethod_success() {
-    telephoneOne.setStatus(Status.RINGING);
-    telephoneOne.setIncomingCall(numberOfTelephoneTwo);
-
-    assertTrue(telephoneOne.isAbleTo(openCallBetweenString));
-
-    assertEquals(Status.RINGING, telephoneOne.getStatus());
-    assertEquals(numberOfTelephoneTwo, telephoneOne.getIncomingCall());
-  }
-
-  /**
-   * A telephone cannot open a communication if it is not receiving a call
-   * and its status is not RINGING.
-   */
-  @Test
-  public void test_isAbleTo_useOpenCallBetweenMethod_fail() {
-    telephoneOne.setStatus(Status.RINGING);
-    telephoneOne.setIncomingCall(Telephone.PHONE_NOT_SET);
-
-    assertFalse(telephoneOne.isAbleTo(openCallBetweenString)); // Incoming call not set
-
-    telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setIncomingCall(numberOfTelephoneTwo);
-
-    assertFalse(telephoneOne.isAbleTo(openCallBetweenString)); // Wrong status
-  }
-
-  /**
-   * There are three situations when a Telephone can close a call.
-   * <ul>
-   * <li> It is in an ongoing call with another phone: Status BUSY, last call set
-   * <li> It is receiving a call. Status RINGING, incoming call set
-   * <li> It is making a call. Status DIALING, last call set
-   * </ul>
-   */
-  @Test
-  public void test_isAbleTo_useCloseCallBetweenMethod_success() {
-    // First scenario
-    telephoneOne.setStatus(Status.BUSY);
-    telephoneOne.setLastCall(numberOfTelephoneTwo);
-    assertTrue(telephoneOne.isAbleTo(closeCallBetweenString), 
-        "Invalid state for first scenario");
-
-    // Second scenario
-    telephoneOne.setStatus(Status.RINGING);
-    telephoneOne.setIncomingCall(numberOfTelephoneTwo);
-    assertTrue(telephoneOne.isAbleTo(closeCallBetweenString),
-        "Invalid state for second scenario");
-
-    // Third scenario
-    telephoneOne.setStatus(Status.DIALING);
-    telephoneOne.setLastCall(numberOfTelephoneTwo);
-    assertTrue(telephoneOne.isAbleTo(closeCallBetweenString), 
-        "Invalid state for third scenario");
-  }
 
   /**
    * Integration test. The scenario is the following two phones are communicating and send 

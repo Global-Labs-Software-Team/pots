@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.globallabs.operator.Exchange;
+import com.globallabs.operator.ExchangeForTests;
 import com.globallabs.phonedata.TelephoneModel;
 import com.globallabs.phoneexceptions.BusyPhoneException;
 import com.globallabs.phoneexceptions.DialingMySelfException;
@@ -13,29 +14,30 @@ import com.globallabs.phoneexceptions.NoIncomingCallsException;
 import com.globallabs.phoneexceptions.PhoneExistInNetworkException;
 import com.globallabs.phoneexceptions.PhoneNotFoundException;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 class TelephoneTests {
 
-  private static Exchange exchange;
+  private static ExchangeForTests exchange;
 
-  private static Telephone telephoneOne;
-  private static Telephone telephoneTwo;
-  private static Telephone telephoneThree;
+  private static TelephoneWithPipeline telephoneOne;
+  private static TelephoneWithPipeline telephoneTwo;
+  private static TelephoneWithPipeline telephoneThree;
   
   private static int ID1 = 1;
   private static int ID2 = 2;
   private static int ID3 = 3;
   private static int ID_NONEXISTING = 4;
 
-  @BeforeAll
-  public static void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
-    exchange = Exchange.getInstance();
-    telephoneOne = new Telephone(new TelephoneModel(ID1), exchange);
-    telephoneTwo = new Telephone(new TelephoneModel(ID2), exchange);
-    telephoneThree = new Telephone(new TelephoneModel(ID3), exchange);
+  @BeforeEach
+  public void setUp() throws PhoneExistInNetworkException, InvalidNumberException {
+    exchange = ExchangeForTests.getInstance();
+    exchange.resetExchange();
+    telephoneOne = new TelephoneWithPipeline(new TelephoneModel(ID1), exchange);
+    telephoneTwo = new TelephoneWithPipeline(new TelephoneModel(ID2), exchange);
+    telephoneThree = new TelephoneWithPipeline(new TelephoneModel(ID3), exchange);
   }
 
   /**
